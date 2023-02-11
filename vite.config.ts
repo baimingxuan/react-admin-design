@@ -1,7 +1,13 @@
-import { defineConfig } from 'vite'
+import type { ConfigEnv, UserConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()]
-})
+export default ({ command, mode }: ConfigEnv): UserConfig => {
+  return {
+    base: './',
+    server: {
+      host: '0.0.0.0'
+    },
+    plugins: [react()]
+  }
+}
