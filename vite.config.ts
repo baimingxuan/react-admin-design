@@ -1,5 +1,11 @@
 import type { ConfigEnv, UserConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+// need install plugin @types/node
+import { resolve } from 'path'
+
+function pathResolve(dir: string) {
+  return resolve(process.cwd(), '.', dir)
+}
 
 // https://vitejs.dev/config/
 export default ({ command, mode }: ConfigEnv): UserConfig => {
@@ -8,6 +14,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     server: {
       host: '0.0.0.0'
     },
-    plugins: [react()]
+    plugins: [react()],
+    resolve: {
+      alias: {
+				'@': resolve(__dirname, './src')
+			}
+    }
   }
 }
