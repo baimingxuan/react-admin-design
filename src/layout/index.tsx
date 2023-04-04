@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Layout } from 'antd'
 
-const BasicLayout = (props: any) => {
+export const BasicLayout = (props: any) => {
   const { Sider, Content } = Layout
 
   return (
