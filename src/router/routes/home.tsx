@@ -11,7 +11,8 @@ const HomeRoute: AppRoute[] = [
         element: <Home />,
         meta: {
 					title: '首页',
-					key: 'home'
+					key: 'home',
+          icon: 'home'
 				}
       }
     ]

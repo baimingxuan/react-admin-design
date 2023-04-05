@@ -1,6 +1,7 @@
 export interface MetaProps {
   title: string
   key?: string
+  icon?: string
   keepAlive?: boolean
 }
 
