@@ -13,14 +13,14 @@ const TableRoute: AppRoute = {
     children: [
         {
             path: 'table-basic',
-            element: <BasicLayout />,
+            element: <Home />,
             meta: {
                 title: '基础表格'
             }
         },
         {
             path: 'table-edit-row',
-            element: <BasicLayout />,
+            element: <Home />,
             meta: {
                 title: '可编辑行表格'
             }
