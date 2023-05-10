@@ -8,7 +8,8 @@ const ImageRoute: AppRoute = {
     element: <BasicLayout />,
     meta: {
         title: '图片处理',
-        icon: 'image'
+        icon: 'image',
+        orderNo: 4
     },
     children: [
         {

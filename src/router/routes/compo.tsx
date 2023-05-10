@@ -8,7 +8,8 @@ const CompoRoute: AppRoute = {
   element: <BasicLayout />,
   meta: {
       title: '组件',
-      icon: 'compo'
+      icon: 'compo',
+      orderNo: 6
   },
   children: [
       {

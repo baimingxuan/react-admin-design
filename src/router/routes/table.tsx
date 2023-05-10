@@ -8,7 +8,8 @@ const TableRoute: AppRoute = {
     element: <BasicLayout />,
     meta: {
         title: '表格',
-        icon: 'table'
+        icon: 'table',
+        orderNo: 3
     },
     children: [
         {

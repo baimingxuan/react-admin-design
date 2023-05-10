@@ -8,7 +8,8 @@ const VideoRoute: AppRoute = {
     element: <BasicLayout />,
     meta: {
         title: '视频处理',
-        icon: 'video'
+        icon: 'video',
+        orderNo: 5
     },
     children: [
         {

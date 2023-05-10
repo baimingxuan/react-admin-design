@@ -8,7 +8,8 @@ const FormRoute: AppRoute = {
   element: <BasicLayout />,
   meta: {
       title: '表单',
-      icon: 'form'
+      icon: 'form',
+      orderNo: 2
   },
   children: [
       {

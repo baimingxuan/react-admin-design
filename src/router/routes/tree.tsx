@@ -8,7 +8,8 @@ const TreeRoute: AppRoute = {
     element: <BasicLayout />,
     meta: {
         title: '树形结构',
-        icon: 'tree'
+        icon: 'tree',
+        orderNo: 9
     },
     children: [
         {

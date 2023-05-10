@@ -8,7 +8,8 @@ const ExceptionRoute: AppRoute = {
   element: <BasicLayout />,
   meta: {
     title: '异常页面',
-    icon: 'bug'
+    icon: 'bug',
+    orderNo: 11
   },
   children: [
     {

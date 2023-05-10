@@ -3,6 +3,7 @@ export interface MetaProps {
   key?: string
   icon?: string
   keepAlive?: boolean
+  orderNo?: number
 }
 
 export interface AppRoute {

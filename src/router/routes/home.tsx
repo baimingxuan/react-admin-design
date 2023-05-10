@@ -12,7 +12,8 @@ const HomeRoute: AppRoute = {
       meta: {
         title: '首页',
         key: 'home',
-        icon: 'home'
+        icon: 'home',
+        orderNo: 1
       }
     }
   ]

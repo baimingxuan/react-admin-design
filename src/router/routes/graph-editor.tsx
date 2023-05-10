@@ -8,7 +8,8 @@ const GraphEditorRoute: AppRoute = {
   element: <BasicLayout />,
   meta: {
       title: '图形编辑器',
-      icon: 'flow'
+      icon: 'flow',
+      orderNo: 8
   },
   children: [
       {

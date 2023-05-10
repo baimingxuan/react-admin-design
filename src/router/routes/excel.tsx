@@ -8,7 +8,8 @@ const ExcelRoute: AppRoute = {
   element: <BasicLayout />,
   meta: {
       title: 'Excel',
-      icon: 'excel'
+      icon: 'excel',
+      orderNo: 10
   },
   children: [
       {
