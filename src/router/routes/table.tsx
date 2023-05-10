@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // table module page
-const TableRoute: AppRoute = {
+const TableRoute: RouteObject = {
     path: '/table',
     element: <BasicLayout />,
     meta: {

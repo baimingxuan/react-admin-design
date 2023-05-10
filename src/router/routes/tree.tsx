@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // tree module page
-const TreeRoute: AppRoute = {
+const TreeRoute: RouteObject = {
     path: '/tree',
     element: <BasicLayout />,
     meta: {

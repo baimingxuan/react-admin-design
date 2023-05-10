@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // video module page
-const VideoRoute: AppRoute = {
+const VideoRoute: RouteObject = {
     path: '/video',
     element: <BasicLayout />,
     meta: {

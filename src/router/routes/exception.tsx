@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // exception module page
-const ExceptionRoute: AppRoute = {
+const ExceptionRoute: RouteObject = {
   path: '/exception',
   element: <BasicLayout />,
   meta: {

@@ -6,10 +6,10 @@ export interface MetaProps {
   orderNo?: number
 }
 
-export interface AppRoute {
+export interface RouteObject {
   element?: React.ReactNode
   path?: string
-  children?: AppRoute[]
-  index?: boolean
+  children?: RouteObject[]
+  index?: false
   meta?: MetaProps
 }

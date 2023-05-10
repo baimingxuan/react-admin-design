@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // image module page
-const ImageRoute: AppRoute = {
+const ImageRoute: RouteObject = {
     path: '/image',
     element: <BasicLayout />,
     meta: {

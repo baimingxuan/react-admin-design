@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // Home route
-const HomeRoute: AppRoute = {
+const HomeRoute: RouteObject = {
   element: <BasicLayout />,
   children: [
     {

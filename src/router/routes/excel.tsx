@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // excel module page
-const ExcelRoute: AppRoute = {
+const ExcelRoute: RouteObject = {
   path: '/excel',
   element: <BasicLayout />,
   meta: {

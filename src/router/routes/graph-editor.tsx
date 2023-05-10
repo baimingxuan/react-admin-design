@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // graph-editor module page
-const GraphEditorRoute: AppRoute = {
+const GraphEditorRoute: RouteObject = {
   path: '/graph-editor',
   element: <BasicLayout />,
   meta: {

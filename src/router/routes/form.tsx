@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // form module page
-const FormRoute: AppRoute = {
+const FormRoute: RouteObject = {
   path: '/form',
   element: <BasicLayout />,
   meta: {

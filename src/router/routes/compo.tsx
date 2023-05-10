@@ -1,9 +1,9 @@
-import { AppRoute } from '../types'
+import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 
 // component module page
-const CompoRoute: AppRoute = {
+const CompoRoute: RouteObject = {
   path: '/compo',
   element: <BasicLayout />,
   meta: {
