@@ -23,9 +23,4 @@ export const basicRoutes: RouteObject[] = [
 	}
 ]
 
-const Router = () => {
-  const routes = useRoutes(basicRoutes)
-  return routes
-}
-
-export default Router
+export default () => useRoutes(basicRoutes)
