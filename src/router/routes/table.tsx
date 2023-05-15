@@ -16,14 +16,16 @@ const TableRoute: RouteObject = {
             path: 'table-basic',
             element: <Home />,
             meta: {
-                title: '基础表格'
+                title: '基础表格',
+                key: 'tableBasic'
             }
         },
         {
             path: 'table-edit-row',
             element: <Home />,
             meta: {
-                title: '可编辑行表格'
+                title: '可编辑行表格',
+                key: 'tableEditRow'
             }
         }
     ]

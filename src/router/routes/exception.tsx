@@ -16,21 +16,24 @@ const ExceptionRoute: RouteObject = {
       path: 'page-403',
       element: <Home />,
       meta: {
-        title: '403页面'
+        title: '403页面',
+        key: 'page403'
       }
     },
     {
       path: 'page-404',
       element: <Home />,
       meta: {
-        title: '404页面'
+        title: '404页面',
+        key: 'page404'
       }
     },
     {
       path: 'page-500',
       element: <Home />,
       meta: {
-        title: '500页面'
+        title: '500页面',
+        key: 'page500'
       }
     }
   ]

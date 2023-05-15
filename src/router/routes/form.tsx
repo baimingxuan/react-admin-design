@@ -16,14 +16,16 @@ const FormRoute: RouteObject = {
           path: 'form-list',
           element: <Home />,
           meta: {
-              title: '表单列表'
+              title: '表单列表',
+              key: 'formList'
           }
       },
       {
           path: 'form-marking',
           element: <Home />,
           meta: {
-              title: '表单生成器'
+              title: '表单生成器',
+              key: 'formMarking'
           }
       }
   ]

@@ -16,14 +16,16 @@ const TreeRoute: RouteObject = {
             path: 'org-tree',
             element: <Home />,
             meta: {
-                title: '组织树'
+                title: '组织树',
+                key: 'orgTree'
             }
         },
         {
             path: 'antd-tree',
             element: <Home />,
             meta: {
-                title: '控件树'
+                title: '控件树',
+                key: 'antdTree'
             }
         }
     ]

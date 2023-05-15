@@ -16,7 +16,8 @@ const CompoRoute: RouteObject = {
           path: 'image-upload',
           element: <Home />,
           meta: {
-              title: '图片上传'
+              title: '图片上传',
+              key: 'imageUpload'
           }
       },
       {
@@ -29,14 +30,16 @@ const CompoRoute: RouteObject = {
                   path: 'drag-list',
                   element: <Home />,
                   meta: {
-                      title: '列表拖拽'
+                      title: '列表拖拽',
+                      key: 'dragList'
                   }
               },
               {
                   path: 'drag-resize',
                   element: <Home />,
                   meta: {
-                      title: '组件拖拽'
+                      title: '组件拖拽',
+                      key: 'dragResize'
                   }
               }
           ]
@@ -52,7 +55,8 @@ const CompoRoute: RouteObject = {
           path: 'count-to',
           element: <Home />,
           meta: {
-              title: '数字滚动'
+              title: '数字滚动',
+              key: 'countTo'
           }
       }
   ]

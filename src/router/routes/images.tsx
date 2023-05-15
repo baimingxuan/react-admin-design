@@ -16,21 +16,24 @@ const ImageRoute: RouteObject = {
             path: 'image-cropper',
             element: <Home />,
             meta: {
-                title: '图片裁剪'
+                title: '图片裁剪',
+                key: 'imageCropper'
             }
         },
         {
             path: 'image-compress',
             element: <Home />,
             meta: {
-                title: '图片压缩'
+                title: '图片压缩',
+                key: 'imageCompress'
             }
         },
         {
             path: 'image-composition',
             element: <Home />,
             meta: {
-                title: '图片合成'
+                title: '图片合成',
+                key: 'imageComposition'
             }
         }
     ]

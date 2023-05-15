@@ -16,14 +16,16 @@ const GraphEditorRoute: RouteObject = {
           path: 'flow-chart',
           element: <Home />,
           meta: {
-              title: '流程图'
+              title: '流程图',
+              key: 'flowChart'
           }
       },
       {
-          path: 'mind',
+          path: 'mind-chart',
           element: <Home />,
           meta: {
-              title: '思维导图'
+              title: '思维导图',
+              key: 'mindChart'
           }
       }
   ]

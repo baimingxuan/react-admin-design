@@ -16,14 +16,16 @@ const VideoRoute: RouteObject = {
             path: 'video-player',
             element: <Home />,
             meta: {
-                title: '视频播放器'
+                title: '视频播放器',
+                key: 'videoPlayer'
             }
         },
         {
             path: 'video-mark',
             element: <Home />,
             meta: {
-                title: '视频水印'
+                title: '视频水印',
+                key: 'videoMark'
             }
         }
     ]

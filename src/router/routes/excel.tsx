@@ -16,14 +16,16 @@ const ExcelRoute: RouteObject = {
           path: 'export-excel',
           element: <Home />,
           meta: {
-              title: '导出Excel'
+              title: '导出Excel',
+              key: 'exportExcel'
           }
       },
       {
           path: 'import-excel',
           element: <Home />,
           meta: {
-              title: '导入Excel'
+              title: '导入Excel',
+              key: 'importExcel'
           }
       }
   ]
