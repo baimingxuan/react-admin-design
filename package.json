@@ -16,6 +16,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
     "redux": "^4.2.1",
+    "redux-persist": "^6.0.0",
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.4.2"
   },

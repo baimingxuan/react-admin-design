@@ -4,6 +4,8 @@ import {
   combineReducers,
   applyMiddleware
 } from 'redux'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 import reduxThunk from 'redux-thunk'
 import reduxPromise from 'redux-promise'
 import { composeWithDevTools } from '@redux-devtools/extension'
@@ -15,8 +17,17 @@ const reducer = combineReducers({
   breadcrumb: breadcrumbReducer
 })
 
+const persistConfig = {
+  key: 'redux-persist',
+  storage
+}
+
+const persistedReducer = persistReducer(persistConfig, reducer)
+
 const middleWares = applyMiddleware(reduxThunk, reduxPromise)
 
-const store: Store = createStore(reducer, composeWithDevTools(middleWares))
+const store: Store = createStore(persistedReducer, composeWithDevTools(middleWares))
 
-export default store
+const persistor = persistStore(store)
+
+export { store, persistor }
