@@ -1,4 +1,4 @@
-interface MenuOptions {
+export interface MenuOptions {
   path: string
   title: string
   icon?: string
