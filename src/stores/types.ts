@@ -17,3 +17,8 @@ export interface BreadcrumbState {
     [propName: string]: any
   }
 }
+
+export interface TagsState {
+	tagsActive: string
+	tagsList: MenuOptions[]
+}
