@@ -13,7 +13,7 @@ export interface MenuState {
 }
 
 export interface BreadcrumbState {
-  breadcrumbList: {
+  breadcrumbs: {
     [propName: string]: any
   }
 }
