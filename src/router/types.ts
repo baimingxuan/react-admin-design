@@ -4,6 +4,7 @@ export interface MetaProps {
   icon?: string
   keepAlive?: boolean
   orderNo?: number
+  hideMenu?: boolean
 }
 
 export interface RouteObject {
@@ -12,4 +13,17 @@ export interface RouteObject {
   children?: RouteObject[]
   index?: false
   meta?: MetaProps
+}
+
+export interface AppMenu {
+  name: string
+  path: string
+  children?: AppMenu[]
+  disabled?: boolean
+  icon?: string
+  affix?: boolean
+  orderNo?: number
+  hideMenu?: boolean
+  hideChildrenInMenu?: boolean
+  hideBreadcrumb?: boolean
 }
