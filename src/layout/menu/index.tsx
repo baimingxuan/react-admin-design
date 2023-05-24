@@ -2,6 +2,7 @@ import type { MenuProps } from 'antd'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Menu, Spin } from 'antd'
+import { getAsyncMenus } from '@/router/menus'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -31,6 +32,15 @@ const LayoutMenu = (props: any) => {
   useEffect(() => {
     setSelectedKeys([pathname])
   }, [pathname])
+
+  const getMenuList = async () => {
+    setLoading(true)
+    try {
+      const menus = await getAsyncMenus()
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleOpenChange: MenuProps['onOpenChange'] = (keys: string[]) => {
     if (keys.length === 0 || keys.length === 1) return setOpenKeys(keys)
