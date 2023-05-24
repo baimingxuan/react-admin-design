@@ -4,6 +4,7 @@ import Home from '../../views/home'
 
 // Home route
 const HomeRoute: RouteObject = {
+  path: '/',
   element: <BasicLayout />,
   children: [
     {

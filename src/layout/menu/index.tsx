@@ -37,10 +37,15 @@ const LayoutMenu = (props: any) => {
     setLoading(true)
     try {
       const menus = await getAsyncMenus()
+      console.log('menus', menus)
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    getMenuList()
+  }, [])
 
   const handleOpenChange: MenuProps['onOpenChange'] = (keys: string[]) => {
     if (keys.length === 0 || keys.length === 1) return setOpenKeys(keys)
