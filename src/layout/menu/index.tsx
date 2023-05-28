@@ -40,14 +40,14 @@ const LayoutMenu = (props: any) => {
     return React.createElement(customIcons[name])
   }
 
-  const getMenuItem = (menuData: AppMenu[], menuList: MenuItem[] = []) => {
-    menuData.forEach((item: AppMenu) => {
+  const getMenuItem = (data: AppMenu[], list: MenuItem[] = []) => {
+    data.forEach((item: AppMenu) => {
       if (!item?.children?.length) {
-        return menuList.push(getItem(item.name, item.path, addIcon(item.icon!)))
+        return list.push(getItem(item.name, item.path, addIcon(item.icon!)))
       }
-      menuList.push(getItem(item.name, item.path, addIcon(item.icon!), getMenuItem(item.children)))
+      list.push(getItem(item.name, item.path, addIcon(item.icon!), getMenuItem(item.children)))
     })
-    return menuList
+    return list
   }
 
   const getMenuList = async () => {
