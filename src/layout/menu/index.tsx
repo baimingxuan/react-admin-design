@@ -43,9 +43,9 @@ const LayoutMenu = (props: any) => {
   const getMenuItem = (data: AppMenu[], list: MenuItem[] = []) => {
     data.forEach((item: AppMenu) => {
       if (!item?.children?.length) {
-        return list.push(getItem(item.name, item.path, addIcon(item.icon!)))
+        return list.push(getItem(item.name, item.path))
       }
-      list.push(getItem(item.name, item.path, addIcon(item.icon!), getMenuItem(item.children)))
+      list.push(getItem(item.name, item.path, '', getMenuItem(item.children)))
     })
     return list
   }
