@@ -11,7 +11,7 @@ Object.keys(metaRoutes).forEach(key => {
   routeList.push(...moduleList)
 })
 
-export const basicRoutes: RouteObject[] = [
+const rootRoutes: RouteObject[] = [
   {
     path: '/',
     element: <Navigate to='/home' />
@@ -23,4 +23,6 @@ export const basicRoutes: RouteObject[] = [
 	}
 ]
 
-export default () => useRoutes(basicRoutes)
+export { routeList as basicRoutes }
+
+export default () => useRoutes(rootRoutes)

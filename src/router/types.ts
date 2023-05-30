@@ -5,6 +5,7 @@ export interface MetaProps {
   keepAlive?: boolean
   orderNo?: number
   hideMenu?: boolean
+  hideChildrenInMenu?: boolean
 }
 
 export interface RouteObject {

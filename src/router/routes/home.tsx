@@ -4,17 +4,24 @@ import Home from '../../views/home'
 
 // Home route
 const HomeRoute: RouteObject = {
-  path: '/',
+  path: '/home',
   element: <BasicLayout />,
+  meta: {
+    title: '首页',
+    icon: 'home',
+    orderNo: 1,
+    hideChildrenInMenu: true
+  },
   children: [
     {
-      path: '/home',
+      path: '',
       element: <Home />,
       meta: {
         title: '首页',
         key: 'home',
         icon: 'home',
-        orderNo: 1
+        orderNo: 1,
+        hideMenu: true
       }
     }
   ]

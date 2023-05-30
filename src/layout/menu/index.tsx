@@ -16,10 +16,10 @@ const getItem = (
   type?: 'group'
 ): MenuItem => {
   return {
+    label,
     key,
     icon,
     children,
-    label,
     type
   } as MenuItem
 }
@@ -45,7 +45,7 @@ const LayoutMenu = (props: any) => {
       if (!item?.children?.length) {
         return list.push(getItem(item.name, item.path))
       }
-      list.push(getItem(item.name, item.path, '', getMenuItem(item.children)))
+      list.push(getItem(item.name, item.path, null, getMenuItem(item.children)))
     })
     return list
   }

@@ -8,7 +8,7 @@ export function treeMapEach(
   data: any,
   { children = 'children', conversion }: { children?: string; conversion: Fn },
 ) {
-  const haveChildren = Array.isArray(data[children]) && data[children].length > 0
+  const haveChildren = Array.isArray(data[children]) && data[children].length > 0 && !data.meta.hideChildrenInMenu
   const conversionData = conversion(data) || {}
   if (haveChildren) {
     return {
@@ -19,10 +19,10 @@ export function treeMapEach(
           conversion
         })
       )
-    };
+    }
   } else {
     return {
       ...conversionData
-    };
+    }
   }
 }
