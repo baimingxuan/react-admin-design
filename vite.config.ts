@@ -8,7 +8,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   return {
     base: './',
     server: {
-      host: '0.0.0.0'
+      host: true
     },
     plugins: [react()],
     resolve: {
