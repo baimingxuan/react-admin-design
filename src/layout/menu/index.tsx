@@ -1,10 +1,13 @@
 import type { MenuProps } from 'antd'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Menu, Spin } from 'antd'
 import * as Icons from '@ant-design/icons'
 import { getAsyncMenus } from '@/router/menus'
 import { AppMenu } from '@/router/types'
+import { setMenuList } from '@/stores/modules/menu/action'
+import { setBreadcrumbs } from '@/stores/modules/breadcrumb/action'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -31,6 +34,8 @@ const LayoutMenu = (props: any) => {
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
 
+  const { setMenuList: setMenuListAction } = props
+
   useEffect(() => {
     setSelectedKeys([pathname])
   }, [pathname])
@@ -54,8 +59,8 @@ const LayoutMenu = (props: any) => {
     setLoading(true)
     try {
       const menus = await getAsyncMenus()
-      console.log('menus', menus)
       setMenuList(getMenuItem(menus))
+      setMenuListAction(menus)
     } finally {
       setLoading(false)
     }
@@ -95,4 +100,7 @@ const LayoutMenu = (props: any) => {
   )
 }
 
-export default LayoutMenu
+const mapStateToProps = (state: any) => state.menu
+const mapDispatchToProps = { setMenuList, setBreadcrumbs }
+
+export default connect(mapStateToProps, mapDispatchToProps)(LayoutMenu)
