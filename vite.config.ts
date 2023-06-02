@@ -1,6 +1,7 @@
 import type { ConfigEnv, UserConfig } from 'vite'
 import { loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { wrapperEnv } from './build/utils'
 // need install plugin @types/node
 import { resolve } from 'path'
@@ -22,7 +23,13 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       host: true,
       port: VITE_PORT,
     },
-    plugins: [react()],
+    plugins: [
+      react(),
+      createSvgIconsPlugin({
+        iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
+        symbolId: 'icon-[dir]-[name]'
+      })
+    ],
 
     build: {
       target: 'es2015',
