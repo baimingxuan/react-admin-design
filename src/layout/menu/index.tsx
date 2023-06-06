@@ -41,16 +41,17 @@ const LayoutMenu = (props: any) => {
   }, [pathname])
 
   const customIcons: { [key: string]: any } = Icons
-  const addIcon = (name: string) => {
+  const addIcon = (name?: string) => {
+    if (!name) return null
     return React.createElement(customIcons[name])
   }
 
   const getMenuItem = (data: AppMenu[], list: MenuItem[] = []) => {
     data.forEach((item: AppMenu) => {
       if (!item?.children?.length) {
-        return list.push(getItem(item.name, item.path))
+        return list.push(getItem(item.name, item.path, addIcon(item.icon)))
       }
-      list.push(getItem(item.name, item.path, null, getMenuItem(item.children)))
+      list.push(getItem(item.name, item.path, addIcon(item.icon), getMenuItem(item.children)))
     })
     return list
   }

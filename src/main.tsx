@@ -6,6 +6,9 @@ import { store, persistor } from './stores'
 import App from './App'
 import '@/design/index.less'
 
+// register svg icon
+import 'virtual:svg-icons-register'
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>

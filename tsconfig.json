@@ -21,7 +21,8 @@
       "#/*": ["types/*"]
     },
     "types": [
-      "vite/client"
+      "vite/client",
+      "vite-plugin-svg-icons/client"
     ]
   },
   "include": [
