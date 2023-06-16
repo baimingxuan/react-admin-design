@@ -1,8 +1,11 @@
 import { Menu } from 'antd'
+import MenuItemCont from './MenuItemCont'
 
-const MenuItem = (props: any) => {
+export default function MenuItem(props: any) {
 
   return (
-    <Menu.Item></Menu.Item>
+    <Menu.Item key={props.item.path}>
+      <MenuItemCont item={props.item} />
+    </Menu.Item>
   )
 }
