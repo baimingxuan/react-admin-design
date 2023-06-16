@@ -21,7 +21,7 @@ export default function SubMenuItem(props: any) {
           <Menu.SubMenu key={props.item.path}>
             <MenuItemCont item={props.item} />
             {
-              props.item.children.map((cItem: any) => <SubMenuItem item={cItem} />)
+              props.item.children.map((cItem: any) => <SubMenuItem item={cItem} key={cItem.path} />)
             }
           </Menu.SubMenu>
         )

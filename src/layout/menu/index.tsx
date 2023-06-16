@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Menu, Spin } from 'antd'
+import { BasicMenu } from '@/components/Menu'
 import * as Icons from '@ant-design/icons'
 import { getAsyncMenus } from '@/router/menus'
 import { AppMenu } from '@/router/types'
@@ -86,7 +87,7 @@ const LayoutMenu = (props: any) => {
   return (
     <div className='layout_menu'>
       <Spin spinning={loading} tip='Loading...'>
-        <Menu
+        {/* <Menu
           theme='dark'
           mode='inline'
           triggerSubMenuAction='click'
@@ -95,7 +96,8 @@ const LayoutMenu = (props: any) => {
           items={menuList}
           onClick={handleMenuClick}
           onOpenChange={handleOpenChange}
-        />
+        /> */}
+        <BasicMenu items={menuList} />
       </Spin>
     </div>
   )
