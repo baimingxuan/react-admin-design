@@ -31,7 +31,7 @@ const getItem = (
 const LayoutMenu = (props: any) => {
   const { pathname } = useLocation()
   const [loading, setLoading] = useState(false)
-  const [menuList, setMenuList] = useState<MenuItem[]>([])
+  const [menuList, setMenuList] = useState<AppMenu[]>([])
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
 
@@ -61,7 +61,7 @@ const LayoutMenu = (props: any) => {
     setLoading(true)
     try {
       const menus = await getAsyncMenus()
-      setMenuList(getMenuItem(menus))
+      setMenuList(menus)
       setMenuListAction(menus)
     } finally {
       setLoading(false)

@@ -10,7 +10,8 @@ export default function SubMenuItem(props: any) {
       !!menuTreeItem.children &&
       menuTreeItem.children.length > 0
     )
-  } 
+  }
+  console.log('subitem', props.item)
 
   return (
    <>
@@ -21,7 +22,7 @@ export default function SubMenuItem(props: any) {
           <Menu.SubMenu key={props.item.path}>
             <MenuItemCont item={props.item} />
             {
-              props.item.children.map((cItem: any) => <SubMenuItem item={cItem} key={cItem.path} />)
+              props.item.children.map((cItem: any) => <SubMenuItem item={cItem} key={cItem.key} />)
             }
           </Menu.SubMenu>
         )
