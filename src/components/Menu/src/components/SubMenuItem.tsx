@@ -19,8 +19,7 @@ export default function SubMenuItem(props: any) {
     { 
       (menuHasChildren(props.item) && !props.item?.hideMenu)
       ? (
-          <Menu.SubMenu key={props.item.path}>
-            <MenuItemCont item={props.item} />
+          <Menu.SubMenu key={props.item.path} title={<MenuItemCont item={props.item} />}>
             {
               props.item.children.map((cItem: any) => <SubMenuItem item={cItem} key={cItem.key} />)
             }
