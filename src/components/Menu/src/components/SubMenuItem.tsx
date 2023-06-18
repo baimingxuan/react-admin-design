@@ -11,7 +11,6 @@ export default function SubMenuItem(props: any) {
       menuTreeItem.children.length > 0
     )
   }
-  console.log('subitem', props.item)
 
   return (
    <>
