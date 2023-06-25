@@ -2,6 +2,9 @@ import { Menu } from 'antd'
 import SubMenuItem from './components/SubMenuItem'
 
 export default function BasicMenu(props: any) {
+  const { SubMenu, Item } = Menu
+
+  const renderSubMenu = () => {}
 
   return (
     <Menu
