@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { Menu, Spin } from 'antd'
 import { getAsyncMenus } from '@/router/menus'
 import { AppMenu } from '@/router/types'
-import { setMenuList } from '@/stores/modules/menu/action'
 import { setBreadcrumbs } from '@/stores/modules/breadcrumb/action'
 import SvgIcon from '@/components/SvgIcon'
 
@@ -34,8 +33,6 @@ const LayoutMenu = (props: any) => {
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
 
-  const { setMenuList: setMenuListAction } = props
-
   useEffect(() => {
     setSelectedKeys([pathname])
   }, [pathname])
@@ -60,7 +57,6 @@ const LayoutMenu = (props: any) => {
     try {
       const menus = await getAsyncMenus()
       setMenuList(getMenuItem(menus))
-      setMenuListAction(menus)
     } finally {
       setLoading(false)
     }
@@ -89,6 +85,7 @@ const LayoutMenu = (props: any) => {
           theme='dark'
           mode='inline'
           triggerSubMenuAction='click'
+          inlineIndent={20}
           openKeys={openKeys}
           selectedKeys={selectedKeys}
           items={menuList}
@@ -101,6 +98,6 @@ const LayoutMenu = (props: any) => {
 }
 
 const mapStateToProps = (state: any) => state.menu
-const mapDispatchToProps = { setMenuList, setBreadcrumbs }
+const mapDispatchToProps = { setBreadcrumbs }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayoutMenu)
