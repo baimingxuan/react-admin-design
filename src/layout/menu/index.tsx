@@ -86,6 +86,7 @@ const LayoutMenu = (props: any) => {
           mode='inline'
           triggerSubMenuAction='click'
           inlineIndent={20}
+          subMenuOpenDelay={0.2}
           openKeys={openKeys}
           selectedKeys={selectedKeys}
           items={menuList}
