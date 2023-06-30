@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { MenuState } from '@/stores/types'
 
 const initialState: MenuState = {
-  isCollapse: false,
-  menuList: []
+  menuList: [],
+  isCollapse: false
 }
 
 const menuSlice = createSlice({

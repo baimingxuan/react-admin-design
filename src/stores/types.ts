@@ -8,8 +8,8 @@ export interface MenuOptions {
 }
 
 export interface MenuState {
-  isCollapse: boolean
   menuList: MenuOptions[]
+  isCollapse: boolean
 }
 
 export interface BreadcrumbState {
@@ -19,6 +19,6 @@ export interface BreadcrumbState {
 }
 
 export interface TagsState {
-	tagsActive: string
 	tagsList: MenuOptions[]
+  tagsActive: string
 }
