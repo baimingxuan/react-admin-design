@@ -1,32 +1,39 @@
 import type { Store } from 'redux'
-import { 
-  legacy_createStore as createStore,
-  combineReducers,
-  applyMiddleware
-} from 'redux'
-import { persistStore, persistReducer } from 'redux-persist'
+import { configureStore } from '@reduxjs/toolkit'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import reduxThunk from 'redux-thunk'
-import reduxPromise from 'redux-promise'
-import { composeWithDevTools } from '@redux-devtools/extension'
-import menuReducer from './modules/menu/reducer'
-import breadcrumbReducer from './modules/breadcrumb/reducer'
-
-const reducer = combineReducers({
-  menu: menuReducer,
-  breadcrumb: breadcrumbReducer
-})
+import menuReducer from './modules/menuSlice'
+import breadcrumbReducer from './modules/breadcrumbSlice'
+import tagsSlice from './modules/tagsSlice'
 
 const persistConfig = {
   key: 'redux-persist',
   storage
 }
 
-const persistedReducer = persistReducer(persistConfig, reducer)
-
-const middleWares = applyMiddleware(reduxThunk, reduxPromise)
-
-const store: Store = createStore(persistedReducer, composeWithDevTools(middleWares))
+const store: Store = configureStore({
+  reducer: {
+    menu: persistReducer(persistConfig, menuReducer),
+    breadcrumb: persistReducer(persistConfig, breadcrumbReducer),
+    tags: persistReducer(persistConfig, tagsSlice)
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+      }
+    }),
+  devTools: true
+})
 
 const persistor = persistStore(store)
 

@@ -19,17 +19,13 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
     "redux": "^4.2.1",
-    "redux-persist": "^6.0.0",
-    "redux-promise": "^0.6.0",
-    "redux-thunk": "^2.4.2"
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
-    "@redux-devtools/extension": "^3.2.5",
     "@types/lodash-es": "^4.17.7",
     "@types/node": "^18.15.11",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
-    "@types/redux-promise": "^0.5.29",
     "@vitejs/plugin-react": "^3.0.1",
     "fast-glob": "^3.2.12",
     "less": "^4.1.3",
