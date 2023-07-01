@@ -6,6 +6,7 @@ import { Menu, Spin } from 'antd'
 import { getAsyncMenus } from '@/router/menus'
 import { AppMenu } from '@/router/types'
 import { setMenuList } from '@/stores/modules/menuSlice'
+import { getOpenKeys } from '@/utils/helper/menuHelper'
 import SvgIcon from '@/components/SvgIcon'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -35,7 +36,10 @@ const LayoutMenu = (props: any) => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
 
   useEffect(() => {
+    console.log('pathname', pathname)
     setSelectedKeys([pathname])
+    
+    setOpenKeys(getOpenKeys(pathname))
   }, [pathname])
 
   const addIcon = (icon?: string) => {
