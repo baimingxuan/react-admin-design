@@ -36,7 +36,6 @@ const LayoutMenu = (props: any) => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
 
   useEffect(() => {
-    console.log('pathname', pathname)
     setSelectedKeys([pathname])
     
     setOpenKeys(getOpenKeys(pathname))
