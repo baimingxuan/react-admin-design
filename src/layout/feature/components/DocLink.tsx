@@ -1,7 +1,7 @@
 import { Tooltip } from 'antd'
 import SvgIcon from '@/components/SvgIcon'
 
-export default function() {
+export default function DocLink() {
   return (
     <Tooltip
       title='文档'
