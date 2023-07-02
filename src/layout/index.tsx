@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Layout } from 'antd'
 import { Outlet } from 'react-router-dom'
 import LayoutMenu from './menu'
+import LayoutHeader from './header'
 import style from './index.module.less'
 
 export const BasicLayout = (props: any) => {
@@ -13,6 +14,7 @@ export const BasicLayout = (props: any) => {
         <LayoutMenu />
       </Sider>
       <Layout>
+        <LayoutHeader />
         <Content>
           <Outlet />
         </Content>
