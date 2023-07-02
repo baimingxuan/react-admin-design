@@ -4,7 +4,7 @@ import SvgIcon from '@/components/SvgIcon'
 
 export default function GithubLink() {
   function openGithub () {
-    openWindow('https://github.com/baimingxuan/vue3-admin-design')
+    openWindow('https://github.com/baimingxuan/react-admin-design')
   }
 
   return (
