@@ -1,5 +1,7 @@
 import { Layout } from 'antd'
+import { Breadcrumb, FoldTrigger } from './components'
 import LayoutFeature from '../feature'
+
 
 const LayoutHeader = (props: any) => {
   const { Header } = Layout
@@ -18,7 +20,7 @@ const LayoutHeader = (props: any) => {
         style={{padding: '0 12px'}}
       >
         <div className='flex-center-v'>
-
+          <FoldTrigger />
         </div>
         <LayoutFeature />
       </div>
