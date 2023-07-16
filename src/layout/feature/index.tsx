@@ -15,7 +15,7 @@ export default function LayoutFeature() {
         <GithubLink />
       </div>
       <Divider type='vertical' className={moduleStyle[`${prefixCls}-divider`]} />
-      {/* <UserDropdown /> */}
+      <UserDropdown />
     </div>
   )
 }
