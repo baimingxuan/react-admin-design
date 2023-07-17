@@ -1,5 +1,5 @@
 import type { MenuProps } from 'antd'
-import { Dropdown } from 'antd'
+import { Space, Dropdown } from 'antd'
 import { LockOutlined, PoweroffOutlined } from '@ant-design/icons'
 import headerImg from '@/assets/images/avatar.png'
 
@@ -9,19 +9,19 @@ export default function UserDropdown() {
     {
       key: 'lock',
       label: (
-        <span className='flex-center-v'>
+        <Space size={4}>
           <LockOutlined rev={undefined} />
-          <span style={{marginLeft: '4px'}}>锁定屏幕</span>
-        </span>
+          <span>锁定屏幕</span>
+        </Space>
       )
     },
     {
       key: 'logout',
       label: (
-        <span className='flex-center-v'>
+        <Space size={4}>
           <PoweroffOutlined rev={undefined} />
-          <span style={{marginLeft: '4px'}}>退出登录</span>
-        </span>
+          <span>退出登录</span>
+        </Space>
       )
     }
   ]
