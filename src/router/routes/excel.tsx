@@ -1,6 +1,7 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import ImportExcel from '@/views/excel/import-excel'
 
 // excel module page
 const ExcelRoute: RouteObject = {
@@ -22,7 +23,7 @@ const ExcelRoute: RouteObject = {
       },
       {
           path: 'import-excel',
-          element: <Home />,
+          element: <ImportExcel />,
           meta: {
               title: '导入Excel',
               key: 'importExcel'
