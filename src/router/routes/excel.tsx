@@ -1,6 +1,6 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import Home from '../../views/home'
+import ExportExcel from '@/views/excel/export-excel'
 import ImportExcel from '@/views/excel/import-excel'
 
 // excel module page
@@ -15,7 +15,7 @@ const ExcelRoute: RouteObject = {
   children: [
       {
           path: 'export-excel',
-          element: <Home />,
+          element: <ExportExcel />,
           meta: {
               title: '导出Excel',
               key: 'exportExcel'

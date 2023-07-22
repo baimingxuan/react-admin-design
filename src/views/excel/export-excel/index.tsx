@@ -21,6 +21,12 @@ const ExportExcel = (props: any) => {
 
   const { exportDataToExcel } = useExcel()
 
+  const formParam = {
+    fileName: '',
+    autoWidth: true,
+    fileType: 'xlsx'
+  }
+
   const tableColumns: ColumnType<any>[] = [
     { title: '编号', dataIndex: 'key', align: 'center' },
     { title: '姓名', dataIndex: 'name', align: 'center' },
@@ -33,7 +39,7 @@ const ExportExcel = (props: any) => {
   const [tableSelectedKeys, setTableSelectedKeys] = useState<number[]>([])
   const [tableSelectedRows, setTableSelectedRows] = useState<object[]>([])
 
-  function handleTableChange(selectedKeys: number[]) {
+  function handleTableChange(selectedKeys: any[]) {
     setTableSelectedKeys(selectedKeys)
   }
 
@@ -50,19 +56,19 @@ const ExportExcel = (props: any) => {
   }
 
 
-  function handleExport() {
+  function handleExport(values: FormState) {
+    console.log('values', values)
     if (!tableSelectedRows.length) {
       message.warning('请勾选要导出的数据项！')
       return
     }
+    const { fileName, autoWidth, fileType: bookType } = values
 
     const params: DataToSheet = {
       data: tableSelectedRows,
       header: ['编号', '姓名', '性别', '手机', '学历', '爱好'],
       key: ['key', 'name', 'sex', 'phone', 'education', 'hobby'],
-      fileName: formParam.fileName,
-      autoWidth: formParam.autoWidth,
-      bookType: formParam.fileType
+      fileName, autoWidth, bookType
     }
     exportDataToExcel(params)
     setTableSelectedKeys([])
@@ -73,7 +79,7 @@ const ExportExcel = (props: any) => {
     <PageWrapper plugin={XLSX_PLUGIN}>
       <Card bordered={false}>
         <Space direction='vertical' size={16} style={{width: '100%'}}>
-          <Form layout='inline'>
+          <Form layout='inline' autoComplete="off" initialValues={formParam} onFinish={handleExport}>
             <Item label='文件名:' name='fileName'>
               <Input placeholder='文件名' />
             </Item>
@@ -96,7 +102,7 @@ const ExportExcel = (props: any) => {
               />
             </Item>
             <Item>
-              <Button type='primary' htmlType='submit' onClick={handleExport}>导出Excel</Button>
+              <Button type='primary' htmlType='submit'>导出Excel</Button>
             </Item>
           </Form>
           <Table
