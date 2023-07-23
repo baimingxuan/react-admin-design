@@ -1,6 +1,7 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import VideoPlayer from '@/views/video/video-player'
 
 // video module page
 const VideoRoute: RouteObject = {
@@ -14,7 +15,7 @@ const VideoRoute: RouteObject = {
     children: [
         {
             path: 'video-player',
-            element: <Home />,
+            element: <VideoPlayer />,
             meta: {
                 title: '视频播放器',
                 key: 'videoPlayer'
