@@ -1,6 +1,7 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import TableBasic from '@/views/table/table-basic'
 
 // table module page
 const TableRoute: RouteObject = {
@@ -14,7 +15,7 @@ const TableRoute: RouteObject = {
     children: [
         {
             path: 'table-basic',
-            element: <Home />,
+            element: <TableBasic />,
             meta: {
                 title: '基础表格',
                 key: 'tableBasic'
