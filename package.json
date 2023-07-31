@@ -34,6 +34,7 @@
     "@types/video.js": "^7.3.52",
     "@videojs-player/react": "^1.0.0",
     "@vitejs/plugin-react": "^3.0.1",
+    "dayjs": "^1.11.9",
     "esbuild": "^0.18.16",
     "fast-glob": "^3.2.12",
     "file-saver": "^2.0.5",
