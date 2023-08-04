@@ -1,6 +1,7 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import OrgTree from '@/views/tree/org-tree'
 
 // tree module page
 const TreeRoute: RouteObject = {
@@ -14,7 +15,7 @@ const TreeRoute: RouteObject = {
     children: [
         {
             path: 'org-tree',
-            element: <Home />,
+            element: <OrgTree />,
             meta: {
                 title: '组织树',
                 key: 'orgTree'
