@@ -3,5 +3,3 @@ declare interface Fn<T = any, R = T> {
 }
 
 declare type TargetContext = '_self' | '_blank'
-
-declare module 'react-org-tree'
