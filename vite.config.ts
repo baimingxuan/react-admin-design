@@ -2,6 +2,7 @@ import type { ConfigEnv, UserConfig } from 'vite'
 import { loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { viteMockServe } from 'vite-plugin-mock'
 import { wrapperEnv } from './build/utils'
 // need install plugin @types/node
 import { resolve } from 'path'
@@ -28,6 +29,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       createSvgIconsPlugin({
         iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]'
+      }),
+      viteMockServe({
+        mockPath: 'mock',
+        ignore: /^\_/
       })
     ],
 
