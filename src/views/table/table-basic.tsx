@@ -128,7 +128,7 @@ const TableBasic = () => {
             dataIndex='married'
             align='center'
             render={
-              (_, record: any) => (
+              (text, record: any) => (
                 <Select
                   options={marriedOptions}
                   defaultValue={record.married}

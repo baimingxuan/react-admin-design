@@ -2,6 +2,7 @@ import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 import TableBasic from '@/views/table/table-basic'
+import TableEditRow from '@/views/table/table-edit-row'
 
 // table module page
 const TableRoute: RouteObject = {
@@ -23,7 +24,7 @@ const TableRoute: RouteObject = {
         },
         {
             path: 'table-edit-row',
-            element: <Home />,
+            element: <TableEditRow />,
             meta: {
                 title: '可编辑行表格',
                 key: 'tableEditRow'

@@ -1,10 +1,31 @@
+import React, { useState } from 'react'
 import type { ColumnType } from 'antd/es/table'
-import { Button, Table, Select, Switch, InputNumber, Input, DatePicker, Radio, Checkbox, Card, Popconfirm, Space } from 'antd'
+import { Form, Button, Table, Select, Switch, InputNumber, Input, DatePicker, Radio, Checkbox, Card, Popconfirm, Space } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import dayjs from 'dayjs'
 import { cloneDeep } from 'lodash-es'
 import { TABLE_EDIT_COMPO } from '@/settings/websiteSetting'
 import { tableData, DataItem } from '../excel/export-excel/data'
+
+interface ColumnState {
+  key: number
+  name: string
+  sex: string
+  birth: string
+  education: string
+  hobby: string
+  forbid: boolean
+}
+
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+  editing: boolean
+  dataIndex: string
+  title: any
+  cellType: 'number' | 'text'
+  record: ColumnState
+  index: number
+  children: React.ReactNode
+}
 
 const theadMap = {
   key: '数字输入框',
@@ -17,7 +38,7 @@ const theadMap = {
   action: '按钮'
 }
 
-const TableEditRow = () => {
+const TableEditRow: React.FC = () => {
   const { Column } = Table
 
   return (
@@ -28,10 +49,30 @@ const TableEditRow = () => {
           pagination={false}
         >
           <Column
-            title='编号'
-            dataIndex='id'
+            title={
+              () => (
+                <>
+                  <span>编号</span>
+                  <p className='sub-title'>(数字输入框)</p>
+                </>
+              )
+            }
+            dataIndex='key'
             align='center'
+            width={70}
             sorter
+            render={
+              (text, record: any) => (
+                record.editable
+                ? <InputNumber
+                    defaultValue={record.key}
+                    onChange={(value) => record.key = value}
+                    min={1000}
+                    max={2000}
+                  />
+                : <span>{text}</span>
+              )
+            }
           />
         </Table>
       </Card>
