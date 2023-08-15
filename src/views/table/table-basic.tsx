@@ -51,6 +51,7 @@ const TableBasic = () => {
   }
 
   function handlePageChange(page: number, pageSize: number) {
+    console.log('xas', page, pageSize)
     setTableQuery({ ...tableQuery, current: page, pageSize })
     fetchData()
   }
@@ -78,6 +79,7 @@ const TableBasic = () => {
           rowSelection={tableSelection}
           dataSource={tableData}
           loading={tableLoading}
+          pagination={false}
         >
           <Column
             title='编号'
@@ -172,14 +174,16 @@ const TableBasic = () => {
             }
           />
         </Table>
-        <Pagination
-          defaultCurrent={tableQuery.current}
-          defaultPageSize={tableQuery.pageSize}
-          total={tableTotal}
-          showSizeChanger
-          showQuickJumper
-          onChange={handlePageChange}
-        />
+        <div style={{textAlign: 'right'}}>
+          <Pagination
+            current={tableQuery.current}
+            pageSize={tableQuery.pageSize}
+            total={tableTotal}
+            showSizeChanger
+            showQuickJumper
+            onChange={handlePageChange}
+          />
+        </div>
       </>
     </PageWrapper>
   )
