@@ -17,11 +17,13 @@ interface ColumnState {
   forbid: boolean
 }
 
+type CellType = 'number' | 'text' | 'radio' | 'date' | 'select' | 'checkbox' | 'switch'
+
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean
   dataIndex: string
   title: any
-  cellType: 'number' | 'text'
+  cellType: CellType
   record: ColumnState
   index: number
   children: React.ReactNode
@@ -38,8 +40,61 @@ const theadMap = {
   action: '按钮'
 }
 
+const nodeType = (type: CellType) => {
+  switch (type) {
+    case 'number':
+      return <InputNumber />
+    case 'text':
+      return <Input />
+    case 'radio':
+      return <Radio.Group />
+    case 'date':
+      return <DatePicker />
+    case 'select':
+      return <Select />
+    case 'checkbox':
+      return <Checkbox.Group />
+    case 'switch':
+      return <Switch />
+  }
+}
+
+const EditableCell: React.FC<EditableCellProps> = ({
+  editing,
+  dataIndex,
+  title,
+  cellType,
+  record,
+  index,
+  children,
+  ...restProps
+}) => {
+  const cellNode = nodeType(cellType)
+
+  return (
+    <td {...restProps}>
+      {editing ? (
+        <Form.Item
+          name={dataIndex}
+          style={{ margin: 0 }}
+        >
+          {cellNode}
+        </Form.Item>
+      ) : (
+        children
+      )}
+    </td>
+  )
+}
+
 const TableEditRow: React.FC = () => {
   const { Column } = Table
+
+  const [form] = Form.useForm()
+  const [data, setData] = useState(tableData)
+  const [editingKey, setEditingKey] = useState<number>()
+
+  const isEditing = (record: ColumnState) => record.key === editingKey
 
   return (
     <PageWrapper plugin={TABLE_EDIT_COMPO}>
