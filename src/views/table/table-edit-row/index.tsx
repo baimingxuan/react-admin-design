@@ -5,17 +5,7 @@ import { PageWrapper } from '@/components/Page'
 import dayjs from 'dayjs'
 import { cloneDeep } from 'lodash-es'
 import { TABLE_EDIT_COMPO } from '@/settings/websiteSetting'
-import { tableData, DataItem } from '../excel/export-excel/data'
-
-interface ColumnState {
-  key: number
-  name: string
-  sex: string
-  birth: string
-  education: string
-  hobby: string
-  forbid: boolean
-}
+import { tableData, DataItem } from './data'
 
 type CellType = 'number' | 'text' | 'radio' | 'date' | 'select' | 'checkbox' | 'switch'
 
@@ -24,7 +14,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   dataIndex: string
   title: any
   cellType: CellType
-  record: ColumnState
+  record: DataItem
   index: number
   children: React.ReactNode
 }
@@ -92,9 +82,43 @@ const TableEditRow: React.FC = () => {
 
   const [form] = Form.useForm()
   const [data, setData] = useState(tableData)
-  const [editingKey, setEditingKey] = useState<number>()
+  const [editingKey, setEditingKey] = useState('')
 
-  const isEditing = (record: ColumnState) => record.key === editingKey
+  const isEditing = (record: DataItem) => record.key === editingKey
+
+  const edit = (record: Partial<DataItem> & { key: React.Key }) => {
+    form.setFieldsValue({ name: '', sex: '', birth: '', education: '', hobby: '', ...record })
+    setEditingKey(record.key)
+  }
+
+  const cancel = () => {
+    setEditingKey('')
+  }
+
+  const save = async (key: React.Key) => {
+    try {
+      const row = (await form.validateFields()) as DataItem
+
+      const newData = [...data]
+      const index = newData.findIndex((item) => key === item.key)
+
+      if (index > -1) {
+        const item = newData[index]
+        newData.splice(index, 1, {
+          ...item,
+          ...row
+        })
+        setData(newData)
+        setEditingKey('')
+      } else {
+        newData.push(row)
+        setData(newData)
+        setEditingKey('')
+      }
+    } catch (errInfo) {
+      console.log('Validate Failed:', errInfo);
+    }
+  }
 
   return (
     <PageWrapper plugin={TABLE_EDIT_COMPO}>
