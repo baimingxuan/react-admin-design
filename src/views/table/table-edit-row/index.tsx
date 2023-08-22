@@ -3,7 +3,6 @@ import { Form, Button, Table, Select, Switch, InputNumber, Input, DatePicker, Ra
 import { ColumnType } from 'antd/es/table'
 import { PageWrapper } from '@/components/Page'
 import dayjs from 'dayjs'
-import { cloneDeep } from 'lodash-es'
 import { TABLE_EDIT_COMPO } from '@/settings/websiteSetting'
 import { tableData, DataItem } from './data'
 
@@ -31,7 +30,7 @@ const theadMap: theadKey = {
   action: { title: '按钮', type: 'button' }
 }
 
-const nodeType = (type: CellType) => {
+const nodeType = (type: CellType, record: DataItem) => {
   switch (type) {
     case 'number':
       return <InputNumber min={1000} max={2000} />
@@ -40,13 +39,13 @@ const nodeType = (type: CellType) => {
     case 'radio':
       return <Radio.Group options={['男', '女'].map(item => ({value: item, label: item}))} />
     case 'date':
-      return <DatePicker format='YYYY-MM-DD' />
+      return <div><DatePicker defaultValue={dayjs(record.birth, 'YYYY-MM-DD')} format='YYYY-MM-DD' /></div>
     case 'select':
       return <Select options={['初中', '高中', '大专', '本科'].map(item => ({ value: item }))} style={{width: '80px'}} />
     case 'checkbox':
-      return <Checkbox.Group />
+      return <Checkbox.Group options={record.hobby.split('、')} defaultValue={record.hobby.split('、')} />
     case 'switch':
-      return <Switch />
+      return <Switch defaultChecked={record.forbid} />
   }
 }
 
@@ -60,7 +59,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   children,
   ...restProps
 }) => {
-  const cellNode = nodeType(cellType)
+  const cellNode = nodeType(cellType, record)
 
   return (
     <td {...restProps}>
@@ -87,7 +86,7 @@ const TableEditRow: React.FC = () => {
   const isEditing = (record: DataItem) => record.key === editingKey
 
   const edit = (record: Partial<DataItem>) => {
-    form.setFieldsValue({ key: '', name: '', sex: '', birth: '', education: '', hobby: '', forbid: false, ...record })
+    form.setFieldsValue({ ...record })
     setEditingKey(record.key!)
   }
 
@@ -218,7 +217,12 @@ const TableEditRow: React.FC = () => {
       dataIndex: 'forbid',
       width: 70,
       editable: true,
-      align: 'center'
+      align: 'center',
+      render: (text: string, record: DataItem) => {
+        return (
+          <span>{record.forbid ? '是' : '否'}</span>
+        )
+      }
     },
     {
       title: () => {
