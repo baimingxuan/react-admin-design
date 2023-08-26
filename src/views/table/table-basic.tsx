@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Button, Table, Tag, Select, Switch, Popover, Space, Modal, Pagination, TableProps } from 'antd'
-import { ColumnType, TablePaginationConfig } from 'antd/es/table'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { TABLE_COMPO } from '@/settings/websiteSetting'
 import { getTableList } from '@/api'
