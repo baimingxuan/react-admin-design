@@ -11,3 +11,5 @@ const ImageUpload: React.FC = () => {
     </PageWrapper>
   )
 }
+
+export default ImageUpload
