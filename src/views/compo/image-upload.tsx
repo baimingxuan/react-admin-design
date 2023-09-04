@@ -13,10 +13,10 @@ const ImageUpload: React.FC = () => {
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
 
-  const [dragImgs, setDragImgs] = useState<UploadFile[]>([
+  const dragImgs: UploadFile[] = [
     { uid: '-1', name: 'beautiful-girl.jpg' },
     { uid: '-2', name: 'beautiful-sunshine.jpg' }
-  ])
+  ]
   const [listImgs, setListImgs] = useState<UploadFile[]>([
     {
       uid: '-1',
