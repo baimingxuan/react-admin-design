@@ -1,6 +1,7 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import ImageUpload from '@/views/compo/image-upload'
 
 // component module page
 const CompoRoute: RouteObject = {
@@ -14,7 +15,7 @@ const CompoRoute: RouteObject = {
   children: [
       {
           path: 'image-upload',
-          element: <Home />,
+          element: <ImageUpload />,
           meta: {
               title: '图片上传',
               key: 'imageUpload'

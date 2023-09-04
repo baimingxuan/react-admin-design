@@ -1,4 +1,5 @@
-import type { UploadProps } from 'antd'
+import type { UploadFile } from 'antd/es/upload/interface'
+import type { RcFile, UploadProps } from 'antd/es/upload'
 import React, { useState } from 'react'
 import { Row, Col, Card, Button, Upload, Modal } from 'antd'
 import { CloudUploadOutlined, PlusOutlined } from '@ant-design/icons'
@@ -6,15 +7,17 @@ import { PageWrapper } from '@/components/Page'
 import { UPLOAD_COMPO } from '@/settings/websiteSetting'
 
 const ImageUpload: React.FC = () => {
+  const { Dragger } = Upload
+
   const [previewVisible, setPreviewVisible] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
 
-  const [dragImgs, setDragImgs] = useState<UploadProps['fileList']>([
+  const [dragImgs, setDragImgs] = useState<UploadFile[]>([
     { uid: '-1', name: 'beautiful-girl.jpg' },
     { uid: '-2', name: 'beautiful-sunshine.jpg' }
   ])
-  const [listImgs, setListImgs] = useState<UploadProps['fileList']>([
+  const [listImgs, setListImgs] = useState<UploadFile[]>([
     {
       uid: '-1',
       name: 'beautiful-girl.jpg',
@@ -31,25 +34,27 @@ const ImageUpload: React.FC = () => {
     }
   ])
 
-  async function handlePreview(file: any) {
+  const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      file.preview = (await getBase64(file.originFileObj)) as string
+      file.preview = (await getBase64(file.originFileObj as RcFile)) as string
     }
-    setPreviewImage(file.url || file.preview)
+    setPreviewImage(file.url || (file.preview as string))
     setPreviewVisible(true)
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
+    setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1))
   }
 
-  function getBase64(file: File) {
+  const getBase64 = (file: RcFile): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader()
       reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result)
+      reader.onload = () => resolve(reader.result as string)
       reader.onerror = error => reject(error)
     })
   }
 
-  function handleCancle() {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setListImgs(newFileList)
+
+  const handleCancle = () => {
     setPreviewVisible(false)
     setPreviewTitle('')
   }
@@ -59,25 +64,24 @@ const ImageUpload: React.FC = () => {
       <Row gutter={12}>
         <Col span={8}>
           <Card title='拖拽上传' bordered={false} bodyStyle={{height: '300px'}}>
-            <Upload.Dragger
-              v-model:fileList={dragImgs}
+            <Dragger
+              defaultFileList={dragImgs}
               action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
               accept='.jpg, .jpeg, .gif, .png, .bmp'
               multiple
-              className='muti-upload'
             >
               <p className="ant-upload-drag-icon" style={{marginBottom: 0}}>
                 <CloudUploadOutlined rev={undefined} />
               </p>
               <p>将图片拖到此处, 或<span style={{color: '#1890ff;'}}>点击上传</span></p>
               <p className="ant-upload-hint">只能上传jpg、jpeg、gif、png、bmp文件, 且不超过500kb</p>
-            </Upload.Dragger>
+            </Dragger>
           </Card>
         </Col>
         <Col span={8}>
           <Card title='列表样式' bordered={false} bodyStyle={{height: '300px'}}>
             <Upload
-              fileList={listImgs}
+              defaultFileList={[...listImgs]}
               action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
               accept='.jpg, .jpeg, .gif, .png, .bmp'
               listType='picture'
@@ -100,6 +104,7 @@ const ImageUpload: React.FC = () => {
               listType='picture-card'
               className='list-upload'
               onPreview={handlePreview}
+              onChange={handleChange}
             >
               <div>
                 <PlusOutlined rev={undefined} />
