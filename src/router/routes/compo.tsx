@@ -2,6 +2,7 @@ import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 import ImageUpload from '@/views/compo/image-upload'
+import DragList from '@/views/compo/drag/drag-list'
 
 // component module page
 const CompoRoute: RouteObject = {
@@ -29,7 +30,7 @@ const CompoRoute: RouteObject = {
           children: [
               {
                   path: 'drag-list',
-                  element: <Home />,
+                  element: <DragList />,
                   meta: {
                       title: '列表拖拽',
                       key: 'dragList'

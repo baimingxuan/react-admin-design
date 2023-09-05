@@ -67,11 +67,11 @@ export const XLSX_PLUGIN = {
   desc: 'JS-xlsx: 由SheetJS出品的一款非常方便的只需要纯JS即可读取和导出excel的工具库, 功能强大, 支持xlsx、csv、txt等格式。'
 }
 
-// Vue-Draggable plugin
-export const DRAGGABLE_PLUGIN = {
-  name: 'Draggable拖拽列表',
-  url: 'https://github.com/SortableJS/vue.draggable.next',
-  desc: 'Vue.Draggable: 基于Sortable.js的vue组件, 用以实现拖拽功能。'
+// React-Sortable plugin
+export const SORTABLE_PLUGIN = {
+  name: 'Sortable拖拽列表',
+  url: 'https://github.com/SortableJS/react-sortablejs',
+  desc: 'ReactSortable: 基于Sortable.js的react组件, 用以实现拖拽功能。'
 }
 
 // Vue-drag-resize plugin
