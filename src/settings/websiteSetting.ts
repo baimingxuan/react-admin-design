@@ -74,11 +74,11 @@ export const SORTABLE_PLUGIN = {
   desc: 'ReactSortable: 基于Sortable.js的react组件, 用以实现拖拽功能。'
 }
 
-// Vue-drag-resize plugin
-export const VUE_DRAG_RESIZE_PLUGIN = {
-  name: 'DragResize拖拽组件',
-  url: 'https://github.com/kirillmurashov/vue-drag-resize/tree/vue3',
-  desc: 'vue-drag-resize: 一款用于可拖动和调整元素大小的 vue3 组件。'
+// React-Rnd plugin
+export const REACT_RND_PLUGIN = {
+  name: 'React-Rnd拖拽组件',
+  url: 'https://github.com/bokuweb/react-rnd',
+  desc: 'React-Rnd: 一款可调整大小和可拖拽的React组件。'
 }
 
 // Vue-cropper plugin

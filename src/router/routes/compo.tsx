@@ -3,6 +3,7 @@ import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 import ImageUpload from '@/views/compo/image-upload'
 import DragList from '@/views/compo/drag/drag-list'
+import DragResize from '@/views/compo/drag/drag-resize'
 
 // component module page
 const CompoRoute: RouteObject = {
@@ -38,7 +39,7 @@ const CompoRoute: RouteObject = {
               },
               {
                   path: 'drag-resize',
-                  element: <Home />,
+                  element: <DragResize />,
                   meta: {
                       title: '组件拖拽',
                       key: 'dragResize'
