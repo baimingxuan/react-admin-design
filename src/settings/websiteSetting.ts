@@ -39,7 +39,7 @@ export const TREE_COMPO = {
 // Transfer component
 export const TRANSFER_COMPO = {
   name: 'Transfer穿梭框',
-  url: 'https://www.antdv.com/components/transfer',
+  url: 'https://ant-design.antgroup.com/components/transfer',
   desc: 'ant-design-transfer: 使用 ant-design 的 transfer 组件, 可用于对列表数据进行选中、取消等操作。'
 }
 

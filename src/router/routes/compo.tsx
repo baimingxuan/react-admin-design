@@ -4,6 +4,7 @@ import Home from '../../views/home'
 import ImageUpload from '@/views/compo/image-upload'
 import DragList from '@/views/compo/drag/drag-list'
 import DragResize from '@/views/compo/drag/drag-resize'
+import TransferPage from '@/views/compo/transfer'
 
 // component module page
 const CompoRoute: RouteObject = {
@@ -49,7 +50,7 @@ const CompoRoute: RouteObject = {
       },
       {
           path: 'transfer',
-          element: <Home />,
+          element: <TransferPage />,
           meta: {
               title: '穿梭框'
           }
