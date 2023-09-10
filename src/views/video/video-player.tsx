@@ -1,8 +1,11 @@
+
+// @ts-nocheck
 import { Row, Col, Card } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import { VIDEO_RES_SRC, VIDEO_PLUGIN } from '@/settings/websiteSetting'
-import { VideoPlayer } from '@videojs-player/react'
-import 'video.js/dist/video-js.css'
+import { Player, ControlBar, BigPlayButton, CurrentTimeDisplay, TimeDivider,
+  PlaybackRateMenuButton, VolumeMenuButton } from 'video-react'
+import 'video-react/dist/video-react.css'
 
 const VideoPlayers = () => {
 
@@ -20,15 +23,20 @@ const VideoPlayers = () => {
         </Col>
         <Col span={12}>
           <Card title='视频播放插件' bordered={false}>
-            <VideoPlayer
+            <Player
               src={VIDEO_RES_SRC}
-              playbackRates={[0.5, 1.0, 1.5, 2.0]}
-              controls
               fluid
-              loop={false}
               preload='auto'
               aspectRatio='16:9'
-            />
+            >
+              <BigPlayButton position="center" />
+              <ControlBar>
+                <CurrentTimeDisplay order={4.1} />
+                <TimeDivider order={4.2} />
+                <VolumeMenuButton vertical order={7.0} />
+                <PlaybackRateMenuButton rates={[0.5, 1.0, 1.5, 2.0]} order={7.2} />
+              </ControlBar>
+            </Player>
           </Card>
         </Col>
       </Row>
