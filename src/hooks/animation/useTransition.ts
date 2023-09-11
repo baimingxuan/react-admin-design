@@ -1,58 +1,36 @@
-import { computed, ref, watch } from 'vue-demi'
-import { promiseTimeout, toValue, tryOnScopeDispose } from '@vueuse/shared'
-import type { ComputedRef, Ref } from 'vue-demi'
-import type { MaybeRef, MaybeRefOrGetter } from '@vueuse/shared'
+import { useState, useEffect } from 'react'
+import { promiseTimeout } from '@/utils'
 
-/**
- * Cubic bezier points
- */
+// Cubic bezier points
 export type CubicBezierPoints = [number, number, number, number]
 
-/**
- * Easing function
- */
+// Easing function
 export type EasingFunction = (n: number) => number
 
-/**
- * Transition options
- */
+// Transition options
 export interface TransitionOptions {
 
-  /**
-   * Manually abort a transition
-   */
+  // Manually abort a transition
   abort?: () => any
 
-  /**
-   * Transition duration in milliseconds
-   */
-  duration?: MaybeRef<number>
+  // Transition duration in milliseconds
+  duration?: number
 
-  /**
-   * Easing function or cubic bezier points for calculating transition values
-   */
-  transition?: MaybeRef<EasingFunction | CubicBezierPoints>
+  // Easing function or cubic bezier points for calculating transition values
+  transition?: EasingFunction | CubicBezierPoints
 }
 
 export interface UseTransitionOptions extends TransitionOptions {
-  /**
-   * Milliseconds to wait before starting transition
-   */
-  delay?: MaybeRef<number>
+  // Milliseconds to wait before starting transition
+  delay?: number
 
-  /**
-   * Disables the transition
-   */
-  disabled?: MaybeRef<boolean>
+  // Disables the transition
+  disabled?: boolean
 
-  /**
-   * Callback to execute after transition finishes
-   */
+  // Callback to execute after transition finishes
   onFinished?: () => void
 
-  /**
-   * Callback to execute after transition starts
-   */
+  // Callback to execute after transition starts
   onStarted?: () => void
 }
 
@@ -86,7 +64,6 @@ const _TransitionPresets = {
 
 /**
  * Common transitions
- *
  * @see https://easings.net
  */
 export const TransitionPresets = /*#__PURE__*/ Object.assign({}, _TransitionPresets) as Record<keyof typeof _TransitionPresets, CubicBezierPoints> & { linear: EasingFunction }
@@ -128,18 +105,24 @@ function toVec(t: number | number[] | undefined) {
   return (typeof t === 'number' ? [t] : t) || []
 }
 
+function toValue<T>(r: T): T {
+  return typeof r === 'function'
+    ? (r as AnyFn)()
+    : r
+}
+
 /**
  * Transition from one value to another.
  *
- * @param source
+ * @param setter
  * @param from
  * @param to
  * @param options
  */
 export function executeTransition<T extends number | number[]>(
-  source: Ref<T>,
-  from: MaybeRefOrGetter<T>,
-  to: MaybeRefOrGetter<T>,
+  setter: (val: T) => void,
+  from: T,
+  to: T,
   options: TransitionOptions = {},
 ): PromiseLike<void> {
   const fromVal = toValue(from)
@@ -151,14 +134,14 @@ export function executeTransition<T extends number | number[]>(
   const endAt = Date.now() + duration
   const trans = typeof options.transition === 'function'
     ? options.transition
-    : (toValue(options.transition) ?? linear)
+    : (toValue(options.transition) ?? [0, 0, 1, 1])
 
   const ease = typeof trans === 'function'
     ? trans
     : createEasingFunction(trans)
 
   return new Promise<void>((resolve) => {
-    source.value = fromVal
+    setter(fromVal)
 
     const tick = () => {
       if (options.abort?.()) {
@@ -169,18 +152,18 @@ export function executeTransition<T extends number | number[]>(
 
       const now = Date.now()
       const alpha = ease((now - startedAt) / duration)
-      const arr = toVec(source.value).map((n, i) => lerp(v1[i], v2[i], alpha))
+      const arr = toVec(fromVal).map((n, i) => lerp(v1[i], v2[i], alpha))
 
-      if (Array.isArray(source.value))
-        (source.value as number[]) = arr.map((n, i) => lerp(v1[i] ?? 0, v2[i] ?? 0, alpha))
-      else if (typeof source.value === 'number')
-        (source.value as number) = arr[0]
+      if (Array.isArray(fromVal))
+        (fromVal as number[]) = arr.map((n, i) => lerp(v1[i] ?? 0, v2[i] ?? 0, alpha))
+      else if (typeof fromVal === 'number')
+        (fromVal as number) = arr[0]
 
       if (now < endAt) {
         requestAnimationFrame(tick)
       }
       else {
-        source.value = toVal
+        setter(toVal)
 
         resolve()
       }
@@ -191,25 +174,21 @@ export function executeTransition<T extends number | number[]>(
 }
 
 // option 1: reactive number
-export function useTransition(source: MaybeRefOrGetter<number>, options?: UseTransitionOptions): ComputedRef<number>
+export function useTransition(source: number, options?: UseTransitionOptions): number
 
-// option 2: static array of possibly reactive numbers
-export function useTransition<T extends MaybeRefOrGetter<number>[]>(source: [...T], options?: UseTransitionOptions): ComputedRef<{ [K in keyof T]: number }>
-
-// option 3: reactive array of numbers
-export function useTransition<T extends MaybeRefOrGetter<number[]>>(source: T, options?: UseTransitionOptions): ComputedRef<number[]>
+// option 2: reactive array of numbers
+export function useTransition<T extends number[]>(source: T, options?: UseTransitionOptions): number[]
 
 /**
  * Follow value with a transition.
  *
- * @see https://vueuse.org/useTransition
  * @param source
  * @param options
  */
 export function useTransition(
-  source: MaybeRefOrGetter<number | number[]> | MaybeRefOrGetter<number>[],
+  source: number | number[],
   options: UseTransitionOptions = {},
-): Ref<any> {
+): any {
   let currentId = 0
 
   const sourceVal = () => {
@@ -220,43 +199,44 @@ export function useTransition(
       : v.map(toValue<number>)
   }
 
-  const outputRef = ref(sourceVal())
+  const [outputVal, setOutputVal] = useState(sourceVal())
 
-  watch(sourceVal, async (to) => {
-    if (toValue(options.disabled))
+  useEffect(() => {
+    const to = sourceVal()
+    const asyncFunc =async () => {
+      if (toValue(options.disabled))
       return
 
-    const id = ++currentId
+      const id = ++currentId
 
-    if (options.delay)
-      await promiseTimeout(toValue(options.delay))
+      if (options.delay)
+        await promiseTimeout(toValue(options.delay))
 
-    if (id !== currentId)
-      return
+      if (id !== currentId)
+        return
 
-    const toVal = Array.isArray(to) ? to.map(toValue<number>) : toValue(to)
+      const toVal = Array.isArray(to) ? to.map(toValue<number>) : toValue(to)
 
-    options.onStarted?.()
+      options.onStarted?.()
 
-    await executeTransition(outputRef, outputRef.value, toVal, {
-      ...options,
-      abort: () => id !== currentId || options.abort?.(),
-    })
+      await executeTransition(setOutputVal, outputVal, toVal, {
+        ...options,
+        abort: () => id !== currentId || options.abort?.(),
+      })
 
-    options.onFinished?.()
-  }, { deep: true })
+      options.onFinished?.()
+    }
 
-  watch(() => toValue(options.disabled), (disabled) => {
-    if (disabled) {
+    asyncFunc()
+  }, [sourceVal()])
+
+  useEffect(() => {
+    if (toValue(options.disabled)) {
       currentId++
 
-      outputRef.value = sourceVal()
+      setOutputVal(sourceVal())
     }
-  })
+  }, [toValue(options.disabled)])
 
-  tryOnScopeDispose(() => {
-    currentId++
-  })
-
-  return computed(() => toValue(options.disabled) ? sourceVal() : outputRef.value)
+  return () => toValue(options.disabled) ? sourceVal() : outputVal
 }
