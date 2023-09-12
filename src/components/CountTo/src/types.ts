@@ -1,3 +1,13 @@
+import { CSSProperties } from 'react'
+
+type VoidFn = () => void
+
+export enum transitionState {
+  LINEAR = 'linear',
+  EASE_IN_SINE = 'easeInSine', 
+  EASE_OUT_SINE = 'easeOutSine'
+}
+
 export interface CountToProp {
   // Number to start at (0)
   startVal?: number
@@ -24,5 +34,13 @@ export interface CountToProp {
   // Turn on digital animation (true)
   useEasing?: boolean
   // Digital animation (linear)
-  transition?: string
+  transition?: transitionState
+  // Class name
+  className?: string
+  // Custom style
+  style?: CSSProperties
+  // Callback to execute after transition started
+  onStarted?: VoidFn
+  // Callback to execute after transition finished
+  onFinished?: VoidFn
 }

@@ -125,10 +125,8 @@ export function executeTransition<T extends number | number[]>(
   to: T,
   options: TransitionOptions = {},
 ): PromiseLike<void> {
-  const fromVal = toValue(from)
-  const toVal = toValue(to)
-  const v1 = toVec(fromVal)
-  const v2 = toVec(toVal)
+  const v1 = toVec(from)
+  const v2 = toVec(to)
   const duration = toValue(options.duration) ?? 1000
   const startedAt = Date.now()
   const endAt = Date.now() + duration
@@ -141,7 +139,7 @@ export function executeTransition<T extends number | number[]>(
     : createEasingFunction(trans)
 
   return new Promise<void>((resolve) => {
-    setter(fromVal)
+    setter(from)
 
     const tick = () => {
       if (options.abort?.()) {
@@ -152,18 +150,18 @@ export function executeTransition<T extends number | number[]>(
 
       const now = Date.now()
       const alpha = ease((now - startedAt) / duration)
-      const arr = toVec(fromVal).map((n, i) => lerp(v1[i], v2[i], alpha))
+      const arr = toVec(from).map((n, i) => lerp(v1[i], v2[i], alpha))
 
-      if (Array.isArray(fromVal))
-        (fromVal as number[]) = arr.map((n, i) => lerp(v1[i] ?? 0, v2[i] ?? 0, alpha))
-      else if (typeof fromVal === 'number')
-        (fromVal as number) = arr[0]
+      if (Array.isArray(from))
+        (from as number[]) = arr.map((n, i) => lerp(v1[i] ?? 0, v2[i] ?? 0, alpha))
+      else if (typeof from === 'number')
+        (from as number) = arr[0]
 
       if (now < endAt) {
         requestAnimationFrame(tick)
       }
       else {
-        setter(toVal)
+        setter(to)
 
         resolve()
       }
@@ -203,7 +201,7 @@ export function useTransition(
 
   useEffect(() => {
     const to = sourceVal()
-    const asyncFunc =async () => {
+    const asyncFunc = async () => {
       if (toValue(options.disabled))
       return
 
@@ -238,5 +236,5 @@ export function useTransition(
     }
   }, [toValue(options.disabled)])
 
-  return () => toValue(options.disabled) ? sourceVal() : outputVal
+  return toValue(options.disabled) ? sourceVal() : outputVal
 }
