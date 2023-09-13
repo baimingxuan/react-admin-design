@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Row, Col, Card, Button, Form, Input, InputNumber, Space } from 'antd'
 import { PageWrapper } from '@/components/Page'
-import CountUp from 'react-countup'
+import CountUp, { useCountUp } from 'react-countup'
 import { COUNTTO_PLUGIN } from '@/settings/websiteSetting'
 
 const CountToPage: React.FC = () => {
   const [form] = Form.useForm()
   const [formData, setFromData] = useState({
-    startVal: 0,
-    endVal: 2020,
+    start: 0,
+    end: 2020,
     duration: 4,
     decimals: 0,
     separator: ',',
@@ -16,13 +16,18 @@ const CountToPage: React.FC = () => {
     suffix: ' rmb'
   })
 
-  const onFinish = (values: any) => {
-    setFromData({...formData, ...values})
-    console.log('values', values)
-  }
+  const countUpRef = useRef(null)
+  const { start, reset } = useCountUp({
+    ref: countUpRef,
+    ...formData
+  })
 
-  const handleReset = () => {
-    // countRef.current?.reset()
+  useEffect(() => {
+    reset()
+  }, [])
+
+  const onValuesChange = (values: any) => {
+    setFromData({...formData, ...values})
   }
   
   return (
@@ -46,20 +51,12 @@ const CountToPage: React.FC = () => {
         <Col span={12}>
           <Card title='自定义配置' bordered={false} bodyStyle={{height: '300px'}}>
             <div className='flex-center' style={{marginBottom: '30px'}}>
-              <CountUp
-                // ref={countRef}
-                start={formData.startVal}
-                end={formData.endVal}
-                duration={formData.duration}
-                decimals={formData.decimals}
-                separator={formData.separator}
-                prefix={formData.prefix}
-                suffix={formData.suffix}
+              <span
+                ref={countUpRef}
                 style={{
                   fontSize: '40px',
                   color: '#e65d6e'
                 }}
-                onReset={handleReset}
               />
             </div>
             <Form
@@ -68,16 +65,16 @@ const CountToPage: React.FC = () => {
               layout='inline'
               labelAlign='left'
               labelCol={{style: {width: '80px', marginBottom: '12px'}}}
-              onFinish={onFinish}
+              onValuesChange={onValuesChange}
             >
-              <Form.Item label='startVal:' name='startVal'>
+              <Form.Item label='startVal:' name='start'>
                 <InputNumber
                   min={0}
                   max={10000}
                   style={{width: '100px'}}
                 />
               </Form.Item>
-              <Form.Item label='endVal:' name='endVal'>
+              <Form.Item label='endVal:' name='end'>
                 <InputNumber
                   min={0}
                   max={10000}
@@ -109,8 +106,8 @@ const CountToPage: React.FC = () => {
               </Form.Item>
               <Form.Item>
                 <Space>
-                  <Button type='primary' htmlType="submit">开始</Button>
-                  <Button type='primary' danger onClick={handleReset}>重置</Button>
+                  <Button type='primary' onClick={start}>开始</Button>
+                  <Button type='primary' danger onClick={reset}>重置</Button>
                 </Space>
               </Form.Item>
             </Form>
