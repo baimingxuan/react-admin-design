@@ -2,9 +2,9 @@ import React, { useRef, useState, useEffect } from 'react'
 import { Row, Col, Card, Button, Form, Input, InputNumber, Space } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import CountUp, { useCountUp } from 'react-countup'
-import { COUNTTO_PLUGIN } from '@/settings/websiteSetting'
+import { COUNTUP_PLUGIN } from '@/settings/websiteSetting'
 
-const CountToPage: React.FC = () => {
+const CountUpPage: React.FC = () => {
   const [form] = Form.useForm()
   const [formData, setFromData] = useState({
     start: 0,
@@ -31,7 +31,7 @@ const CountToPage: React.FC = () => {
   }
   
   return (
-    <PageWrapper plugin={COUNTTO_PLUGIN}>
+    <PageWrapper plugin={COUNTUP_PLUGIN}>
       <Row gutter={12}>
         <Col span={6}>
           <Card title='正向增加' bordered={false} bodyStyle={{height: '300px'}}>
@@ -133,4 +133,4 @@ const CountToPage: React.FC = () => {
   )
 }
 
-export default CountToPage
+export default CountUpPage

@@ -4,7 +4,7 @@ import ImageUpload from '@/views/compo/image-upload'
 import DragList from '@/views/compo/drag/drag-list'
 import DragResize from '@/views/compo/drag/drag-resize'
 import TransferPage from '@/views/compo/transfer'
-import CountToPage from '@/views/compo/count-to'
+import CountUpPage from '@/views/compo/count-up'
 
 // component module page
 const CompoRoute: RouteObject = {
@@ -56,11 +56,11 @@ const CompoRoute: RouteObject = {
           }
       },
       {
-          path: 'count-to',
-          element: <CountToPage />,
+          path: 'count-up',
+          element: <CountUpPage />,
           meta: {
               title: '数字滚动',
-              key: 'countTo'
+              key: 'countUp'
           }
       }
   ]

@@ -109,10 +109,10 @@ export const IMAGE_COMPRESS = {
 }
 
 // Count-to plugin
-export const COUNTTO_PLUGIN = {
-  name: 'CountTo数字滚动',
-  url: 'https://github.com/baimingxuan/vue3-admin-design/blob/main/src/components/CountTo/src/index.tsx',
-  desc: 'CountTo: 一个无依赖、轻量级的vue3数字滚动插件, 可以通过你自己的方式轻松编写。'
+export const COUNTUP_PLUGIN = {
+  name: 'CountUp数字滚动',
+  url: 'https://github.com/glennreyes/react-countup',
+  desc: 'React-CountUp: 一个无依赖、轻量级的react数字滚动插件, 以更有趣的方式显示数字数据。'
 }
 
 // Vue-codemirror plugin
