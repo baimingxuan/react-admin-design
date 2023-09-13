@@ -16,6 +16,9 @@ dependencies:
   axios:
     specifier: ^1.4.0
     version: 1.4.0
+  cropperjs:
+    specifier: ^1.6.0
+    version: 1.6.0
   immer:
     specifier: ^10.0.2
     version: 10.0.2
@@ -31,6 +34,9 @@ dependencies:
   react-countup:
     specifier: ^6.4.2
     version: 6.4.2(@babel/core@7.20.12)(react@18.2.0)(rollup@2.79.1)
+  react-cropper:
+    specifier: ^2.3.3
+    version: 2.3.3(react@18.2.0)
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
@@ -1567,6 +1573,10 @@ packages:
     resolution: {integrity: sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==}
     engines: {node: '>=0.8'}
     hasBin: true
+    dev: false
+
+  /cropperjs@1.6.0:
+    resolution: {integrity: sha512-BzLU/ecrfsbflwxgu+o7sQTrTlo52pVRZkTVrugEK5uyj6n8qKwAHP4s6+DWHqlXLqQ5B9+cM2MKeXiNfAsF6Q==}
     dev: false
 
   /css-select@4.3.0:
@@ -3323,6 +3333,15 @@ packages:
       - '@babel/core'
       - '@types/babel__core'
       - rollup
+    dev: false
+
+  /react-cropper@2.3.3(react@18.2.0):
+    resolution: {integrity: sha512-zghiEYkUb41kqtu+2jpX2Ntigf+Jj1dF9ew4lAobPzI2adaPE31z0p+5TcWngK6TvmWQUwK3lj4G+NDh1PDQ1w==}
+    peerDependencies:
+      react: '>=17.0.2'
+    dependencies:
+      cropperjs: 1.6.0
+      react: 18.2.0
     dev: false
 
   /react-dom@18.2.0(react@18.2.0):

@@ -1,6 +1,7 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import ImageCropper from '@/views/image/image-cropper'
 
 // image module page
 const ImageRoute: RouteObject = {
@@ -14,7 +15,7 @@ const ImageRoute: RouteObject = {
     children: [
         {
             path: 'image-cropper',
-            element: <Home />,
+            element: <ImageCropper />,
             meta: {
                 title: '图片裁剪',
                 key: 'imageCropper'
