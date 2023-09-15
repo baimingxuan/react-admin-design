@@ -1,6 +1,7 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import CodeMirror from '@/views/editor/code-mirror'
 
 // text-editor module page
 const TextEditorRoute: RouteObject = {
@@ -30,7 +31,7 @@ const TextEditorRoute: RouteObject = {
     },
     {
       path: 'code-editor',
-      element: <Home />,
+      element: <CodeMirror />,
       meta: {
         title: '代码编辑器',
         key: 'codeEditor'

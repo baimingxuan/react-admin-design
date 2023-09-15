@@ -115,11 +115,11 @@ export const COUNTUP_PLUGIN = {
   desc: 'React-CountUp: 一个无依赖、轻量级的react数字滚动插件, 以更有趣的方式显示数字数据。'
 }
 
-// Vue-codemirror plugin
+// React-CodeMirror plugin
 export const CODEMIRROR_PLUGIN = {
   name: 'CodeMirror代码编辑器',
-  url: 'https://github.com/surmon-china/vue-codemirror',
-  desc: 'VueCodeMirror: 是一款基于vue的代码编辑器, 可支持html、javascript、typescript等。'
+  url: 'https://github.com/uiwjs/react-codemirror',
+  desc: 'React-CodeMirror: 是一款基于 react 的代码编辑器, 可支持html、javascript、typescript等。'
 }
 
 // Antv-g6 plugin
