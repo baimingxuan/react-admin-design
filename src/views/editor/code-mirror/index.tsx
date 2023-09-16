@@ -33,12 +33,12 @@ const CodeMirror: FC = () => {
 
   const handleStateUpdate = (viewUpdate: any) => {
     const ranges = viewUpdate.state.selection.ranges
-    // setCodeInfo({
-    //   lines: viewUpdate.state.doc.lines,
-    //   cursor: ranges[0].anchor,
-    //   selected: ranges.reduce((plus: any, range: any) => plus + range.to - range.from, 0),
-    //   length: viewUpdate.state.doc.length
-    // })
+    setCodeInfo({
+      lines: viewUpdate.state.doc.lines,
+      cursor: ranges[0].anchor,
+      selected: ranges.reduce((plus: any, range: any) => plus + range.to - range.from, 0),
+      length: viewUpdate.state.doc.length
+     })
   }
 
   return (
