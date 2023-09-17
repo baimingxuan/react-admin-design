@@ -32,7 +32,7 @@ export const TABLE_EDIT_COMPO = {
 // Tree component
 export const TREE_COMPO = {
   name: 'Tree树形控件',
-  url: 'https://www.antdv.com/components/tree',
+  url: 'https://ant-design.antgroup.com/components/tree',
   desc: 'ant-design-tree: 基于Ant-Design的Tree组件, 可以完整展现其中的层级关系, 并具有展开收起选择等交互功能。'
 }
 
@@ -143,7 +143,7 @@ export const WANG_EDITOR_PLUGIN = {
   desc: 'wangEditor: 基于javascript和css开发的 Web富文本编辑器, 轻量、简洁、易用、开源免费。'
 }
 
-// Vue-markdown-editor plugin
+// React-Markdown-Editor plugin
 export const MARKDOWN_EDITOR_PLUGIN = {
   name: 'Markdown编辑器',
   url: 'https://github.com/uiwjs/react-md-editor',
