@@ -2,6 +2,7 @@ import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
 import CodeMirror from '@/views/editor/code-mirror'
+import RichText from '@/views/editor/rich-text'
 
 // text-editor module page
 const TextEditorRoute: RouteObject = {
@@ -23,7 +24,7 @@ const TextEditorRoute: RouteObject = {
     },
     {
       path: 'rich-text',
-      element: <Home />,
+      element: <RichText />,
       meta: {
         title: '富文本编辑器',
         key: 'richText'
