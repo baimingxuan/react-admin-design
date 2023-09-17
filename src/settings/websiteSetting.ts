@@ -146,6 +146,6 @@ export const WANG_EDITOR_PLUGIN = {
 // Vue-markdown-editor plugin
 export const MARKDOWN_EDITOR_PLUGIN = {
   name: 'Markdown编辑器',
-  url: 'https://github.com/code-farmer-i/vue-markdown-editor',
-  desc: 'VMdEditor: 是一款基于vue的Markdown编辑器,比较适合博客系统。'
+  url: 'https://github.com/uiwjs/react-md-editor',
+  desc: 'React-Md-Editor: 是一款基于 react 的 Markdown 编辑器,比较适合博客系统。'
 }
