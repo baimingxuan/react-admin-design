@@ -129,11 +129,11 @@ export const ANTV_G6_PLUGIN = {
   desc: 'antv-g6: 一个图可视化引擎。它提供了图的绘制、布局、分析、交互、动画等图可视化的基础能力。'
 }
 
-// VueTreeOrg plugin
-export const VUE_TREE_ORG_PLUGIN = {
+// ReactTreeOrg plugin
+export const React_TREE_ORG_PLUGIN = {
   name: 'Tree-Org树状组织图',
-  url: 'https://github.com/sangtian152/vue3-tree-org',
-  desc: 'vue3-tree-org: 基于vue的树结构组织图, 可用于公司组织架构展示。'
+  url: 'https://github.com/artdong/react-org-tree',
+  desc: 'react-tree-org: 基于 react 的树结构组织图, 可用于公司组织架构展示。'
 }
 
 // WangEditor plugin

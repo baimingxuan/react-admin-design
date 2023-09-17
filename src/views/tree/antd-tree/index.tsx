@@ -3,7 +3,6 @@ import { Row, Col, Card, Tree } from 'antd'
 import { TREE_COMPO } from '@/settings/websiteSetting'
 import { PageWrapper } from '@/components/Page'
 import { treeData } from './data'
-import { cloneDeep } from 'lodash-es'
 
 interface DataNode {
   title: string;
@@ -76,3 +75,5 @@ const AntdTree = () => {
     </PageWrapper>
   )
 }
+
+export default AntdTree
