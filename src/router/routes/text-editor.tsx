@@ -1,6 +1,6 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import Home from '../../views/home'
+import Markdown from '@/views/editor/markdown'
 import CodeMirror from '@/views/editor/code-mirror'
 import RichText from '@/views/editor/rich-text'
 
@@ -16,7 +16,7 @@ const TextEditorRoute: RouteObject = {
   children: [
     {
       path: 'markdown',
-      element: <Home />,
+      element: <Markdown />,
       meta: {
         title: 'Markdown编辑器',
         key: 'markdown'

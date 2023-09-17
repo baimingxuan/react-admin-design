@@ -12,12 +12,12 @@ const MarkdownEditor: FC = () => {
 
   return (
     <PageWrapper plugin={MARKDOWN_EDITOR_PLUGIN}>
-      <div className="container">
+      <div data-color-mode='light'>
         <MDEditor
           value={value}
+          height={400}
           onChange={handleChange}
         />
-        <MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} />
       </div>
     </PageWrapper>
   )
