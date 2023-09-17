@@ -13,6 +13,7 @@
     "@codemirror/view": "^6.19.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@uiw/react-codemirror": "^4.21.13",
+    "@uiw/react-md-editor": "^3.23.5",
     "@wangeditor/editor": "^5.1.23",
     "add": "^2.0.6",
     "antd": "^5.6.1",
