@@ -1,6 +1,8 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
 import Home from '../../views/home'
+import BasicForm from '@/views/form/basic-form'
+
 
 // form module page
 const FormRoute: RouteObject = {
@@ -13,19 +15,19 @@ const FormRoute: RouteObject = {
   },
   children: [
       {
-          path: 'form-list',
-          element: <Home />,
+          path: 'basic-form',
+          element: <BasicForm />,
           meta: {
-              title: '表单列表',
-              key: 'formList'
+              title: '基础表单',
+              key: 'basicForm'
           }
       },
       {
-          path: 'form-marking',
+          path: 'form-designer',
           element: <Home />,
           meta: {
-              title: '表单生成器',
-              key: 'formMarking'
+              title: '表单设计器',
+              key: 'formDesigner'
           }
       }
   ]
