@@ -1,7 +1,7 @@
 
 export const provinceData = ['guangdong', 'Zhejiang', 'Jiangsu']
 
-export const cityData = {
+export const cityData: Record<string, any> = {
   guangdong: ['guangzhou', 'shenzhen', 'foshan', 'dongguan', 'zhuhai'],
   Zhejiang: ['Hangzhou', 'Ningbo', 'Wenzhou'],
   Jiangsu: ['Nanjing', 'Suzhou', 'Zhenjiang', 'wuxi']
