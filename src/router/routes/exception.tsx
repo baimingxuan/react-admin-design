@@ -1,7 +1,8 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import Home from '../../views/home'
 import Page403 from '@/views/exception/page-403'
+import Page404 from '@/views/exception/page-404'
+import Page500 from '@/views/exception/page-500'
 
 // exception module page
 const ExceptionRoute: RouteObject = {
@@ -23,7 +24,7 @@ const ExceptionRoute: RouteObject = {
     },
     {
       path: 'page-404',
-      element: <Home />,
+      element: <Page404 />,
       meta: {
         title: '404页面',
         key: 'page404'
@@ -31,7 +32,7 @@ const ExceptionRoute: RouteObject = {
     },
     {
       path: 'page-500',
-      element: <Home />,
+      element: <Page500 />,
       meta: {
         title: '500页面',
         key: 'page500'
