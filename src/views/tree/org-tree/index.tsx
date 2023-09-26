@@ -20,7 +20,7 @@ const OrgTreePage: FC = () => {
 
   return (
     <PageWrapper plugin={React_TREE_ORG_PLUGIN}>
-      <Card bordered={false} bodyStyle={{height: '400px'}}>
+      <Card bordered={false} bodyStyle={{minHeight: '400px'}}>
         <Form
           form={form}
           initialValues={{...config}}
