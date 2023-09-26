@@ -3,13 +3,13 @@ import { Layout } from 'antd'
 import { Outlet } from 'react-router-dom'
 import LayoutMenu from './menu'
 import LayoutHeader from './header'
-import style from './index.module.less'
+import './index.less'
 
 export const BasicLayout = (props: any) => {
   const { Sider, Content } = Layout
 
   return (
-    <Layout className={style['layout_wrapper']}>
+    <Layout className='layout_wrapper'>
       <Sider width={210} style={{height: '100vh'}}>
         <LayoutMenu />
       </Sider>
