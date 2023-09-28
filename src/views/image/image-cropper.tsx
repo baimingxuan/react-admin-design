@@ -1,15 +1,24 @@
 import React, { useRef } from 'react'
 import { Row, Col, Card, Button, Space } from 'antd'
 import { PageWrapper } from '@/components/Page'
-import { VUE_CROPPER_PLUGIN, CROPPER_IMG_SRC } from '@/settings/websiteSetting'
+import { REACT_CROPPER_PLUGIN, CROPPER_IMG_SRC } from '@/settings/websiteSetting'
 import Cropper, { ReactCropperElement } from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
+import { downloadImgByUrl } from '@/utils/download'
 
 const ImageCropper: React.FC = () => {
   const cropperRef = useRef<ReactCropperElement>(null)
 
+  const downloadImage = () => {
+    if (typeof cropperRef.current?.cropper !== 'undefined') {
+      const imgUrl = cropperRef.current?.cropper.getCroppedCanvas().toDataURL()
+      
+      downloadImgByUrl(imgUrl, 'demo.png')
+    }
+  }
+
   return (
-    <PageWrapper plugin={VUE_CROPPER_PLUGIN}>
+    <PageWrapper plugin={REACT_CROPPER_PLUGIN}>
       <Row gutter={12}>
         <Col span={10}>
           <Card title='裁剪区域' bordered={false} bodyStyle={{height: '400px'}}>
@@ -18,8 +27,10 @@ const ImageCropper: React.FC = () => {
               src={CROPPER_IMG_SRC}
               initialAspectRatio={3 / 2}
               autoCrop={true}
+              responsive={true}
+              guides={true}
               autoCropArea={0.6}
-              preview='.image-preview'
+              preview='.img-preview'
               style={{
                 height: '100%',
                 width: '100%'
@@ -32,28 +43,21 @@ const ImageCropper: React.FC = () => {
             <div className='flex-center' style={{height: '352px'}}>
               <Space direction='vertical'>
                 {/* <UploadImage onSuccess={handleSuccess} /> */}
-                {/* <Button type='primary'>
-                  <a onClick={downloadImage}>下载图片</a>
-                </Button>
-                <a ref={downloadDom} href={unref(downImg)} download='demo.png' /> */}
+                <Button type='primary' onClick={downloadImage}>下载图片</Button>
               </Space>
             </div>
           </Card>
         </Col>
         <Col span={10}>
           <Card title='预览区域' bordered={false} bodyStyle={{height: '400px'}}>
-            <div className='image-preview'></div>
-            {/* <div style={{
-              width: unref(previews).w + 'px',
-              height: unref(previews).h + 'px',
-              overflow: 'hidden',
-              margin: 'auto',
-              zoom: (350 / unref(previews).h)
-            }}>
-              <div style={unref(previews).div}>
-                <img src={unref(previews).url} style={unref(previews).img} />
-              </div>
-            </div> */}
+            <div
+              className='img-preview'
+              style={{
+                width: '100%',
+                height: '100%',
+                overflow: 'hidden',
+                margin: 'auto'
+              }} />
           </Card>
         </Col>
       </Row>

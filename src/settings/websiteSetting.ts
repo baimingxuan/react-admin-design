@@ -81,11 +81,11 @@ export const REACT_RND_PLUGIN = {
   desc: 'React-Rnd: 一款可调整大小和可拖拽的React组件。'
 }
 
-// Vue-cropper plugin
-export const VUE_CROPPER_PLUGIN = {
-  name: 'Vue-Cropper图片裁剪',
-  url: 'https://github.com/xyxiao001/vue-cropper',
-  desc: 'vue-cropper: 一个优雅的图片裁剪插件, 可实现图片裁剪、图片生成等功能, 并支持生成png、jpeg、webp等图片格式。'
+// React-cropper plugin
+export const REACT_CROPPER_PLUGIN = {
+  name: 'React-Cropper图片裁剪',
+  url: 'https://github.com/react-cropper/react-cropper',
+  desc: 'react-cropper: 一个优雅的图片裁剪插件, 可实现图片裁剪、图片生成等功能, 并支持生成png、jpeg、webp等图片格式。'
 }
 
 // Image-composition component
