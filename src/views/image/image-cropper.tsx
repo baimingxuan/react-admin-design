@@ -1,13 +1,19 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Row, Col, Card, Button, Space } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import { REACT_CROPPER_PLUGIN, CROPPER_IMG_SRC } from '@/settings/websiteSetting'
 import Cropper, { ReactCropperElement } from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import { downloadImgByUrl } from '@/utils/download'
+import { UploadImage } from '@/components/Upload'
 
 const ImageCropper: React.FC = () => {
   const cropperRef = useRef<ReactCropperElement>(null)
+  const [imgSrc, setImgSrc] = useState(CROPPER_IMG_SRC)
+
+  const handleSuccess = (data: any) => {
+    setImgSrc(data)
+  }
 
   const downloadImage = () => {
     if (typeof cropperRef.current?.cropper !== 'undefined') {
@@ -24,7 +30,7 @@ const ImageCropper: React.FC = () => {
           <Card title='裁剪区域' bordered={false} bodyStyle={{height: '400px'}}>
             <Cropper
               ref={cropperRef}
-              src={CROPPER_IMG_SRC}
+              src={imgSrc}
               initialAspectRatio={3 / 2}
               autoCrop={true}
               responsive={true}
@@ -42,7 +48,7 @@ const ImageCropper: React.FC = () => {
           <Card title='设置区域' bordered={false}>
             <div className='flex-center' style={{height: '352px'}}>
               <Space direction='vertical'>
-                {/* <UploadImage onSuccess={handleSuccess} /> */}
+                <UploadImage onSuccess={handleSuccess} />
                 <Button type='primary' onClick={downloadImage}>下载图片</Button>
               </Space>
             </div>
