@@ -1,5 +1,6 @@
 import { RouteObject } from './types'
 import { Navigate, useRoutes } from 'react-router-dom'
+import LoginPage from '@/views/login'
 
 const metaRoutes = import.meta.glob('./routes/*.tsx', { eager: true }) as Recordable
 
@@ -16,6 +17,14 @@ const rootRoutes: RouteObject[] = [
     path: '/',
     element: <Navigate to='/home' />
   },
+  {
+		path: '/login',
+		element: <LoginPage />,
+		meta: {
+			title: '登录页',
+			key: 'login'
+		}
+	},
   ...routeList,
   {
 		path: '*',
