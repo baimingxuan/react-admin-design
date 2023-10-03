@@ -18,14 +18,14 @@ export const FORM_CREATE_DESIGNER = {
 // Table component
 export const TABLE_COMPO = {
   name: 'Table表格',
-  url: 'https://www.antdv.com/components/table',
+  url: 'https://ant-design.antgroup.com/components/table',
   desc: 'ant-design-table: 使用 ant-design 的 table 组件, 可用于展示多条结构类似的数据, 并对其进行相关操作。'
 }
 
 // Table edit component
 export const TABLE_EDIT_COMPO = {
   name: 'Table表格(可编辑行)',
-  url: 'https://www.antdv.com/components/table',
+  url: 'https://ant-design.antgroup.com/components/table',
   desc: 'ant-design-table: 使用 ant-design 的 table 组件, 可用于展示多条结构类似的数据, 并对其进行行数据编辑操作。'
 }
 

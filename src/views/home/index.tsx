@@ -1,4 +1,6 @@
-const Home = () => {
+import { FC } from 'react'
+
+const HomePage: FC = () => {
 	return (
 		<div className="home card">
 			首页
@@ -6,4 +8,4 @@ const Home = () => {
 	);
 };
 
-export default Home
+export default HomePage

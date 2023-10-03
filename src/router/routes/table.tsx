@@ -1,6 +1,5 @@
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import Home from '../../views/home'
 import TableBasic from '@/views/table/table-basic'
 import TableEditRow from '@/views/table/table-edit-row'
 
