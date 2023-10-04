@@ -96,7 +96,7 @@ const TableBasic: FC = () => {
     {
       title: '操作',
       key: 'action',
-      align: 'right',
+      align: 'center',
       render: (_, record: any) => (
         <Space>
           <Button disabled={record.forbid}>编辑</Button>
