@@ -4,12 +4,14 @@ import styles from './index.module.less'
 export default function SvgIcon({
   name,
   prefix = 'icon',
-  size = 16
+  size = 16,
+  style
 } : SvgIconProp) {
   const symbolId = `#${prefix}-${name}`
   const iconStyle = {
     width: `${size}px`,
-    height: `${size}px`
+    height: `${size}px`,
+    ...style
   }
 
   return (
