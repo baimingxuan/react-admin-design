@@ -16,6 +16,7 @@
     "@uiw/react-md-editor": "^3.23.5",
     "@wangeditor/editor": "^5.1.23",
     "add": "^2.0.6",
+    "ahooks": "^3.7.8",
     "antd": "^5.9.4",
     "axios": "^1.4.0",
     "cropperjs": "^1.6.0",
