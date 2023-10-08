@@ -1,4 +1,5 @@
-import { FC, useRef, useEffect } from 'react'
+import type { EChartsOption } from 'echarts'
+import { FC } from 'react'
 import { Card } from 'antd'
 import { useECharts } from '@/hooks/web/useECharts'
 
@@ -7,9 +8,7 @@ interface propState {
 }
 
 const ChartsBar: FC<propState> = ({ loading }) => {
-  const chartRef = useRef<HTMLDivElement>(null)
-
-  useECharts(chartRef, {
+  const optionConf: EChartsOption = {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -55,7 +54,9 @@ const ChartsBar: FC<propState> = ({ loading }) => {
         data: [782, 925, 1196, 812, 328, 223, 1080]
       }
     ]
-  })
+  }
+
+  const { chartRef } = useECharts(optionConf, loading)
 
   return (
     <Card

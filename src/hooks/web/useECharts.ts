@@ -1,73 +1,71 @@
-import type { RefObject } from 'react'
 import type { EChartsOption } from 'echarts'
-import { useRef, useEffect, useState } from 'react'
-import { useUnmount, useDebounceFn, useTimeout, useEventListener } from 'ahooks'
+import { useRef, useEffect } from 'react'
+import { useDebounceFn } from 'ahooks'
 import echarts from '@/utils/echarts'
 
 export function useECharts(
-  elRef: RefObject<HTMLDivElement>,
   options: EChartsOption,
   loading: boolean = true,
   theme: 'light' | 'dark' | 'default' = 'default'
 ) {
+
+  const chartRef = useRef<HTMLDivElement>(null)
   let chartInstance: echarts.ECharts | null = null
-  let resizeFn: Fn = resize
-  let removeResizeFn: Fn = () => {}
-  const [cacheOptions, setCacheOptions] = useState<EChartsOption>()
+
+  const { run: resizeFn } = useDebounceFn(
+    () => {
+      chartInstance?.resize()
+    },
+    { wait: 200 }
+  )
+
+  useEffect(() => {
+    initCharts()
+
+    return () => {
+      disposeCharts()
+    }
+  }, [])
 
   useEffect(() => {
     if (loading) return
     setOptions(options)
-  }, [loading])
+  }, [loading, options])
 
-  function initCharts(t = theme) {
-    const el = elRef?.current
+  const initCharts = (t = theme) => {
+    const el = chartRef?.current
     if (!el) return
 
     chartInstance = echarts.init(el, t)
+
+    window.addEventListener('resize', resizeFn)
   }
 
-  function setOptions(options: EChartsOption, clear = true) {
-    setCacheOptions(options)
-    if (elRef?.current?.offsetHeight === 0) {
-      useTimeout(() => {
-        setOptions(cacheOptions!)
-      }, 30)
-      return
-    }
-    useTimeout(() => {
-      if (!chartInstance) {
-        initCharts('default')
-
-        if (!chartInstance) return
-      }
-      clear && chartInstance?.clear()
-
-      chartInstance?.setOption(cacheOptions!)
-    }, 30)
-  }
-
-  function resize() {
-    chartInstance?.resize()
-  }
-
-  function getInstance(): echarts.ECharts | null {
+  const setOptions = (options: EChartsOption) => {
     if (!chartInstance) {
-      initCharts('default')
+      initCharts()
+
+      if (!chartInstance) return
+    }
+
+    chartInstance?.clear()
+
+    chartInstance?.setOption(options)
+  }
+
+  const disposeCharts = () => {
+    if (!chartInstance) return
+    window.removeEventListener('resize', resizeFn)
+    chartInstance.dispose()
+    chartInstance = null
+  }
+
+  const getInstance = (): echarts.ECharts | null => {
+    if (!chartInstance) {
+      initCharts()
     }
     return chartInstance
   }
 
-  useUnmount(() => {
-    if (!chartInstance) return
-    chartInstance.dispose()
-    chartInstance = null
-  })
-
-  return {
-    echarts,
-    resize,
-    setOptions,
-    getInstance
-  }
+  return { chartRef, getInstance }
 }
