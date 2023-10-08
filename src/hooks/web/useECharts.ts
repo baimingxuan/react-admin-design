@@ -30,6 +30,10 @@ export function useECharts(
   useEffect(() => {
     if (loading) return
     setOptions(options)
+
+    return () => {
+      disposeCharts()
+    }
   }, [loading, options])
 
   const initCharts = (t = theme) => {
