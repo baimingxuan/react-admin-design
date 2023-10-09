@@ -95,10 +95,10 @@ const TransferPage: React.FC = () => {
                         checkedKeys={treeCheckedKeys}
                         treeData={generateTree(treeData, treeTargetKeys)}
                         onCheck={(_, { node: { key } }) => {
-                          onItemSelect(key as string, !isChecked(treeCheckedKeys, key))
+                          onItemSelect(key as string, !isChecked(treeCheckedKeys, key as string))
                         }}
                         onSelect={(_, { node: { key } }) => {
-                          onItemSelect(key as string, !isChecked(treeCheckedKeys, key))
+                          onItemSelect(key as string, !isChecked(treeCheckedKeys, key as string))
                         }}
                       />
                     )
