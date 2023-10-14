@@ -14,6 +14,7 @@ import storage from 'redux-persist/lib/storage'
 import menuReducer from './modules/menuSlice'
 import breadcrumbReducer from './modules/breadcrumbSlice'
 import tagsSlice from './modules/tagsSlice'
+import userSlice from './modules/userSlice'
 
 const persistConfig = {
   key: 'redux-persist',
@@ -24,7 +25,8 @@ const store: Store = configureStore({
   reducer: {
     menu: persistReducer(persistConfig, menuReducer),
     breadcrumb: persistReducer(persistConfig, breadcrumbReducer),
-    tags: persistReducer(persistConfig, tagsSlice)
+    tags: persistReducer(persistConfig, tagsSlice),
+    user: persistReducer(persistConfig, userSlice)
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,3 +1,12 @@
+interface UserInfo {
+  userId: string | number
+  username: string
+  realName: string
+  avatar: string
+  desc?: string
+  homePath?: string
+}
+
 export interface MenuOptions {
   path: string
   title: string
@@ -21,4 +30,11 @@ export interface BreadcrumbState {
 export interface TagsState {
 	tagsList: MenuOptions[]
   tagsActive: string
+}
+
+export interface UserState {
+  userInfo: Nullable<UserInfo>
+  token?: string
+  sessionTimeout?: boolean
+  lastUpdateTime: number
 }
