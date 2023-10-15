@@ -14,6 +14,13 @@ const userSlice = createSlice({
   reducers: {
     setToken: (state, action) => {
       state.token = action.payload
+    },
+    setUserInfo: (state, action) => {
+      state.userInfo = action.payload
+      state.lastUpdateTime = new Date().getTime()
+    },
+    setSessionTimeout: (state, action) => {
+      state.sessionTimeout = action.payload
     }
   }
 })
