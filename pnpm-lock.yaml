@@ -12,7 +12,7 @@ dependencies:
     version: 1.9.5(react-redux@8.0.5)(react@18.2.0)
   '@uiw/react-codemirror':
     specifier: ^4.21.13
-    version: 4.21.13(@codemirror/view@6.19.0)(react-dom@18.2.0)(react@18.2.0)
+    version: 4.21.13(@babel/runtime@7.22.5)(@codemirror/autocomplete@6.9.1)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.19.0)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0)
   '@uiw/react-md-editor':
     specifier: ^3.23.5
     version: 3.23.5(@types/react@18.2.24)(react-dom@18.2.0)(react@18.2.0)
@@ -88,9 +88,6 @@ dependencies:
   sortablejs:
     specifier: ^1.15.0
     version: 1.15.0
-  terser:
-    specifier: ^5.21.0
-    version: 5.21.0
   use-immer:
     specifier: ^0.9.0
     version: 0.9.0(immer@10.0.2)(react@18.2.0)
@@ -144,12 +141,18 @@ devDependencies:
   less:
     specifier: ^4.1.3
     version: 4.1.3
+  prettier:
+    specifier: ^3.0.3
+    version: 3.0.3
+  terser:
+    specifier: ^5.22.0
+    version: 5.22.0
   typescript:
     specifier: ^4.9.4
     version: 4.9.4
   vite:
     specifier: ^4.2.1
-    version: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.21.0)
+    version: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.22.0)
   vite-plugin-mock:
     specifier: 2.9.6
     version: 2.9.6(mockjs@1.1.0)(rollup@2.79.1)(vite@4.2.1)
@@ -434,11 +437,13 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@codemirror/autocomplete@6.9.1(@codemirror/state@6.2.1)(@codemirror/view@6.19.0):
+  /@codemirror/autocomplete@6.9.1(@codemirror/language@6.9.0)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)(@lezer/common@1.0.4):
     resolution: {integrity: sha512-yma56tqD7khIZK4gy4X5lX3/k5ArMiCGat7HEWRF/8L2kqOjVdp2qKZqpcJjwTIjSj6fqKAHqi7IjtH3QFE+Bw==}
     peerDependencies:
+      '@codemirror/language': ^6.0.0
       '@codemirror/state': ^6.0.0
       '@codemirror/view': ^6.0.0
+      '@lezer/common': ^1.0.0
     dependencies:
       '@codemirror/language': 6.9.0
       '@codemirror/state': 6.2.1
@@ -940,6 +945,7 @@ packages:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.2
       '@jridgewell/trace-mapping': 0.3.17
+    dev: true
 
   /@jridgewell/sourcemap-codec@1.4.14:
     resolution: {integrity: sha512-XPSJHWmi394fuUuzDnGz1wiKqWfo1yXecHQMRf2l6hztTO+nPru658AyDngaBe7isIxEkRsPR3FZh+s7iVa4Uw==}
@@ -1298,12 +1304,18 @@ packages:
       '@types/react': 18.2.24
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup@4.21.13(@codemirror/view@6.19.0):
+  /@uiw/codemirror-extensions-basic-setup@4.21.13(@codemirror/autocomplete@6.9.1)(@codemirror/commands@6.2.5)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0):
     resolution: {integrity: sha512-5ObHaBqPV00xBVleDFehzPfOQvek5dPM7YLdPHJUE9bumeSflIWJb55n0Zg/w1rsuU0Lt/Q6WJUh4X6VGR1FVw==}
     peerDependencies:
+      '@codemirror/autocomplete': '>=6.0.0'
+      '@codemirror/commands': '>=6.0.0'
+      '@codemirror/language': '>=6.0.0'
+      '@codemirror/lint': '>=6.0.0'
+      '@codemirror/search': '>=6.0.0'
+      '@codemirror/state': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
     dependencies:
-      '@codemirror/autocomplete': 6.9.1(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)
+      '@codemirror/autocomplete': 6.9.1(@codemirror/language@6.9.0)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)(@lezer/common@1.0.4)
       '@codemirror/commands': 6.2.5
       '@codemirror/language': 6.9.0
       '@codemirror/lint': 6.4.2
@@ -1316,10 +1328,14 @@ packages:
     resolution: {integrity: sha512-1bbGZ3T+SGmA07BoVPK4UCUDcowDN/moctviJGQexfOc9qL8TMLDQPr7mTPvDKhgJkgnlKkAQNFU8PiarIi9sQ==}
     dev: false
 
-  /@uiw/react-codemirror@4.21.13(@codemirror/view@6.19.0)(react-dom@18.2.0)(react@18.2.0):
+  /@uiw/react-codemirror@4.21.13(@babel/runtime@7.22.5)(@codemirror/autocomplete@6.9.1)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.19.0)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-kNX8jLeoDrF2CDa5lsey0MXjBXN3JP00z6AQTTP58mHvlE7Rf03QJSs7bNwwco+3kpwREifFJjnwRe+Y3Gmwtw==}
     peerDependencies:
+      '@babel/runtime': '>=7.11.0'
+      '@codemirror/state': '>=6.0.0'
+      '@codemirror/theme-one-dark': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
+      codemirror: '>=6.0.0'
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
@@ -1328,10 +1344,15 @@ packages:
       '@codemirror/state': 6.2.1
       '@codemirror/theme-one-dark': 6.1.2
       '@codemirror/view': 6.19.0
-      '@uiw/codemirror-extensions-basic-setup': 4.21.13(@codemirror/view@6.19.0)
-      codemirror: 6.0.1
+      '@uiw/codemirror-extensions-basic-setup': 4.21.13(@codemirror/autocomplete@6.9.1)(@codemirror/commands@6.2.5)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)
+      codemirror: 6.0.1(@lezer/common@1.0.4)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    transitivePeerDependencies:
+      - '@codemirror/autocomplete'
+      - '@codemirror/language'
+      - '@codemirror/lint'
+      - '@codemirror/search'
     dev: false
 
   /@uiw/react-markdown-preview@4.1.15(@types/react@18.2.24)(react-dom@18.2.0)(react@18.2.0):
@@ -1428,7 +1449,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.19.6(@babel/core@7.20.12)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.21.0)
+      vite: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.22.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1613,6 +1634,7 @@ packages:
     resolution: {integrity: sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+    dev: true
 
   /add@2.0.6:
     resolution: {integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==}
@@ -1866,6 +1888,7 @@ packages:
 
   /buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
+    dev: true
 
   /builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
@@ -1988,16 +2011,18 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /codemirror@6.0.1:
+  /codemirror@6.0.1(@lezer/common@1.0.4):
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
     dependencies:
-      '@codemirror/autocomplete': 6.9.1(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)
+      '@codemirror/autocomplete': 6.9.1(@codemirror/language@6.9.0)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)(@lezer/common@1.0.4)
       '@codemirror/commands': 6.2.5
       '@codemirror/language': 6.9.0
       '@codemirror/lint': 6.4.2
       '@codemirror/search': 6.5.3
       '@codemirror/state': 6.2.1
       '@codemirror/view': 6.19.0
+    transitivePeerDependencies:
+      - '@lezer/common'
     dev: false
 
   /codepage@1.15.0:
@@ -2045,6 +2070,7 @@ packages:
 
   /commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
+    dev: true
 
   /commander@7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
@@ -4022,6 +4048,12 @@ packages:
     resolution: {integrity: sha512-X9BODrvQ4Ekwv9GURm9AKAGaomqXmip7NQTZgY7gcNmr7XE83adOMJvd3N42id1tMFU7ojiynRsYnY6/BRFxLA==}
     dev: false
 
+  /prettier@3.0.3:
+    resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
   /prismjs@1.29.0:
     resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
     engines: {node: '>=6'}
@@ -5210,6 +5242,7 @@ packages:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
+    dev: true
 
   /source-map-url@0.4.1:
     resolution: {integrity: sha512-cPiFOTLUKvJFIg4SKVScy4ilPPW6rFgMgfuZJPNoDuMs3nC1HbMUycBoJw77xFIp6z1UJQJOfx6C9GMH80DiTw==}
@@ -5225,6 +5258,7 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
     requiresBuild: true
+    dev: true
 
   /space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
@@ -5373,8 +5407,8 @@ packages:
       stable: 0.1.8
     dev: true
 
-  /terser@5.21.0:
-    resolution: {integrity: sha512-WtnFKrxu9kaoXuiZFSGrcAvvBqAdmKx0SFNmVNYdJamMu9yyN3I/QF0FbH4QcqJQ+y1CJnzxGIKH0cSj+FGYRw==}
+  /terser@5.22.0:
+    resolution: {integrity: sha512-hHZVLgRA2z4NWcN6aS5rQDc+7Dcy58HOf2zbYwmFcQ+ua3h6eEFf5lIDKTzbWwlazPyOZsFQO8V80/IjVNExEw==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -5382,6 +5416,7 @@ packages:
       acorn: 8.10.0
       commander: 2.20.3
       source-map-support: 0.5.21
+    dev: true
 
   /throttle-debounce@5.0.0:
     resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
@@ -5676,7 +5711,7 @@ packages:
       fast-glob: 3.2.12
       mockjs: 1.1.0
       path-to-regexp: 6.2.1
-      vite: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.21.0)
+      vite: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.22.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -5695,12 +5730,12 @@ packages:
       pathe: 0.2.0
       svg-baker: 1.7.0
       svgo: 2.8.0
-      vite: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.21.0)
+      vite: 4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.22.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.21.0):
+  /vite@4.2.1(@types/node@18.15.11)(less@4.1.3)(terser@5.22.0):
     resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -5731,7 +5766,7 @@ packages:
       postcss: 8.4.21
       resolve: 1.22.1
       rollup: 3.29.1
-      terser: 5.21.0
+      terser: 5.22.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
