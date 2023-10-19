@@ -33,8 +33,8 @@ jobs:
           pnpm run build
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3.9.0
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
-          deploy_key: ${{ secrets.DEPLOY_KEY }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./dist
+          ACCESS_TOKEN: ${{ secrets.DEPLOY_KEY }}
+          BRANCH: gh-pages
+          FOLDER: ./dist
