@@ -1,27 +1,40 @@
-name: Deploy
+name: deploy
 
 on:
- push:
-   branches:
-     - main
+  push:
+    branches:
+      - main
 
 jobs:
- build-and-deploy:
-   runs-on: ubuntu-latest
-   steps:
-     - name: Checkout
-       uses: actions/checkout@v2
-       with:
-         persist-credentials: false
+  push-to-gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
-     - name: Build
-       run: |
-         pnpm install
-         pnpm run build
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
 
-     - name: Deploy
-       uses: JamesIves/github-pages-deploy-action@v4.3.3
-       with:
-         ACCESS_TOKEN: ${{ secrets.DEPLOY_KEY }}
-         BRANCH: gh-pages
-         FOLDER: ./dist
+      - name: use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Build
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3.9.0
+        with:
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./dist
