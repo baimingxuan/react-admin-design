@@ -12,7 +12,7 @@ dependencies:
     version: 1.9.5(react-redux@8.0.5)(react@18.2.0)
   '@uiw/react-codemirror':
     specifier: ^4.21.13
-    version: 4.21.13(@babel/runtime@7.22.5)(@codemirror/autocomplete@6.9.1)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.19.0)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0)
+    version: 4.21.13(@codemirror/view@6.19.0)(react-dom@18.2.0)(react@18.2.0)
   '@uiw/react-md-editor':
     specifier: ^3.23.5
     version: 3.23.5(@types/react@18.2.24)(react-dom@18.2.0)(react@18.2.0)
@@ -34,6 +34,9 @@ dependencies:
   cropperjs:
     specifier: ^1.6.0
     version: 1.6.0
+  crypto-js:
+    specifier: ^4.1.1
+    version: 4.1.1
   echarts:
     specifier: ^5.4.3
     version: 5.4.3
@@ -102,6 +105,9 @@ devDependencies:
   '@babel/core':
     specifier: ^7.0.0
     version: 7.20.12
+  '@types/crypto-js':
+    specifier: ^4.1.3
+    version: 4.1.3
   '@types/file-saver':
     specifier: ^2.0.5
     version: 2.0.5
@@ -437,13 +443,11 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@codemirror/autocomplete@6.9.1(@codemirror/language@6.9.0)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)(@lezer/common@1.0.4):
+  /@codemirror/autocomplete@6.9.1(@codemirror/state@6.2.1)(@codemirror/view@6.19.0):
     resolution: {integrity: sha512-yma56tqD7khIZK4gy4X5lX3/k5ArMiCGat7HEWRF/8L2kqOjVdp2qKZqpcJjwTIjSj6fqKAHqi7IjtH3QFE+Bw==}
     peerDependencies:
-      '@codemirror/language': ^6.0.0
       '@codemirror/state': ^6.0.0
       '@codemirror/view': ^6.0.0
-      '@lezer/common': ^1.0.0
     dependencies:
       '@codemirror/language': 6.9.0
       '@codemirror/state': 6.2.1
@@ -1182,6 +1186,10 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
+  /@types/crypto-js@4.1.3:
+    resolution: {integrity: sha512-YP1sYYayLe7Eg5oXyLLvOLfxBfZ5Fgpz6sVWkpB18wDMywCLPWmqzRz+9gyuOoLF0fzDTTFwlyNbx7koONUwqA==}
+    dev: true
+
   /@types/debug@4.1.8:
     resolution: {integrity: sha512-/vPO1EPOs306Cvhwv7KfVfYvOJqA/S/AXjaHQiJboCZzcNDb+TIJFN9/2C9DZ//ijSKWioNyUxD792QmDJ+HKQ==}
     dependencies:
@@ -1304,18 +1312,12 @@ packages:
       '@types/react': 18.2.24
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup@4.21.13(@codemirror/autocomplete@6.9.1)(@codemirror/commands@6.2.5)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0):
+  /@uiw/codemirror-extensions-basic-setup@4.21.13(@codemirror/view@6.19.0):
     resolution: {integrity: sha512-5ObHaBqPV00xBVleDFehzPfOQvek5dPM7YLdPHJUE9bumeSflIWJb55n0Zg/w1rsuU0Lt/Q6WJUh4X6VGR1FVw==}
     peerDependencies:
-      '@codemirror/autocomplete': '>=6.0.0'
-      '@codemirror/commands': '>=6.0.0'
-      '@codemirror/language': '>=6.0.0'
-      '@codemirror/lint': '>=6.0.0'
-      '@codemirror/search': '>=6.0.0'
-      '@codemirror/state': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
     dependencies:
-      '@codemirror/autocomplete': 6.9.1(@codemirror/language@6.9.0)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)(@lezer/common@1.0.4)
+      '@codemirror/autocomplete': 6.9.1(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)
       '@codemirror/commands': 6.2.5
       '@codemirror/language': 6.9.0
       '@codemirror/lint': 6.4.2
@@ -1328,14 +1330,10 @@ packages:
     resolution: {integrity: sha512-1bbGZ3T+SGmA07BoVPK4UCUDcowDN/moctviJGQexfOc9qL8TMLDQPr7mTPvDKhgJkgnlKkAQNFU8PiarIi9sQ==}
     dev: false
 
-  /@uiw/react-codemirror@4.21.13(@babel/runtime@7.22.5)(@codemirror/autocomplete@6.9.1)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.19.0)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0):
+  /@uiw/react-codemirror@4.21.13(@codemirror/view@6.19.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-kNX8jLeoDrF2CDa5lsey0MXjBXN3JP00z6AQTTP58mHvlE7Rf03QJSs7bNwwco+3kpwREifFJjnwRe+Y3Gmwtw==}
     peerDependencies:
-      '@babel/runtime': '>=7.11.0'
-      '@codemirror/state': '>=6.0.0'
-      '@codemirror/theme-one-dark': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
-      codemirror: '>=6.0.0'
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
@@ -1344,15 +1342,10 @@ packages:
       '@codemirror/state': 6.2.1
       '@codemirror/theme-one-dark': 6.1.2
       '@codemirror/view': 6.19.0
-      '@uiw/codemirror-extensions-basic-setup': 4.21.13(@codemirror/autocomplete@6.9.1)(@codemirror/commands@6.2.5)(@codemirror/language@6.9.0)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.3)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)
-      codemirror: 6.0.1(@lezer/common@1.0.4)
+      '@uiw/codemirror-extensions-basic-setup': 4.21.13(@codemirror/view@6.19.0)
+      codemirror: 6.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-    transitivePeerDependencies:
-      - '@codemirror/autocomplete'
-      - '@codemirror/language'
-      - '@codemirror/lint'
-      - '@codemirror/search'
     dev: false
 
   /@uiw/react-markdown-preview@4.1.15(@types/react@18.2.24)(react-dom@18.2.0)(react@18.2.0):
@@ -2011,18 +2004,16 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /codemirror@6.0.1(@lezer/common@1.0.4):
+  /codemirror@6.0.1:
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
     dependencies:
-      '@codemirror/autocomplete': 6.9.1(@codemirror/language@6.9.0)(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)(@lezer/common@1.0.4)
+      '@codemirror/autocomplete': 6.9.1(@codemirror/state@6.2.1)(@codemirror/view@6.19.0)
       '@codemirror/commands': 6.2.5
       '@codemirror/language': 6.9.0
       '@codemirror/lint': 6.4.2
       '@codemirror/search': 6.5.3
       '@codemirror/state': 6.2.1
       '@codemirror/view': 6.19.0
-    transitivePeerDependencies:
-      - '@lezer/common'
     dev: false
 
   /codepage@1.15.0:
@@ -2144,6 +2135,10 @@ packages:
 
   /cropperjs@1.6.0:
     resolution: {integrity: sha512-BzLU/ecrfsbflwxgu+o7sQTrTlo52pVRZkTVrugEK5uyj6n8qKwAHP4s6+DWHqlXLqQ5B9+cM2MKeXiNfAsF6Q==}
+    dev: false
+
+  /crypto-js@4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
     dev: false
 
   /css-select@4.3.0:
