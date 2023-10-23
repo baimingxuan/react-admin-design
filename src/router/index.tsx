@@ -1,5 +1,5 @@
 import { RouteObject } from './types'
-import { Navigate, useRoutes } from 'react-router-dom'
+import { Navigate, createBrowserRouter } from 'react-router-dom'
 import LoginPage from '@/views/login'
 
 const metaRoutes = import.meta.glob('./routes/*.tsx', { eager: true }) as Recordable
@@ -34,4 +34,4 @@ const rootRoutes: RouteObject[] = [
 
 export { routeList as basicRoutes }
 
-export default () => useRoutes(rootRoutes)
+export default createBrowserRouter(rootRoutes)
