@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { viteMockServe } from 'vite-plugin-mock'
 import { wrapperEnv } from './build/utils'
-// need install plugin @types/node
+// need install plugin @typings/node
 import { resolve } from 'path'
 
 // https://vitejs.dev/config/
@@ -13,7 +13,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
 
   const env = loadEnv(mode, root)
 
-  // this function can be converted to different types
+  // this function can be converted to different typings
   const viteEnv = wrapperEnv(env)
   const { VITE_PORT, VITE_DROP_CONSOLE } = viteEnv
 
