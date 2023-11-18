@@ -42,17 +42,33 @@ const LoginPage: FC = () => {
           className='login-box-form'
           onFinish={handleLogin}
         >
-          <Form.Item name='username' rules={[{ required: true, message: '请输入账号' }]}>
+          <Form.Item
+            name='username'
+            rules={[{ required: true, message: '请输入账号' }]}
+          >
             <Input
               placeholder='请输入账号'
-              prefix={<UserOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} rev={undefined} />}
+              prefix={
+                <UserOutlined
+                  style={{ color: 'rgba(0, 0, 0, 0.25)' }}
+                  rev={undefined}
+                />
+              }
             />
           </Form.Item>
-          <Form.Item name='password' rules={[{ required: true, message: '请输入密码' }]}>
+          <Form.Item
+            name='password'
+            rules={[{ required: true, message: '请输入密码' }]}
+          >
             <Input
               type='password'
               placeholder='请输入密码'
-              prefix={<LockOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} rev={undefined} />}
+              prefix={
+                <LockOutlined
+                  style={{ color: 'rgba(0, 0, 0, 0.25)' }}
+                  rev={undefined}
+                />
+              }
             />
           </Form.Item>
           <Form.Item>
@@ -69,7 +85,9 @@ const LoginPage: FC = () => {
               htmlType='submit'
               className='login-btn'
               loading={loading}
-            >登 录</Button>
+            >
+              登 录
+            </Button>
           </Form.Item>
         </Form>
       </div>
