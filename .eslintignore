@@ -9,6 +9,7 @@ mock/*
 dist
 node_modules
 
+.eslintrc.cjs
 .prettierrc.js
 eslint.config.js
 
