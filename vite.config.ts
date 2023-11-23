@@ -22,7 +22,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     server: {
       // Listening on all local ips
       host: true,
-      port: VITE_PORT,
+      port: VITE_PORT
     },
     plugins: [
       react(),
@@ -39,12 +39,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     build: {
       target: 'es2015',
       cssTarget: 'chrome86',
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          keep_infinity: true,
-          // used to delete console and debugger in production environment
-          drop_console: VITE_DROP_CONSOLE
+      minify: 'esbuild',
+      rollupOptions: {
+        output: {
+          chunkFileNames: 'assets/js/[name]-[hash].js',
+          entryFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
         }
       },
       chunkSizeWarningLimit: 2000
@@ -52,8 +52,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
 
     resolve: {
       alias: {
-				'@': resolve(__dirname, './src')
-			}
+        '@': resolve(__dirname, './src')
+      }
     }
   }
 }

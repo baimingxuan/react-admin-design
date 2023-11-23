@@ -1,7 +1,7 @@
+import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import BlankPage from '@/views/blank'
-import BasicForm from '@/views/form/basic-form'
+import lazyLoad from '../lazyLoad'
 
 // form module page
 const FormRoute: RouteObject = {
@@ -15,7 +15,7 @@ const FormRoute: RouteObject = {
   children: [
     {
       path: 'basic-form',
-      element: <BasicForm />,
+      element: lazyLoad(lazy(() => import('@/views/form/basic-form'))),
       meta: {
         title: '基础表单',
         key: 'basicForm'
@@ -23,7 +23,7 @@ const FormRoute: RouteObject = {
     },
     {
       path: 'form-designer',
-      element: <BlankPage />,
+      element: lazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '表单设计器',
         key: 'formDesigner'

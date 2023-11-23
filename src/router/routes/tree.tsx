@@ -1,7 +1,7 @@
+import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import AntdTree from '@/views/tree/antd-tree'
-import OrgTree from '@/views/tree/org-tree'
+import lazyLoad from '../lazyLoad'
 
 // tree module page
 const TreeRoute: RouteObject = {
@@ -15,7 +15,7 @@ const TreeRoute: RouteObject = {
   children: [
     {
       path: 'org-tree',
-      element: <OrgTree />,
+      element: lazyLoad(lazy(() => import('@/views/tree/org-tree'))),
       meta: {
         title: '组织树',
         key: 'orgTree'
@@ -23,7 +23,7 @@ const TreeRoute: RouteObject = {
     },
     {
       path: 'antd-tree',
-      element: <AntdTree />,
+      element: lazyLoad(lazy(() => import('@/views/tree/antd-tree'))),
       meta: {
         title: '控件树',
         key: 'antdTree'

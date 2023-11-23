@@ -1,7 +1,7 @@
+import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import BlankPage from '@/views/blank'
-import VideoPlayer from '@/views/video/video-player'
+import lazyLoad from '../lazyLoad'
 
 // video module page
 const VideoRoute: RouteObject = {
@@ -15,7 +15,7 @@ const VideoRoute: RouteObject = {
   children: [
     {
       path: 'video-player',
-      element: <VideoPlayer />,
+      element: lazyLoad(lazy(() => import('@/views/video/video-player'))),
       meta: {
         title: '视频播放器',
         key: 'videoPlayer'
@@ -23,7 +23,7 @@ const VideoRoute: RouteObject = {
     },
     {
       path: 'video-mark',
-      element: <BlankPage />,
+      element: lazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '视频水印',
         key: 'videoMark'

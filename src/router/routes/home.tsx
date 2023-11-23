@@ -1,6 +1,7 @@
+import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import Home from '../../views/home'
+import lazyLoad from '../lazyLoad'
 
 // Home route
 const HomeRoute: RouteObject = {
@@ -15,7 +16,7 @@ const HomeRoute: RouteObject = {
   children: [
     {
       path: '',
-      element: <Home />,
+      element: lazyLoad(lazy(() => import('@/views/home'))),
       meta: {
         title: '首页',
         key: 'home',

@@ -1,8 +1,7 @@
+import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import Markdown from '@/views/editor/markdown'
-import CodeMirror from '@/views/editor/code-mirror'
-import RichText from '@/views/editor/rich-text'
+import lazyLoad from '../lazyLoad'
 
 // text-editor module page
 const TextEditorRoute: RouteObject = {
@@ -16,7 +15,7 @@ const TextEditorRoute: RouteObject = {
   children: [
     {
       path: 'markdown',
-      element: <Markdown />,
+      element: lazyLoad(lazy(() => import('@/views/editor/markdown'))),
       meta: {
         title: 'Markdown编辑器',
         key: 'markdown'
@@ -24,7 +23,7 @@ const TextEditorRoute: RouteObject = {
     },
     {
       path: 'rich-text',
-      element: <RichText />,
+      element: lazyLoad(lazy(() => import('@/views/editor/rich-text'))),
       meta: {
         title: '富文本编辑器',
         key: 'richText'
@@ -32,7 +31,7 @@ const TextEditorRoute: RouteObject = {
     },
     {
       path: 'code-editor',
-      element: <CodeMirror />,
+      element: lazyLoad(lazy(() => import('@/views/editor/code-mirror'))),
       meta: {
         title: '代码编辑器',
         key: 'codeEditor'

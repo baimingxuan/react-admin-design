@@ -1,6 +1,7 @@
+import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { BasicLayout } from '../../layout'
-import BlankPage from '@/views/blank'
+import lazyLoad from '../lazyLoad'
 
 // graph-editor module page
 const GraphEditorRoute: RouteObject = {
@@ -14,7 +15,7 @@ const GraphEditorRoute: RouteObject = {
   children: [
     {
       path: 'flow-chart',
-      element: <BlankPage />,
+      element: lazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '流程图',
         key: 'flowChart'
@@ -22,7 +23,7 @@ const GraphEditorRoute: RouteObject = {
     },
     {
       path: 'mind-chart',
-      element: <BlankPage />,
+      element: lazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '思维导图',
         key: 'mindChart'
