@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:eslint": "eslint --cache --fix  \"{src,mock,build}/**/*.{js,ts,tsx}\"",
+    "lint:prettier": "prettier --write \"src/**/*.{js,json,ts,tsx,css,less,html,md}\"",
+    "lint:lint-staged": "lint-staged",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -65,7 +69,9 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "fast-glob": "^3.3.2",
+    "husky": "^8.0.3",
     "less": "^4.2.0",
+    "lint-staged": "^15.1.0",
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "rollup": "^4.5.1",
