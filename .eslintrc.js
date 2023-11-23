@@ -16,7 +16,7 @@ export default {
   parser: '@typescript-eslint/parser',
   // 优先级低于 parse 的语法解析配置
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 7,
     sourceType: 'module',
     jsxPragma: 'React',
     ecmaFeatures: {
@@ -41,9 +41,9 @@ export default {
    */
   rules: {
     /*
-    * Eslint规则配置
-    * 配置文档: https://eslint.nodejs.cn/docs/latest/rules/
-    */
+     * Eslint规则配置
+     * 配置文档: https://eslint.nodejs.cn/docs/latest/rules/
+     */
     // 需要 let 或 const 而不是 var
     'no-var': 'error',
     // 禁止在定义变量之前使用变量
@@ -71,9 +71,9 @@ export default {
     ],
 
     /*
-    * TypeScript规则配置
-    * 配置文档: https://typescript-eslint.nodejs.cn/rules/)
-    */
+     * TypeScript规则配置
+     * 配置文档: https://typescript-eslint.nodejs.cn/rules/)
+     */
     // 根据参数、属性和变量的默认值或初始值推断其类型
     '@typescript-eslint/no-inferrable-types': 'off',
     // 禁止使用自定义 ts 模块和命名空间

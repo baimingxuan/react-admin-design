@@ -35,7 +35,7 @@
     "build/**/*.ts",
     "build/**/*.d.ts",
     "mock/*.ts",
-    "vite.config.mts"
+    "vite.config.ts"
   ],
   "exclude": [
     "node_modules",
