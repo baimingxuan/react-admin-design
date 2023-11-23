@@ -1,5 +1,6 @@
 // 配置文档: https://prettier.nodejs.cn/
 
+/** @type {import('prettier').Config} */
 module.exports = {
   // 每行最大宽度，超过换行
   printWidth: 120,
