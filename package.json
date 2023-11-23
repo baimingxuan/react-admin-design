@@ -83,7 +83,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.0.0",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-mock": "^3.0.0",
+    "vite-plugin-mock": "2.9.8",
     "vite-plugin-svg-icons": "^2.0.1"
   },
   "lint-staged": {

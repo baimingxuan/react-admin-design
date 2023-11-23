@@ -1,6 +1,6 @@
 // 配置文档: https://eslint.nodejs.cn/
 
-module.exports = {
+export default {
   root: true,
   env: {
     browser: true,

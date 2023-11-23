@@ -1,7 +1,7 @@
 // 配置文档: https://prettier.nodejs.cn/
 
 /** @type {import('prettier').Config} */
-module.exports = {
+export default {
   // 每行最大宽度，超过换行
   printWidth: 120,
   // 缩进级别的空格数
