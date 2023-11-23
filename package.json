@@ -49,6 +49,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
     "@types/crypto-js": "^4.2.1",
     "@types/file-saver": "^2.0.7",
     "@types/lodash-es": "^4.17.11",
@@ -61,7 +63,9 @@
     "@typescript-eslint/parser": "^6.11.0",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.4.16",
+    "commitizen": "^4.3.0",
     "cssnano": "^6.0.1",
+    "cz-git": "^1.7.1",
     "esbuild": "^0.19.6",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
@@ -81,5 +85,15 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-mock": "^3.0.0",
     "vite-plugin-svg-icons": "^2.0.1"
+  },
+  "lint-staged": {
+    "{src,mock,build}/**/*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git"
+    }
   }
 }
