@@ -9,8 +9,8 @@ mock/*
 dist
 node_modules
 
-.eslintrc.mjs
-.prettierrc.mjs
+.eslintrc.js
+.prettierrc.js
 
 *.md
 *.woff
