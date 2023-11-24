@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
+    "clean:cache": "rimraf .eslintcache && rimraf node_modules && pnpm install",
     "lint:eslint": "eslint --cache --fix  \"{src,mock,build}/**/*.{js,ts,tsx}\"",
     "lint:prettier": "prettier --write \"src/**/*.{js,json,ts,tsx,css,less,html,md}\"",
     "lint:lint-staged": "lint-staged",
@@ -78,6 +79,7 @@
     "lint-staged": "^15.1.0",
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
     "rollup": "^4.5.1",
     "typescript": "^5.2.2",
     "vite": "4.5.0",
