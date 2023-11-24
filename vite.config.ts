@@ -18,7 +18,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const { VITE_PORT, VITE_DROP_CONSOLE } = viteEnv
 
   return {
-    base: '/react-admin-design/',
+    base: './',
     server: {
       // Listening on all local ips
       host: true,
@@ -39,12 +39,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     build: {
       target: 'es2015',
       cssTarget: 'chrome86',
-      minify: 'esbuild',
-      rollupOptions: {
-        output: {
-          chunkFileNames: 'assets/js/[name]-[hash].js',
-          entryFileNames: 'assets/js/[name]-[hash].js',
-          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          keep_infinity: false,
+          // used to delete console and debugger in production environment
+          drop_console: VITE_DROP_CONSOLE
         }
       },
       chunkSizeWarningLimit: 2000

@@ -1,6 +1,5 @@
 {
   "name": "react-admin-design",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -81,6 +80,7 @@
     "prettier": "^3.1.0",
     "rimraf": "^5.0.5",
     "rollup": "^4.5.1",
+    "terser": "^5.24.0",
     "typescript": "^5.2.2",
     "vite": "4.5.0",
     "vite-plugin-eslint": "^1.8.1",

@@ -202,12 +202,15 @@ devDependencies:
   rollup:
     specifier: ^4.5.1
     version: 4.5.1
+  terser:
+    specifier: ^5.24.0
+    version: 5.24.0
   typescript:
     specifier: ^5.2.2
     version: 5.3.2
   vite:
     specifier: 4.5.0
-    version: 4.5.0(@types/node@20.9.4)(less@4.2.0)
+    version: 4.5.0(@types/node@20.9.4)(less@4.2.0)(terser@5.24.0)
   vite-plugin-eslint:
     specifier: ^1.8.1
     version: 1.8.1(eslint@8.54.0)(vite@4.5.0)
@@ -1258,6 +1261,13 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: true
 
+  /@jridgewell/source-map@0.3.5:
+    resolution: {integrity: sha512-UTYAUj/wviwdsMfzoSJspJxbkH5o1snzwX0//0ENX1u/55kkZZkcTZP6u9bwKGkv+dkk9at4m1Cpt0uY80kcpQ==}
+    dependencies:
+      '@jridgewell/gen-mapping': 0.3.3
+      '@jridgewell/trace-mapping': 0.3.20
+    dev: true
+
   /@jridgewell/sourcemap-codec@1.4.15:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
     dev: true
@@ -2013,7 +2023,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.23.3(@babel/core@7.23.3)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)
+      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)(terser@5.24.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2664,6 +2674,10 @@ packages:
       update-browserslist-db: 1.0.13(browserslist@4.22.1)
     dev: true
 
+  /buffer-from@1.1.2:
+    resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
+    dev: true
+
   /buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
     dependencies:
@@ -2962,6 +2976,10 @@ packages:
   /commander@11.1.0:
     resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
     engines: {node: '>=16'}
+
+  /commander@2.20.3:
+    resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
+    dev: true
 
   /commander@7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
@@ -8754,6 +8772,13 @@ packages:
       urix: 0.1.0
     dev: true
 
+  /source-map-support@0.5.21:
+    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
+    dependencies:
+      buffer-from: 1.1.2
+      source-map: 0.6.1
+    dev: true
+
   /source-map-url@0.4.1:
     resolution: {integrity: sha512-cPiFOTLUKvJFIg4SKVScy4ilPPW6rFgMgfuZJPNoDuMs3nC1HbMUycBoJw77xFIp6z1UJQJOfx6C9GMH80DiTw==}
     deprecated: See https://github.com/lydell/source-map-url#deprecated
@@ -9084,6 +9109,17 @@ packages:
     dependencies:
       '@pkgr/utils': 2.4.2
       tslib: 2.6.2
+    dev: true
+
+  /terser@5.24.0:
+    resolution: {integrity: sha512-ZpGR4Hy3+wBEzVEnHvstMvqpD/nABNelQn/z2r0fjVWGQsN3bpOLzQlqDxmb4CDZnXq5lpjnQ+mHQLAOpfM5iw==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      '@jridgewell/source-map': 0.3.5
+      acorn: 8.11.2
+      commander: 2.20.3
+      source-map-support: 0.5.21
     dev: true
 
   /text-extensions@2.4.0:
@@ -9525,7 +9561,7 @@ packages:
       '@types/eslint': 8.44.7
       eslint: 8.54.0
       rollup: 2.79.1
-      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)
+      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)(terser@5.24.0)
     dev: true
 
   /vite-plugin-mock@2.9.8(mockjs@1.1.0)(vite@4.5.0):
@@ -9544,7 +9580,7 @@ packages:
       fast-glob: 3.3.2
       mockjs: 1.1.0
       path-to-regexp: 6.2.1
-      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)
+      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)(terser@5.24.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -9562,12 +9598,12 @@ packages:
       pathe: 0.2.0
       svg-baker: 1.7.0
       svgo: 2.8.0
-      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)
+      vite: 4.5.0(@types/node@20.9.4)(less@4.2.0)(terser@5.24.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@4.5.0(@types/node@20.9.4)(less@4.2.0):
+  /vite@4.5.0(@types/node@20.9.4)(less@4.2.0)(terser@5.24.0):
     resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -9600,6 +9636,7 @@ packages:
       less: 4.2.0
       postcss: 8.4.31
       rollup: 3.29.4
+      terser: 5.24.0
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
