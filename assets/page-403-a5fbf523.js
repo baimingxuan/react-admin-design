@@ -1,1 +1,0 @@
-import{H as s,j as r,B as e}from"./index-b7f5d5f9.js";import{C as t}from"./index-ad275af7.js";import{R as i}from"./index-6b00a8e4.js";const o=()=>{const o=s();return r.jsx(t,{bordered:!1,children:r.jsx(i,{status:"403",title:"403",subTitle:"对不起，您没有权限访问此页面。",extra:r.jsx(e,{type:"primary",onClick:()=>{o("/home")},children:"返回首页"})})})};export{o as default};
