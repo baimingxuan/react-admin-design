@@ -10,7 +10,7 @@ dist
 node_modules
 
 eslint.config.js
-.prettierrc.js
+prettier.config.js
 
 *.md
 *.woff
