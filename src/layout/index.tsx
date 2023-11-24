@@ -4,8 +4,10 @@ import { Outlet } from 'react-router-dom'
 import LayoutMenu from './menu'
 import LayoutHeader from './header'
 import './index.less'
+import { useTitle } from '@/hooks/web/useTitle'
 
 export const BasicLayout = (props: any) => {
+  useTitle()
   const { Sider, Content } = Layout
 
   return (

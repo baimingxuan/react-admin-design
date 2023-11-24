@@ -1,20 +1,22 @@
 import type { ConfigEnv, UserConfig } from 'vite'
 import { loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import { createHtmlPlugin } from 'vite-plugin-html'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { viteMockServe } from 'vite-plugin-mock'
 import { wrapperEnv } from './build/utils'
-// need install plugin @typings/node
+// 需要安装 @typings/node 插件
 import { resolve } from 'path'
 
-// https://vitejs.dev/config/
+/** @type {import('vite').UserConfig} */
 export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd()
+  const isBuild = command === 'build'
 
   const env = loadEnv(mode, root)
 
   // this function can be converted to different typings
-  const viteEnv = wrapperEnv(env)
+  const viteEnv: any = wrapperEnv(env)
   const { VITE_PORT, VITE_DROP_CONSOLE } = viteEnv
 
   return {
@@ -26,6 +28,9 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
     plugins: [
       react(),
+      createHtmlPlugin({
+        minify: isBuild,
+      }),
       createSvgIconsPlugin({
         iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]'

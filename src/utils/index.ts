@@ -1,6 +1,6 @@
 export function openWindow(
   url: string,
-  opt?: { 
+  opt?: {
     target?: TargetContext | string
     noopener?: boolean
     noreferrer?: boolean
@@ -26,4 +26,15 @@ export function promiseTimeout(
     else
       setTimeout(resolve, ms)
   })
+}
+
+export const searchRoute: any = (path: string, routes: any = []) => {
+  for (const item of routes) {
+    if (item.path === path) return item
+    if (item.children) {
+      const result = searchRoute(path, item.children)
+      if (result) return result
+    }
+  }
+  return ''
 }
