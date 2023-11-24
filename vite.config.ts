@@ -1,7 +1,6 @@
 import type { ConfigEnv, UserConfig } from 'vite'
 import { loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-import { createHtmlPlugin } from 'vite-plugin-html'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { viteMockServe } from 'vite-plugin-mock'
 import { wrapperEnv } from './build/utils'
@@ -28,9 +27,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
     plugins: [
       react(),
-      createHtmlPlugin({
-        minify: isBuild,
-      }),
       createSvgIconsPlugin({
         iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]'
