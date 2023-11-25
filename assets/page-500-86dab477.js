@@ -1,0 +1,1 @@
+import{H as s,j as r,B as e}from"./index-f124ab68.js";import{C as t}from"./index-a25b1911.js";import{R as i}from"./index-7d288cef.js";const o=()=>{const o=s();return r.jsx(t,{bordered:!1,children:r.jsx(i,{status:"500",title:"500",subTitle:"对不起，服务器发生错误。",extra:r.jsx(e,{type:"primary",onClick:()=>{o("/home")},children:"返回首页"})})})};export{o as default};
