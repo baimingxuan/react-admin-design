@@ -19,7 +19,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const { VITE_PORT, VITE_DROP_CONSOLE } = viteEnv
 
   return {
-    base: './',
+    base: '/',
     server: {
       // Listening on all local ips
       host: true,
@@ -43,7 +43,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       minify: 'terser',
       terserOptions: {
         compress: {
-          keep_infinity: false,
+          keep_infinity: true,
           // used to delete console and debugger in production environment
           drop_console: VITE_DROP_CONSOLE
         }
