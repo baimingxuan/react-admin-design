@@ -15,21 +15,21 @@ Object.keys(metaRoutes).forEach(key => {
 const rootRoutes: RouteObject[] = [
   {
     path: '/',
-    element: <Navigate to='/home' />
+    element: <Navigate to='/login' />
   },
   {
-		path: '/login',
-		element: <LoginPage />,
-		meta: {
-			title: '登录页',
-			key: 'login'
-		}
-	},
+    path: '/login',
+    element: <LoginPage />,
+    meta: {
+      title: '登录页',
+      key: 'login'
+    }
+  },
   ...routeList,
   {
-		path: '*',
-		element: <Navigate to='/404' />
-	}
+    path: '*',
+    element: <Navigate to='/404' />
+  }
 ]
 
 export { routeList as basicRoutes }
