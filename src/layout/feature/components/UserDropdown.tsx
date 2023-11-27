@@ -1,6 +1,13 @@
 import type { MenuProps } from 'antd'
 import { Space, Dropdown } from 'antd'
 import { LockOutlined, PoweroffOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
+import { getAuthCache } from '@/utils/auth'
+import { TOKEN_KEY } from '@/enums/cacheEnum'
+import { useAppDispatch, useAppSelector } from '@/stores'
+import { useMessage } from '@/hooks/web/useMessage'
+import { logoutApi } from '@/api'
+import { resetState } from '@/stores/modules/userSlice'
 import headerImg from '@/assets/images/avatar.png'
 
 export default function UserDropdown() {
@@ -37,9 +44,42 @@ export default function UserDropdown() {
     }
   }
 
+  const navigate = useNavigate()
+
+  const dispatch = useAppDispatch()
+  const { token } = useAppSelector(state => state.user)
+  const getToken = (): string => {
+    return token || getAuthCache<string>(TOKEN_KEY)
+  }
+
+
   const handleLock = () => {}
 
-  const handleLogout = () => {}
+  const handleLogout = () => {
+    const { createConfirm } = useMessage()
+
+    createConfirm({
+      iconType: 'warning',
+      title: <span>温馨提醒</span>,
+      content: <span>是否确认退出系统?</span>,
+      onOk: async () => {
+        await logoutAction(true)
+      }
+    })
+  }
+
+  const logoutAction = async (goLogin = false) => {
+    if (getToken()) {
+      try {
+        await logoutApi()
+      } catch (error) {
+        const { createMessage } = useMessage()
+        createMessage.error('注销失败!')
+      }
+    }
+    dispatch(resetState())
+    goLogin && navigate('/login')
+  }
 
   return (
     <Dropdown menu={{ items, onClick }} placement='bottomRight' arrow>
@@ -54,6 +94,7 @@ export default function UserDropdown() {
             height: '24px',
             borderRadius: '50%'
           }}
+          alt=''
         />
       </span>
     </Dropdown>
