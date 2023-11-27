@@ -1,5 +1,5 @@
 import { RouteObject } from '../types'
-import { BasicLayout } from '../../layout'
+import { BasicLayout } from '@/layout'
 import Home from '@/views/home'
 
 // Home route

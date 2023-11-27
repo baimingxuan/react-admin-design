@@ -1,5 +1,6 @@
 import type { Store } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import {
   persistStore,
   persistReducer,
@@ -21,7 +22,7 @@ const persistConfig = {
   storage
 }
 
-const store: Store = configureStore({
+export const store: Store = configureStore({
   reducer: {
     menu: persistReducer(persistConfig, menuReducer),
     breadcrumb: persistReducer(persistConfig, breadcrumbReducer),
@@ -37,7 +38,10 @@ const store: Store = configureStore({
   devTools: true
 })
 
-const persistor = persistStore(store)
+export const persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof store.getState>
-export { store, persistor }
+export type AppDispatch = typeof store.dispatch
+
+export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
