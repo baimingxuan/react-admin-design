@@ -1,10 +1,18 @@
-interface UserInfo {
+export interface UserInfo {
   userId: string | number
   username: string
   realName: string
   avatar: string
+  token: string
   desc?: string
   homePath?: string
+}
+
+export interface UserState {
+  userInfo: Nullable<UserInfo>
+  token?: string
+  sessionTimeout?: boolean
+  lastUpdateTime: number
 }
 
 export interface MenuOptions {
@@ -30,11 +38,4 @@ export interface BreadcrumbState {
 export interface TagsState {
 	tagsList: MenuOptions[]
   tagsActive: string
-}
-
-export interface UserState {
-  userInfo: Nullable<UserInfo>
-  token?: string
-  sessionTimeout?: boolean
-  lastUpdateTime: number
 }

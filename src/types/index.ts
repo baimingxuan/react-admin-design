@@ -8,6 +8,7 @@ export interface UserInfo {
   username: string
   realName: string
   avatar: string
+  token: string
   desc?: string
   homePath?: string
 }

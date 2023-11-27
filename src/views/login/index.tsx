@@ -1,7 +1,14 @@
 import type { FormInstance } from 'antd/es/form'
+import type { LoginParams, UserInfo } from '@/types'
 import { FC, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Form, Input, Checkbox, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { useAppSelector, useAppDispatch } from '@/stores'
+import { setToken, setUserInfo, setSessionTimeout } from '@/stores/modules/userSlice'
+import { getAuthCache } from '@/utils/auth'
+import { TOKEN_KEY } from '@/enums/cacheEnum'
+import { loginApi, getUserInfo } from '@/api'
 import logoIcon from '@/assets/images/logo2.png'
 import './index.less'
 
@@ -10,18 +17,72 @@ const LoginPage: FC = () => {
   const loginFormRef = useRef<FormInstance>(null)
   const [loading, setLoading] = useState(false)
 
-  const handleLogin = (values: any) => {
-    console.log('values', values)
-    setLoading(true)
+  const dispatch = useAppDispatch()
+
+  const { token, sessionTimeout } = useAppSelector(state => state.user)
+  const getToken = (): string => {
+    return token || getAuthCache<string>(TOKEN_KEY)
+  }
+
+  const navigate = useNavigate()
+
+  const handleLogin = async (values: any) => {
+
     try {
-      setTimeout(() => {
-        setLoading(false)
-      }, 1500)
+      setLoading(true)
+      const userInfo = await loginAction({
+        username: values.username,
+        password: values.password
+      })
+      if (userInfo) {
+        message.success('登陆成功！')
+      }
     } catch (error) {
       message.error((error as unknown as Error).message)
     } finally {
-      // setLoading(false)
+      setLoading(false)
     }
+  }
+
+  const loginAction = async (
+    params: LoginParams & {
+      goHome?: boolean
+    }
+  ): Promise<UserInfo | null> => {
+    try {
+      const { goHome = true, ...loginParams } = params
+      const data = await loginApi(loginParams)
+
+      // 保存 Token
+      dispatch(setToken(data?.token))
+      return afterLoginAction(goHome)
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+
+  const afterLoginAction = async (goHome?: boolean): Promise<UserInfo | null> => {
+    if (!getToken()) return null
+
+    const userInfo = await getUserInfoAction()
+
+    if (sessionTimeout) {
+      dispatch(setSessionTimeout(false))
+    } else {
+      goHome && navigate(userInfo?.homePath || '/home')
+    }
+
+    return userInfo
+  }
+
+  const getUserInfoAction = async (): Promise<UserInfo | null> => {
+    if (!getToken()) return null
+
+    const userInfo = await getUserInfo()
+
+    dispatch(setUserInfo(userInfo))
+
+    return userInfo
   }
 
   return (
@@ -42,33 +103,17 @@ const LoginPage: FC = () => {
           className='login-box-form'
           onFinish={handleLogin}
         >
-          <Form.Item
-            name='username'
-            rules={[{ required: true, message: '请输入账号' }]}
-          >
+          <Form.Item name='username' rules={[{ required: true, message: '请输入账号' }]}>
             <Input
               placeholder='请输入账号'
-              prefix={
-                <UserOutlined
-                  style={{ color: 'rgba(0, 0, 0, 0.25)' }}
-                  rev={undefined}
-                />
-              }
+              prefix={<UserOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} rev={undefined} />}
             />
           </Form.Item>
-          <Form.Item
-            name='password'
-            rules={[{ required: true, message: '请输入密码' }]}
-          >
+          <Form.Item name='password' rules={[{ required: true, message: '请输入密码' }]}>
             <Input
               type='password'
               placeholder='请输入密码'
-              prefix={
-                <LockOutlined
-                  style={{ color: 'rgba(0, 0, 0, 0.25)' }}
-                  rev={undefined}
-                />
-              }
+              prefix={<LockOutlined style={{ color: 'rgba(0, 0, 0, 0.25)' }} rev={undefined} />}
             />
           </Form.Item>
           <Form.Item>
@@ -80,12 +125,7 @@ const LoginPage: FC = () => {
             </Form.Item>
           </Form.Item>
           <Form.Item>
-            <Button
-              type='primary'
-              htmlType='submit'
-              className='login-btn'
-              loading={loading}
-            >
+            <Button type='primary' htmlType='submit' className='login-btn' loading={loading}>
               登 录
             </Button>
           </Form.Item>
