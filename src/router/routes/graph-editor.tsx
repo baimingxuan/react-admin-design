@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // graph-editor module page
 const GraphEditorRoute: RouteObject = {
   path: '/graph-editor',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '图形编辑器',
     icon: 'flow',

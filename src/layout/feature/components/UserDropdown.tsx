@@ -2,7 +2,7 @@ import type { MenuProps } from 'antd'
 import { Space, Dropdown } from 'antd'
 import { LockOutlined, PoweroffOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { getAuthCache } from '@/utils/auth'
+import { getAuthCache, clearAuthCache } from '@/utils/auth'
 import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { useAppDispatch, useAppSelector } from '@/stores'
 import { useMessage } from '@/hooks/web/useMessage'
@@ -11,7 +11,6 @@ import { resetState } from '@/stores/modules/userSlice'
 import headerImg from '@/assets/images/avatar.png'
 
 export default function UserDropdown() {
-
   const items: MenuProps['items'] = [
     {
       key: 'lock',
@@ -52,7 +51,6 @@ export default function UserDropdown() {
     return token || getAuthCache<string>(TOKEN_KEY)
   }
 
-
   const handleLock = () => {}
 
   const handleLogout = () => {
@@ -78,15 +76,13 @@ export default function UserDropdown() {
       }
     }
     dispatch(resetState())
+    clearAuthCache()
     goLogin && navigate('/login')
   }
 
   return (
     <Dropdown menu={{ items, onClick }} placement='bottomRight' arrow>
-      <span
-        className='flex-center'
-        style={{cursor: 'pointer'}}
-      >
+      <span className='flex-center' style={{ cursor: 'pointer' }}>
         <img
           src={headerImg}
           style={{

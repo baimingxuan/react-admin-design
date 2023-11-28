@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // excel module page
 const ExcelRoute: RouteObject = {
   path: '/excel',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: 'Excel',
     icon: 'excel',

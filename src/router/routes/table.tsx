@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // table module page
 const TableRoute: RouteObject = {
   path: '/table',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '表格',
     icon: 'table',

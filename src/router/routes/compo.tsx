@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // component module page
 const CompoRoute: RouteObject = {
   path: '/compo',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '组件',
     icon: 'compo',

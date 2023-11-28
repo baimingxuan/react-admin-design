@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // exception module page
 const ExceptionRoute: RouteObject = {
   path: '/exception',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '异常页面',
     icon: 'bug',

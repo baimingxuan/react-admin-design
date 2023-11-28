@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // form module page
 const FormRoute: RouteObject = {
   path: '/form',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '表单',
     icon: 'form',

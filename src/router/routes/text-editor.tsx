@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // text-editor module page
 const TextEditorRoute: RouteObject = {
   path: '/editor',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '文本编辑器',
     icon: 'editor',

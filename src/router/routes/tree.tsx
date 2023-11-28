@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // tree module page
 const TreeRoute: RouteObject = {
   path: '/tree',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '树形结构',
     icon: 'tree',

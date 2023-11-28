@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // image module page
 const ImageRoute: RouteObject = {
   path: '/image',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '图片处理',
     icon: 'image',

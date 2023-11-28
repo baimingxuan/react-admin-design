@@ -1,11 +1,11 @@
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import Home from '@/views/home'
 
 // Home route
 const HomeRoute: RouteObject = {
   path: '/home',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '首页',
     icon: 'home',

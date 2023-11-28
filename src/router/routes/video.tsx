@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '@/layout'
+import { LayoutGuard } from '../constant'
 import lazyLoad from '../lazyLoad'
 
 // video module page
 const VideoRoute: RouteObject = {
   path: '/video',
-  element: <BasicLayout />,
+  element: <LayoutGuard />,
   meta: {
     title: '视频处理',
     icon: 'video',
