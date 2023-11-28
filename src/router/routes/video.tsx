@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
-import { BasicLayout } from '../../layout'
+import { BasicLayout } from '@/layout'
 import lazyLoad from '../lazyLoad'
 
 // video module page

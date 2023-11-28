@@ -1,3 +1,6 @@
+import { ReactNode } from 'react'
+import { LoaderFunction } from 'react-router-dom'
+
 export interface MetaProps {
   title: string
   key?: string
@@ -9,7 +12,9 @@ export interface MetaProps {
 }
 
 export interface RouteObject {
-  element?: React.ReactNode
+  id?: string
+  loader?: LoaderFunction
+  element?: ReactNode
   path?: string
   children?: RouteObject[]
   index?: false

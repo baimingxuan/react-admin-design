@@ -1,4 +1,4 @@
-import type { RouteObject, AppMenu } from './types'
+import type { RouteObject, AppMenu } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { isUrl } from '@/utils/is'
 import { treeMap } from '@/utils/helper/treeHelper'
