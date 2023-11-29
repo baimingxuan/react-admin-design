@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../constant'
-import lazyLoad from '../lazyLoad'
+import { LazyLoad } from '@/components/LazyLoad'
 
 // component module page
 const CompoRoute: RouteObject = {
@@ -15,7 +15,7 @@ const CompoRoute: RouteObject = {
   children: [
     {
       path: 'image-upload',
-      element: lazyLoad(lazy(() => import('@/views/compo/image-upload'))),
+      element: LazyLoad(lazy(() => import('@/views/compo/image-upload'))),
       meta: {
         title: '图片上传',
         key: 'imageUpload'
@@ -29,7 +29,7 @@ const CompoRoute: RouteObject = {
       children: [
         {
           path: 'drag-list',
-          element: lazyLoad(lazy(() => import('@/views/compo/drag/drag-list'))),
+          element: LazyLoad(lazy(() => import('@/views/compo/drag/drag-list'))),
           meta: {
             title: '列表拖拽',
             key: 'dragList'
@@ -37,7 +37,7 @@ const CompoRoute: RouteObject = {
         },
         {
           path: 'drag-resize',
-          element: lazyLoad(lazy(() => import('@/views/compo/drag/drag-resize'))),
+          element: LazyLoad(lazy(() => import('@/views/compo/drag/drag-resize'))),
           meta: {
             title: '组件拖拽',
             key: 'dragResize'
@@ -47,14 +47,14 @@ const CompoRoute: RouteObject = {
     },
     {
       path: 'transfer',
-      element: lazyLoad(lazy(() => import('@/views/compo/transfer'))),
+      element: LazyLoad(lazy(() => import('@/views/compo/transfer'))),
       meta: {
         title: '穿梭框'
       }
     },
     {
       path: 'count-up',
-      element: lazyLoad(lazy(() => import('@/views/compo/count-up'))),
+      element: LazyLoad(lazy(() => import('@/views/compo/count-up'))),
       meta: {
         title: '数字滚动',
         key: 'countUp'

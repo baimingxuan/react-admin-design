@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../constant'
-import lazyLoad from '../lazyLoad'
+import { LazyLoad } from '@/components/LazyLoad'
 
 // video module page
 const VideoRoute: RouteObject = {
@@ -15,7 +15,7 @@ const VideoRoute: RouteObject = {
   children: [
     {
       path: 'video-player',
-      element: lazyLoad(lazy(() => import('@/views/video/video-player'))),
+      element: LazyLoad(lazy(() => import('@/views/video/video-player'))),
       meta: {
         title: '视频播放器',
         key: 'videoPlayer'
@@ -23,7 +23,7 @@ const VideoRoute: RouteObject = {
     },
     {
       path: 'video-mark',
-      element: lazyLoad(lazy(() => import('@/views/blank'))),
+      element: LazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '视频水印',
         key: 'videoMark'

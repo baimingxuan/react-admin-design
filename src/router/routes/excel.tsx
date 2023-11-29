@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../constant'
-import lazyLoad from '../lazyLoad'
+import { LazyLoad } from '@/components/LazyLoad'
 
 // excel module page
 const ExcelRoute: RouteObject = {
@@ -15,7 +15,7 @@ const ExcelRoute: RouteObject = {
   children: [
     {
       path: 'export-excel',
-      element: lazyLoad(lazy(() => import('@/views/excel/export-excel'))),
+      element: LazyLoad(lazy(() => import('@/views/excel/export-excel'))),
       meta: {
         title: '导出Excel',
         key: 'exportExcel'
@@ -23,7 +23,7 @@ const ExcelRoute: RouteObject = {
     },
     {
       path: 'import-excel',
-      element: lazyLoad(lazy(() => import('@/views/excel/import-excel'))),
+      element: LazyLoad(lazy(() => import('@/views/excel/import-excel'))),
       meta: {
         title: '导入Excel',
         key: 'importExcel'

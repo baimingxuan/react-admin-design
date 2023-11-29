@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../constant'
-import lazyLoad from '../lazyLoad'
+import { LazyLoad } from '@/components/LazyLoad'
 
 // form module page
 const FormRoute: RouteObject = {
@@ -15,7 +15,7 @@ const FormRoute: RouteObject = {
   children: [
     {
       path: 'basic-form',
-      element: lazyLoad(lazy(() => import('@/views/form/basic-form'))),
+      element: LazyLoad(lazy(() => import('@/views/form/basic-form'))),
       meta: {
         title: '基础表单',
         key: 'basicForm'
@@ -23,7 +23,7 @@ const FormRoute: RouteObject = {
     },
     {
       path: 'form-designer',
-      element: lazyLoad(lazy(() => import('@/views/blank'))),
+      element: LazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '表单设计器',
         key: 'formDesigner'

@@ -1,7 +1,12 @@
-import { ReactNode, Suspense } from 'react'
+import React, { Suspense } from 'react'
 import { Spin } from 'antd'
 
-const LazyLoad = (Component: React.LazyExoticComponent<() => JSX.Element>): ReactNode => {
+/**
+ * @description 路由懒加载
+ * @param {Element} Component 需要访问的组件
+ * @returns element
+ */
+const LazyLoad = (Component: React.LazyExoticComponent<any>): React.ReactNode => {
   return (
     <Suspense
       fallback={
