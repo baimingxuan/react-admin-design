@@ -1,5 +1,5 @@
 import { RouteObject } from '../types'
-import { LayoutGuard } from '../constant'
+import { LayoutGuard } from '../guard'
 import Home from '@/views/home'
 
 // Home route
