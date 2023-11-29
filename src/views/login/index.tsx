@@ -4,9 +4,10 @@ import { FC, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Form, Input, Checkbox, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { useAppDispatch } from '@/stores'
+import { useAppSelector, useAppDispatch } from '@/stores'
 import { setToken, setUserInfo, setSessionTimeout } from '@/stores/modules/userSlice'
-import { getUserToken, getSessionTimeout } from '@/stores/getters'
+import { getAuthCache } from '@/utils/auth'
+import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { loginApi, getUserInfo } from '@/api'
 import logoIcon from '@/assets/images/logo2.png'
 import './index.less'
@@ -17,6 +18,11 @@ const LoginPage: FC = () => {
   const [loading, setLoading] = useState(false)
 
   const dispatch = useAppDispatch()
+
+  const { token, sessionTimeout } = useAppSelector(state => state.user)
+  const getToken = (): string => {
+    return token || getAuthCache<string>(TOKEN_KEY)
+  }
 
   const navigate = useNavigate()
 
@@ -56,11 +62,11 @@ const LoginPage: FC = () => {
   }
 
   const afterLoginAction = async (goHome?: boolean): Promise<UserInfo | null> => {
-    if (!getUserToken()) return null
+    if (!getToken()) return null
 
     const userInfo = await getUserInfoAction()
 
-    if (getSessionTimeout()) {
+    if (sessionTimeout) {
       dispatch(setSessionTimeout(false))
     } else {
       goHome && navigate(userInfo?.homePath || '/home')
@@ -70,7 +76,7 @@ const LoginPage: FC = () => {
   }
 
   const getUserInfoAction = async (): Promise<UserInfo | null> => {
-    if (!getUserToken()) return null
+    if (!getToken()) return null
 
     const userInfo = await getUserInfo()
 
