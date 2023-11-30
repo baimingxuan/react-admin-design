@@ -19,7 +19,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const { VITE_PORT, VITE_DROP_CONSOLE } = viteEnv
 
   return {
-    base: '/react-admin-design/',
+    base: isBuild ? '/react-admin-design/' : './',
     server: {
       // Listening on all local ips
       host: true,
@@ -33,7 +33,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       viteMockServe({
         mockPath: 'mock',
-        ignore: /^\_/
+        ignore: /^_/
       })
     ],
 
