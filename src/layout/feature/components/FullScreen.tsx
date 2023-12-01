@@ -1,35 +1,14 @@
-import { useState } from 'react'
 import { Tooltip } from 'antd'
-import { useFullScreenHandle } from 'react-full-screen'
+import { useFullscreen } from 'ahooks'
 import SvgIcon from '@/components/SvgIcon'
 
 export default function FullScreen() {
-  const [fullScreen, setFullScreen] = useState(false)
-  const handle = useFullScreenHandle()
-  const toggle = () => {
-    if (!fullScreen) {
-      setFullScreen(true)
-      handle.enter()
-    } else {
-      setFullScreen(false)
-      handle.exit()
-    }
-  }
+  const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.body)
 
   return (
-    <Tooltip
-      title={fullScreen ? '退出全屏' : '全屏'}
-      placement='bottom'
-      mouseEnterDelay={0.5}
-    >
-      <span className='icon-btn' onClick={toggle}>
-        {
-          !fullScreen ? (
-            <SvgIcon name='screen-full' size={20} />
-          ) : (
-            <SvgIcon name='screen-normal' size={20} />
-          )
-        }
+    <Tooltip title={isFullscreen ? '退出全屏' : '进入全屏'} placement='bottom' mouseEnterDelay={0.5}>
+      <span className='icon-btn' onClick={toggleFullscreen}>
+        {!isFullscreen ? <SvgIcon name='screen-full' size={20} /> : <SvgIcon name='screen-normal' size={20} />}
       </span>
     </Tooltip>
   )
