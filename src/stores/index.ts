@@ -4,7 +4,6 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import menuReducer from './modules/menuSlice'
-import breadcrumbReducer from './modules/breadcrumbSlice'
 import tagsSlice from './modules/tagsSlice'
 import userSlice from './modules/userSlice'
 import appSlice from './modules/appSlice'
@@ -18,7 +17,6 @@ export const store: Store = configureStore({
   reducer: {
     app: persistReducer(persistConfig, appSlice),
     menu: persistReducer(persistConfig, menuReducer),
-    breadcrumb: persistReducer(persistConfig, breadcrumbReducer),
     tags: persistReducer(persistConfig, tagsSlice),
     user: persistReducer(persistConfig, userSlice)
   },

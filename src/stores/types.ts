@@ -32,12 +32,6 @@ export interface MenuState {
   isCollapse: boolean
 }
 
-export interface BreadcrumbState {
-  breadcrumbs: {
-    [propName: string]: any
-  }
-}
-
 export interface TagsState {
   tagsList: MenuOptions[]
   tagsActive: string
