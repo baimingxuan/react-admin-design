@@ -32,6 +32,9 @@ dependencies:
   axios:
     specifier: ^1.6.2
     version: 1.6.2
+  classnames:
+    specifier: ^2.3.2
+    version: 2.3.2
   cropperjs:
     specifier: ^1.6.1
     version: 1.6.1
