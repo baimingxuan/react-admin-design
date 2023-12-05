@@ -37,13 +37,17 @@ const LayoutMenu = (props: any) => {
 
   useEffect(() => {
     setSelectedKeys([pathname])
-    
+
     setOpenKeys(getOpenKeys(pathname))
   }, [pathname])
 
   const addIcon = (icon?: string) => {
     if (!icon) return null
-    return <SvgIcon name={icon} size={16} />
+    return (
+      <span className='anticon'>
+        <SvgIcon name={icon} size={16} />
+      </span>
+    )
   }
 
   const getMenuItem = (data: AppMenu[], list: MenuItem[] = []) => {
@@ -74,14 +78,14 @@ const LayoutMenu = (props: any) => {
   const handleOpenChange: MenuProps['onOpenChange'] = (keys: string[]) => {
     if (keys.length === 0 || keys.length === 1) return setOpenKeys(keys)
     const latestKey = keys[keys.length - 1]
-		if (latestKey.includes(keys[0])) return setOpenKeys(keys)
-		setOpenKeys([latestKey])
+    if (latestKey.includes(keys[0])) return setOpenKeys(keys)
+    setOpenKeys([latestKey])
   }
 
   const navigate = useNavigate()
   const handleMenuClick: MenuProps['onClick'] = ({ key }: { key: string }) => {
-		navigate(key)
-	};
+    navigate(key)
+  }
 
   return (
     <div className='layout_menu'>
