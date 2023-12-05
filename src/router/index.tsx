@@ -1,6 +1,8 @@
 import { RouteObject } from './types'
 import { Navigate, createHashRouter } from 'react-router-dom'
 import LoginPage from '@/views/login'
+import { ExceptionEnum } from '@/enums/exceptionEnum'
+import PageException from '@/views/exception'
 
 const metaRoutes = import.meta.glob('./routes/*.tsx', { eager: true }) as Recordable
 
@@ -29,6 +31,16 @@ const rootRoutes: RouteObject[] = [
   {
     path: '*',
     element: <Navigate to='/404' />
+  },
+  {
+    path: '/403',
+    element: <PageException />,
+    loader: () => ({ status: ExceptionEnum.PAGE_NOT_ACCESS, withCard: false })
+  },
+  {
+    path: '/404',
+    element: <PageException />,
+    loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: false })
   }
 ]
 
