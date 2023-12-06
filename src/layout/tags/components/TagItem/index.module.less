@@ -1,0 +1,47 @@
+.compo_tag-item {
+  display: inline-block;
+  vertical-align: top;
+  height: 24px;
+  margin: 0 2px;
+  padding: 0 8px;
+  border-radius: 3px;
+  line-height: 24px;
+  color: #555;
+  background: #fff;
+  overflow: hidden;
+  cursor: pointer;
+
+  &__dot {
+    display: inline-block;
+    vertical-align: baseline;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #dcdee0;
+  }
+
+  &__name {
+    font-size: 12px;
+  }
+
+  :global .anticon-close {
+    vertical-align: baseline;
+    svg {
+      width: 8px;
+      height: 8px;
+    }
+  }
+
+  &.active {
+    border: none;
+    color: #fff;
+    background: #1890ff;
+    & .compo_tag-item__dot{
+      background: #fff;
+    }
+    :global .anticon-close {
+      color: #fff;
+    }
+  }
+}
