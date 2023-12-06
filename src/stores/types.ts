@@ -1,5 +1,6 @@
 import { AppConfig } from '@/types/config'
 import { AppModeEnum, ThemeEnum } from '@/enums/appEnum'
+import { RouteObject } from '@/router/types'
 
 export interface UserInfo {
   userId: string | number
@@ -33,8 +34,8 @@ export interface MenuState {
 }
 
 export interface TagsState {
-  tagsList: MenuOptions[]
-  tagsActive: string
+  visitedTags: RouteObject[]
+  cachedTags: Set<string>
 }
 
 export interface AppState {
