@@ -9,6 +9,7 @@ const HomeRoute: RouteObject = {
   meta: {
     title: '首页',
     icon: 'home',
+    affix: true,
     orderNo: 1,
     hideChildrenInMenu: true
   },

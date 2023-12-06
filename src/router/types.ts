@@ -5,6 +5,7 @@ export interface MetaProps {
   title: string
   key?: string
   icon?: string
+  affix?: boolean
   keepAlive?: boolean
   orderNo?: number
   hideMenu?: boolean
