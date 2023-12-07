@@ -12,9 +12,8 @@ export function useTitle() {
   const currRoute = searchRoute(pathname, menuList)
 
   useEffect(() => {
-    setPageTitle(currRoute?.name)
+    setPageTitle(currRoute?.name!)
   }, [pathname])
 
   usePageTitle(pageTitle)
-
 }

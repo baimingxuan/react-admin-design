@@ -3,7 +3,7 @@ import { TagsState } from '@/stores/types'
 
 const initialState: TagsState = {
   visitedTags: [],
-  cachedTags: new Set()
+  cachedTags: []
 }
 
 const tags = createSlice({
