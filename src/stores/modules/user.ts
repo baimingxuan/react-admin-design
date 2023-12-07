@@ -10,7 +10,7 @@ const initialState: UserState = {
   lastUpdateTime: 0
 }
 
-const userSlice = createSlice({
+const user = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -35,6 +35,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setToken, setUserInfo, setSessionTimeout, resetState } = userSlice.actions
+export const { setToken, setUserInfo, setSessionTimeout, resetState } = user.actions
 
-export default userSlice.reducer
+export default user.reducer

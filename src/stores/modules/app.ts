@@ -10,7 +10,7 @@ const initialState: AppState = {
   appConfig: Persistent.getLocal(APP_CONFIG_KEY)
 }
 
-const appSlice = createSlice({
+const app = createSlice({
   name: 'app',
   initialState,
   reducers: {
@@ -33,6 +33,6 @@ const appSlice = createSlice({
   }
 })
 
-export const { setAppMode, setThemeMode, setAppConfig, resetState } = appSlice.actions
+export const { setAppMode, setThemeMode, setAppConfig, resetState } = app.actions
 
-export default appSlice.reducer
+export default app.reducer

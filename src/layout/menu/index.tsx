@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Menu, Spin } from 'antd'
 import { getAsyncMenus } from '@/router/menus'
 import { AppMenu } from '@/router/types'
-import { setMenuList } from '@/stores/modules/menuSlice'
+import { setMenuList } from '@/stores/modules/menu'
 import { getOpenKeys } from '@/utils/helper/menuHelper'
 import SvgIcon from '@/components/SvgIcon'
 

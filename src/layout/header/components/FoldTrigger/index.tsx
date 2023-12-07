@@ -1,5 +1,5 @@
 import { useAppSelector, useAppDispatch } from '@/stores'
-import { setAppConfig } from '@/stores/modules/appSlice'
+import { setAppConfig } from '@/stores/modules/app'
 import SvgIcon from '@/components/SvgIcon'
 import style from './index.module.less'
 import classNames from 'classnames'

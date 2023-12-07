@@ -6,7 +6,7 @@ const initialState: MenuState = {
   isCollapse: false
 }
 
-const menuSlice = createSlice({
+const menu = createSlice({
   name: 'menu',
   initialState,
   reducers: {
@@ -19,6 +19,6 @@ const menuSlice = createSlice({
   }
 })
 
-export const { setMenuList, updateCollapse } = menuSlice.actions
+export const { setMenuList, updateCollapse } = menu.actions
 
-export default menuSlice.reducer
+export default menu.reducer

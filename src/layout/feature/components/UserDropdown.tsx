@@ -7,7 +7,7 @@ import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { useAppDispatch, useAppSelector } from '@/stores'
 import { useMessage } from '@/hooks/web/useMessage'
 import { logoutApi } from '@/api'
-import { resetState } from '@/stores/modules/userSlice'
+import { resetState } from '@/stores/modules/user'
 import headerImg from '@/assets/images/avatar.png'
 
 export default function UserDropdown() {

@@ -6,7 +6,7 @@ const initialState: TagsState = {
   cachedTags: new Set()
 }
 
-const tagsSlice = createSlice({
+const tags = createSlice({
   name: 'tags',
   initialState,
   reducers: {
@@ -14,6 +14,6 @@ const tagsSlice = createSlice({
   }
 })
 
-export const { addVisitedTags } = tagsSlice.actions
+export const { addVisitedTags } = tags.actions
 
-export default tagsSlice.reducer
+export default tags.reducer

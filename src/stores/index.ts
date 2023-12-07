@@ -3,10 +3,10 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import menuReducer from './modules/menuSlice'
-import tagsSlice from './modules/tagsSlice'
-import userSlice from './modules/userSlice'
-import appSlice from './modules/appSlice'
+import appSlice from './modules/app'
+import menuSlice from './modules/menu'
+import tagsSlice from './modules/tags'
+import userSlice from './modules/user'
 
 const persistConfig = {
   key: 'redux-persist',
@@ -16,7 +16,7 @@ const persistConfig = {
 export const store: Store = configureStore({
   reducer: {
     app: persistReducer(persistConfig, appSlice),
-    menu: persistReducer(persistConfig, menuReducer),
+    menu: persistReducer(persistConfig, menuSlice),
     tags: persistReducer(persistConfig, tagsSlice),
     user: persistReducer(persistConfig, userSlice)
   },
