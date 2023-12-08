@@ -10,6 +10,7 @@ import { getAuthCache } from '@/utils/auth'
 import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { loginApi, getUserInfo } from '@/api'
 import logoIcon from '@/assets/images/logo_name.png'
+import classNames from 'classnames'
 import './index.less'
 
 const LoginPage: FC = () => {
@@ -117,10 +118,10 @@ const LoginPage: FC = () => {
             />
           </Form.Item>
           <Form.Item>
-            <Form.Item name='remember' className='fl' valuePropName='checked'>
+            <Form.Item name='remember' className={classNames('fl', 'no-margin')} valuePropName='checked'>
               <Checkbox>记住我</Checkbox>
             </Form.Item>
-            <Form.Item className='fr'>
+            <Form.Item className={classNames('fr', 'no-margin')}>
               <a href=''>忘记密码？</a>
             </Form.Item>
           </Form.Item>
