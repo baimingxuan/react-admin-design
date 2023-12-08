@@ -1,6 +1,7 @@
-<h1 align="center">
-  React Admin Design
-</h1> 
+<p align="center">
+  <img width="420" src="https://cdn.jsdelivr.net/gh/baimingxuan/media-store/images/logo-r-md.png">
+</p>
+
 
 
 
