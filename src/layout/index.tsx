@@ -2,6 +2,7 @@ import { Layout } from 'antd'
 import { Outlet } from 'react-router-dom'
 import LayoutMenu from './menu'
 import LayoutHeader from './header'
+import { AppLogo } from '@/components/AppLogo'
 import './index.less'
 import { useTitle } from '@/hooks/web/useTitle'
 import { useAppSelector } from '@/stores'
@@ -15,6 +16,7 @@ export const BasicLayout = (props: any) => {
   return (
     <Layout className='layout_wrapper'>
       <Sider width={210} trigger={null} collapsed={getMenuFold} style={{ height: '100vh' }}>
+        <AppLogo />
         <LayoutMenu />
       </Sider>
       <Layout>
