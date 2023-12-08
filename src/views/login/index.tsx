@@ -9,7 +9,7 @@ import { setToken, setUserInfo, setSessionTimeout } from '@/stores/modules/user'
 import { getAuthCache } from '@/utils/auth'
 import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { loginApi, getUserInfo } from '@/api'
-import logoIcon from '@/assets/images/logo2.png'
+import logoIcon from '@/assets/images/logo_name.png'
 import './index.less'
 
 const LoginPage: FC = () => {
