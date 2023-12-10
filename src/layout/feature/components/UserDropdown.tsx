@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/stores'
 import { useMessage } from '@/hooks/web/useMessage'
 import { logoutApi } from '@/api'
 import { resetState } from '@/stores/modules/user'
-import headerImg from '@/assets/images/avatar.png'
+import headerImg from '@/assets/images/avatar.jpeg'
 
 export default function UserDropdown() {
   const items: MenuProps['items'] = [
