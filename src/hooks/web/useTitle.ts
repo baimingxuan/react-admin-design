@@ -9,10 +9,10 @@ export function useTitle() {
   const [pageTitle, setPageTitle] = useState('react-admin-design')
   const { pathname } = useLocation()
   const { menuList } = useAppSelector(state => state.menu)
-  const currRoute = searchRoute(pathname, menuList)
 
   useEffect(() => {
-    setPageTitle(currRoute?.name || '首页')
+    const currRoute = searchRoute(pathname, menuList)
+    setPageTitle(currRoute?.name!)
   }, [pathname])
 
   usePageTitle(pageTitle)

@@ -32,7 +32,7 @@ export const searchRoute: any = (path: string, routes: any = []) => {
       if (result) return result
     }
   }
-  return ''
+  return null
 }
 
 export function deepMerge<T = any>(src: any = {}, target: any = {}): T {

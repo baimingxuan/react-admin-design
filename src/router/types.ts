@@ -17,6 +17,7 @@ export interface RouteObject {
   loader?: LoaderFunction
   element?: ReactNode
   path?: string
+  fullPath?: string
   children?: RouteObject[]
   index?: false
   meta?: MetaProps
