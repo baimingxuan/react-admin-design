@@ -1,9 +1,14 @@
 import type { MenuProps } from 'antd'
-import { FC } from 'react'
+import type { RouteObject } from '@/router/types'
+import { FC, useEffect } from 'react'
 import { Button, Dropdown } from 'antd'
 import { LeftOutlined, RightOutlined, RedoOutlined, CloseOutlined } from '@ant-design/icons'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { TagItem } from './components'
 import { basicRoutes } from '@/router'
+import { useAppSelector, useAppDispatch } from '@/stores'
+import { addVisitedTags } from '@/stores/modules/tags'
+import { searchRoute } from '@/utils'
 import classNames from 'classnames'
 import styles from './index.module.less'
 
@@ -26,7 +31,43 @@ const LayoutTags: FC = () => {
     }
   }
 
-  const tagsList = [{ title: '首页', path: '/home' }]
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const visitedTags = useAppSelector(state => state.tags.visitedTags)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const affixTags = initAffixTags(basicRoutes)
+    for (const tag of affixTags) {
+      dispatch(addVisitedTags(tag))
+    }
+  }, [])
+
+  useEffect(() => {
+    const currRoute = searchRoute(pathname, basicRoutes)
+    if (currRoute) {
+      dispatch(addVisitedTags(currRoute))
+    }
+  }, [pathname])
+
+  const initAffixTags = (routes: RouteObject[], basePath: string = '/') => {
+    let affixTags: RouteObject[] = []
+
+    for (const route of routes) {
+      if (route.meta?.affix) {
+        const fullPath = route.path!.startsWith('/') ? route.path : basePath + route.path
+        affixTags.push({
+          ...route,
+          path: fullPath
+        })
+      }
+      if (route.children && route.children.length) {
+        affixTags = affixTags.concat(initAffixTags(route.children, route.path))
+      }
+    }
+
+    return affixTags
+  }
 
   const handleMove = (offset: number) => {}
 
@@ -48,9 +89,14 @@ const LayoutTags: FC = () => {
       />
       <div className={styles['layout_tags__main']}>
         <div className={styles['layout_tags__main-body']}>
-          {tagsList.map(item => (
-            <span key={item.path}>
-              <TagItem name={item.title} closeTag={() => handleCloseTag.bind(item.path)} />
+          {visitedTags.map((item: RouteObject) => (
+            <span key={item.fullPath}>
+              <TagItem
+                name={item.meta?.title!}
+                active={pathname === item.fullPath}
+                closeTag={() => handleCloseTag.bind(item.path)}
+                onClick={() => navigate(item.fullPath!)}
+              />
             </span>
           ))}
         </div>

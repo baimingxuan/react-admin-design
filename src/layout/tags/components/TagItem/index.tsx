@@ -8,11 +8,17 @@ interface PropState {
   fixed?: boolean
   active?: boolean
   closeTag: () => void
+  onClick: () => void
 }
 
-const TagItem: FC<PropState> = ({ name, fixed, active, closeTag }) => {
+const TagItem: FC<PropState> = ({ name, fixed, active, closeTag, onClick }) => {
   return (
-    <Tag className={classNames(styles['compo_tag-item'], { active })} closable={!fixed} onClose={closeTag}>
+    <Tag
+      className={classNames(styles['compo_tag-item'], { [styles['active']]: active })}
+      closable={!fixed}
+      onClose={closeTag}
+      onClick={onClick}
+    >
       <span className={styles['compo_tag-item__dot']} />
       <span className={styles['compo_tag-item__name']}>{name}</span>
     </Tag>
