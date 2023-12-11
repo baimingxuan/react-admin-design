@@ -1,7 +1,7 @@
 import type { Store } from 'redux'
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
+import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import appSlice from './modules/app'
 import menuSlice from './modules/menu'
@@ -22,9 +22,7 @@ export const store: Store = configureStore({
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
+      serializableCheck: false
     }),
   devTools: true
 })
