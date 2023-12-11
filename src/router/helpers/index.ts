@@ -36,3 +36,19 @@ export function transformRouteToMenu(routes: RouteObject[]) {
   joinParentPath(list)
   return cloneDeep(list)
 }
+
+export function genFullPath(routes: RouteObject[], parentPath = '') {
+  for (let index = 0; index < routes.length; index++) {
+    const route = routes[index]
+
+    if (route.path!.startsWith('/')) {
+      route.fullPath = route.path
+    } else {
+      route.fullPath = `${parentPath}/${route.path}`
+    }
+
+    if (route?.children?.length) {
+      genFullPath(route.children, route.fullPath)
+    }
+  }
+}
