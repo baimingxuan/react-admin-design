@@ -12,7 +12,7 @@ export function useTitle() {
   const currRoute = searchRoute(pathname, menuList)
 
   useEffect(() => {
-    setPageTitle(currRoute?.name!)
+    setPageTitle(currRoute?.name || '首页')
   }, [pathname])
 
   usePageTitle(pageTitle)
