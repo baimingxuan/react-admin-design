@@ -19,8 +19,17 @@ export function joinParentPath(menus: AppMenu[], parentPath = '') {
 
 export function transformRouteToMenu(routes: RouteObject[]) {
   const cloneRoutes = cloneDeep(routes)
+  const routeList: RouteObject[] = []
 
-  const list = treeMap(cloneRoutes, {
+  cloneRoutes.forEach(item => {
+    if (item.meta!.hideChildrenInMenu) {
+      item.children = []
+    }
+
+    routeList.push(item)
+  })
+
+  const list = treeMap(routeList, {
     conversion: (node: RouteObject) => {
       const { meta: { title, hideMenu = false, ...rest } = {} } = node
 
