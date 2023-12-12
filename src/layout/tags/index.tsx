@@ -1,6 +1,6 @@
 import type { MenuProps } from 'antd'
 import type { RouteObject } from '@/router/types'
-import { FC, useEffect } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { Button, Dropdown } from 'antd'
 import { LeftOutlined, RightOutlined, RedoOutlined, CloseOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -9,6 +9,7 @@ import { basicRoutes } from '@/router'
 import { useAppSelector, useAppDispatch } from '@/stores'
 import { addVisitedTags } from '@/stores/modules/tags'
 import { searchRoute } from '@/utils'
+import { closeAllTags, closeTagByKey, closeTagsByType } from '@/stores/modules/tags'
 import classNames from 'classnames'
 import styles from './index.module.less'
 
@@ -21,13 +22,16 @@ const LayoutTags: FC = () => {
   ]
 
   const onClick: MenuProps['onClick'] = ({ key }) => {
-    switch (key) {
-      case 'left':
-        handleClose()
-        break
-      case 'right':
-        handleClose()
-        break
+    if (key === 'all') {
+      // @ts-ignore
+      dispatch(closeAllTags()).then(({ payload }) => {
+        const lastTag = payload.slice(-1)[0]
+        if (activeTag !== lastTag?.fullPath) {
+          navigate(lastTag?.fullPath)
+        }
+      })
+    } else {
+      dispatch(closeTagsByType({ type: key, path: activeTag }))
     }
   }
 
@@ -35,6 +39,8 @@ const LayoutTags: FC = () => {
   const navigate = useNavigate()
   const visitedTags = useAppSelector(state => state.tags.visitedTags)
   const dispatch = useAppDispatch()
+
+  const [activeTag, setActiveTag] = useState(pathname)
 
   useEffect(() => {
     const affixTags = initAffixTags(basicRoutes)
@@ -48,6 +54,7 @@ const LayoutTags: FC = () => {
     if (currRoute) {
       dispatch(addVisitedTags(currRoute))
     }
+    setActiveTag(pathname)
   }, [pathname])
 
   const initAffixTags = (routes: RouteObject[], basePath: string = '/') => {
@@ -73,7 +80,27 @@ const LayoutTags: FC = () => {
 
   const handleScroll = (e: any) => {}
 
-  const handleCloseTag = (targetKey: string) => {}
+  const handleCloseTag = (path: string) => {
+    // @ts-ignore
+    dispatch(closeTagByKey(path)).then(({ payload }) => {
+      let currTag: RouteObject = {}
+      const { tagIndex, tagsList } = payload
+      const tagLen = tagsList.length
+      if (path === activeTag) {
+        if (tagIndex <= tagLen - 1) {
+          currTag = tagsList[tagIndex]
+        } else {
+          currTag = tagsList[tagLen - 1]
+        }
+        navigate(currTag?.fullPath!)
+      }
+    })
+  }
+
+  const handleClickTag = (path: string) => {
+    setActiveTag(path)
+    navigate(path)
+  }
 
   const handleReload = () => {}
 
@@ -93,9 +120,10 @@ const LayoutTags: FC = () => {
             <span key={item.fullPath}>
               <TagItem
                 name={item.meta?.title!}
-                active={pathname === item.fullPath}
-                closeTag={() => handleCloseTag.bind(item.path)}
-                onClick={() => navigate(item.fullPath!)}
+                active={activeTag === item.fullPath}
+                fixed={item.meta?.affix}
+                closeTag={() => handleCloseTag(item.fullPath!)}
+                onClick={() => handleClickTag(item.fullPath!)}
               />
             </span>
           ))}
