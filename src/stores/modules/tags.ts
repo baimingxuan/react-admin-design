@@ -47,9 +47,6 @@ const tags = createSlice({
         case 'other':
           restTags = visitedTags.filter((tag: any) => tag.fullPath === path)
           break
-        case 'all':
-          restTags = []
-          break
       }
       state.visitedTags = affixTags.concat(restTags.filter((tag: RouteObject) => !tag.meta?.affix))
     }
