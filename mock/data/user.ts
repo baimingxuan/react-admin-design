@@ -21,12 +21,10 @@ export default [
   {
     url: '/api/login',
     timeout: 500,
-    method: 'post',
-    response: ({ body }) => {
-      const { username, password } = body
-      const checkUser = createFakeUserList().find(
-        item => item.username === username && password === item.password
-      )
+    method: 'get',
+    response: ({ query }) => {
+      const { username, password } = query
+      const checkUser = createFakeUserList().find(item => item.username === username && password === item.password)
       if (!checkUser) {
         return resultError('Incorrect account or password!')
       }
@@ -60,7 +58,7 @@ export default [
     response: (request: requestParams) => {
       const token = getRequestToken(request)
       if (!token) return resultError('Invalid token!')
-      const checkUser = createFakeUserList().find((item) => item.token === token)
+      const checkUser = createFakeUserList().find(item => item.token === token)
       if (!checkUser) {
         return resultError('Invalid token!')
       }

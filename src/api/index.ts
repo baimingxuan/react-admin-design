@@ -6,11 +6,11 @@ interface LoginParams {
 }
 
 // User login api
-export function loginApi(data: LoginParams): Promise<any> {
+export function loginApi(params: LoginParams): Promise<any> {
   return service({
     url: '/login',
-    method: 'post',
-    data
+    method: 'get',
+    params
   })
 }
 
