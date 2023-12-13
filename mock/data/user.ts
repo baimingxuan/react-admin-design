@@ -21,9 +21,9 @@ export default [
   {
     url: '/api/login',
     timeout: 500,
-    method: 'get',
-    response: ({ query }) => {
-      const { username, password } = query
+    method: 'post',
+    response: ({ body }) => {
+      const { username, password } = body
       const checkUser = createFakeUserList().find(item => item.username === username && password === item.password)
       if (!checkUser) {
         return resultError('Incorrect account or password!')
