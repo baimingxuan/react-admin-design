@@ -32,7 +32,7 @@ const rootRoutes: RouteObject[] = [
     },
     loader: () => {
       if (getAuthCache<string>(TOKEN_KEY)) {
-        return redirect('/')
+        return redirect('/home')
       }
       return null
     }

@@ -5,6 +5,7 @@ import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { useAppSelector } from '@/stores'
 
 export const GuardRoute = ({ children }: { children: ReactNode }) => {
+  const whiteList: string[] = ['/', '/home', '/login']
   const { pathname } = useLocation()
   const { token } = useAppSelector(state => state.user)
   const getToken = (): string => {
@@ -12,7 +13,7 @@ export const GuardRoute = ({ children }: { children: ReactNode }) => {
   }
 
   if (!getToken()) {
-    if (pathname === '/login') {
+    if (whiteList.includes(pathname)) {
       return <Navigate to='/login' replace />
     } else {
       return <Navigate to={`/login?redirect=${pathname}`} replace />
