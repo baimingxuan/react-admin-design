@@ -19,7 +19,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const { VITE_PORT, VITE_DROP_CONSOLE } = viteEnv
 
   return {
-    base: '/react-admin-design/',
+    base: './',
     server: {
       // Listening on all local ips
       host: true,

@@ -5,7 +5,7 @@ import { getToken, clearAuthCache } from '@/utils/auth'
 
 // Create axios instance
 const service = axios.create({
-  baseURL: '/react-admin-design/api',
+  baseURL: '/api',
   timeout: 10 * 1000
 })
 
