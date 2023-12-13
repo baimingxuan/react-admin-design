@@ -5,7 +5,7 @@ import { getToken, clearAuthCache } from '@/utils/auth'
 
 // Create axios instance
 const service = axios.create({
-  baseURL: '/api',
+  baseURL: '/react-admin-design/api',
   timeout: 10 * 1000
 })
 
@@ -23,12 +23,11 @@ const handleError = (error: AxiosError): Promise<AxiosError> => {
 service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = getToken()
   if (token) {
-    (config as Recordable).headers['Authorization'] = `${token}`
+    ;(config as Recordable).headers['Authorization'] = `${token}`
   }
-  (config as Recordable).headers['Content-Type'] = 'application/json'
+  ;(config as Recordable).headers['Content-Type'] = 'application/json'
   return config
-},
-handleError)
+}, handleError)
 
 // Respose interceptors configuration
 service.interceptors.response.use((response: AxiosResponse) => {
@@ -41,7 +40,6 @@ service.interceptors.response.use((response: AxiosResponse) => {
 
     return Promise.reject('error')
   }
-},
-handleError)
+}, handleError)
 
 export { service }
