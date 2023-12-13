@@ -1,7 +1,7 @@
 import type { FormInstance } from 'antd/es/form'
 import type { LoginParams, UserInfo } from '@/types'
 import { FC, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Input, Checkbox, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useAppSelector, useAppDispatch } from '@/stores'
@@ -26,9 +26,9 @@ const LoginPage: FC = () => {
   }
 
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const handleLogin = async (values: any) => {
-
     try {
       setLoading(true)
       const userInfo = await loginAction({
@@ -70,7 +70,12 @@ const LoginPage: FC = () => {
     if (sessionTimeout) {
       dispatch(setSessionTimeout(false))
     } else {
-      goHome && navigate(userInfo?.homePath || '/home')
+      const redirect = searchParams.get('redirect')
+      if (redirect) {
+        navigate(redirect)
+      } else {
+        goHome && navigate(userInfo?.homePath || '/home')
+      }
     }
 
     return userInfo

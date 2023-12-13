@@ -1,7 +1,9 @@
 import { RouteObject } from './types'
-import { Navigate, createHashRouter } from 'react-router-dom'
+import { Navigate, createHashRouter, redirect } from 'react-router-dom'
 import { genFullPath } from './helpers'
 import { ExceptionEnum } from '@/enums/exceptionEnum'
+import { getAuthCache } from '@/utils/auth'
+import { TOKEN_KEY } from '@/enums/cacheEnum'
 import LoginPage from '@/views/login'
 import PageException from '@/views/exception'
 
@@ -27,6 +29,12 @@ const rootRoutes: RouteObject[] = [
     meta: {
       title: '登录页',
       key: 'login'
+    },
+    loader: () => {
+      if (getAuthCache<string>(TOKEN_KEY)) {
+        return redirect('/')
+      }
+      return null
     }
   },
   ...routeList,
