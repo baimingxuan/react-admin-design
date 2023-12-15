@@ -1,4 +1,4 @@
-import {FC, useState, useEffect } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { PageWrapper } from '@/components/Page'
 import { WANG_EDITOR_PLUGIN } from '@/settings/websiteSetting'
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
@@ -10,17 +10,14 @@ const RichTextEditor: FC = () => {
   const [editor, setEditor] = useState<IDomEditor | null>(null)
   const [html, setHtml] = useState('<p>hello</p>')
 
-
   const toolbarConfig: Partial<IToolbarConfig> = {}
-  const editorConfig: Partial<IEditorConfig> = {    // TS 语法
-    placeholder: '请输入内容...'
-  }
+  const editorConfig: Partial<IEditorConfig> = {}
 
   useEffect(() => {
     return () => {
-        if (editor == null) return
-        editor.destroy()
-        setEditor(null)
+      if (editor == null) return
+      editor.destroy()
+      setEditor(null)
     }
   }, [editor])
 

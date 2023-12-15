@@ -63,23 +63,25 @@ const ImageUpload: React.FC = () => {
     <PageWrapper plugin={UPLOAD_COMPO}>
       <Row gutter={12}>
         <Col span={8}>
-          <Card title='拖拽上传' bordered={false} bodyStyle={{height: '300px'}}>
+          <Card title='拖拽上传' bordered={false} bodyStyle={{ height: '300px' }}>
             <Dragger
               defaultFileList={dragImgs}
               action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
               accept='.jpg, .jpeg, .gif, .png, .bmp'
               multiple
             >
-              <p className="ant-upload-drag-icon" style={{marginBottom: 0}}>
+              <p className='ant-upload-drag-icon' style={{ marginBottom: 0 }}>
                 <CloudUploadOutlined rev={undefined} />
               </p>
-              <p>将图片拖到此处, 或<span style={{color: '#1890ff;'}}>点击上传</span></p>
-              <p className="ant-upload-hint">只能上传jpg、jpeg、gif、png、bmp文件, 且不超过500kb</p>
+              <p>
+                将图片拖到此处, 或<span style={{ color: '#1890ff' }}>点击上传</span>
+              </p>
+              <p className='ant-upload-hint'>只能上传jpg、jpeg、gif、png、bmp文件, 且不超过500kb</p>
             </Dragger>
           </Card>
         </Col>
         <Col span={8}>
-          <Card title='列表样式' bordered={false} bodyStyle={{height: '300px'}}>
+          <Card title='列表样式' bordered={false} bodyStyle={{ height: '300px' }}>
             <Upload
               defaultFileList={[...listImgs]}
               action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
@@ -91,12 +93,12 @@ const ImageUpload: React.FC = () => {
                 <CloudUploadOutlined rev={undefined} />
                 <span>点击上传</span>
               </Button>
-              <p className="ant-upload-hint">只能上传jpg、jpeg、gif、png、bmp文件, 且不超过500kb</p>
+              <p className='ant-upload-hint'>只能上传jpg、jpeg、gif、png、bmp文件, 且不超过500kb</p>
             </Upload>
           </Card>
         </Col>
         <Col span={8}>
-          <Card title='照片墙' bordered={false} bodyStyle={{height: '300px'}}>
+          <Card title='照片墙' bordered={false} bodyStyle={{ height: '300px' }}>
             <Upload
               fileList={listImgs}
               action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
@@ -108,17 +110,12 @@ const ImageUpload: React.FC = () => {
             >
               <div>
                 <PlusOutlined rev={undefined} />
-                <div style={{marginTop: '8px'}}>点击上传</div>
+                <div style={{ marginTop: '8px' }}>点击上传</div>
               </div>
             </Upload>
           </Card>
-          <Modal
-            open={previewVisible}
-            title={previewTitle}
-            footer={null}
-            onCancel={handleCancle}
-          >
-            <img src={previewImage} style={{width: '100%'}} />
+          <Modal open={previewVisible} title={previewTitle} footer={null} onCancel={handleCancle}>
+            <img src={previewImage} style={{ width: '100%' }} />
           </Modal>
         </Col>
       </Row>
