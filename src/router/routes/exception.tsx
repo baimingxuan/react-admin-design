@@ -7,6 +7,7 @@ import { LazyLoad } from '@/components/LazyLoad'
 // exception module page
 const ExceptionRoute: RouteObject = {
   path: '/exception',
+  name: 'ExceptionPage',
   element: <LayoutGuard />,
   meta: {
     title: '异常页面',
@@ -16,6 +17,7 @@ const ExceptionRoute: RouteObject = {
   children: [
     {
       path: 'page-403',
+      name: 'Page403',
       element: LazyLoad(lazy(() => import('@/views/exception'))),
       meta: {
         title: '403页面',
@@ -25,6 +27,7 @@ const ExceptionRoute: RouteObject = {
     },
     {
       path: 'page-404',
+      name: 'Page404',
       element: LazyLoad(lazy(() => import('@/views/exception'))),
       meta: {
         title: '404页面',
@@ -34,6 +37,7 @@ const ExceptionRoute: RouteObject = {
     },
     {
       path: 'page-500',
+      name: 'Page500',
       element: LazyLoad(lazy(() => import('@/views/exception'))),
       meta: {
         title: '500页面',

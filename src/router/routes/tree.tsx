@@ -6,6 +6,7 @@ import { LazyLoad } from '@/components/LazyLoad'
 // tree module page
 const TreeRoute: RouteObject = {
   path: '/tree',
+  name: 'Tree',
   element: <LayoutGuard />,
   meta: {
     title: '树形结构',
@@ -15,6 +16,7 @@ const TreeRoute: RouteObject = {
   children: [
     {
       path: 'org-tree',
+      name: 'OrgTree',
       element: LazyLoad(lazy(() => import('@/views/tree/org-tree'))),
       meta: {
         title: '组织树',
@@ -23,6 +25,7 @@ const TreeRoute: RouteObject = {
     },
     {
       path: 'antd-tree',
+      name: 'AntdTree',
       element: LazyLoad(lazy(() => import('@/views/tree/antd-tree'))),
       meta: {
         title: '控件树',

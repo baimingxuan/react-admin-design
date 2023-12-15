@@ -6,6 +6,7 @@ import { LazyLoad } from '@/components/LazyLoad'
 // video module page
 const VideoRoute: RouteObject = {
   path: '/video',
+  name: 'Video',
   element: <LayoutGuard />,
   meta: {
     title: '视频处理',
@@ -15,6 +16,7 @@ const VideoRoute: RouteObject = {
   children: [
     {
       path: 'video-player',
+      name: 'VideoPlayer',
       element: LazyLoad(lazy(() => import('@/views/video/video-player'))),
       meta: {
         title: '视频播放器',
@@ -23,6 +25,7 @@ const VideoRoute: RouteObject = {
     },
     {
       path: 'video-mark',
+      name: 'VideoMark',
       element: LazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '视频水印',

@@ -6,6 +6,7 @@ import { LazyLoad } from '@/components/LazyLoad'
 // image module page
 const ImageRoute: RouteObject = {
   path: '/image',
+  name: 'Image',
   element: <LayoutGuard />,
   meta: {
     title: '图片处理',
@@ -15,6 +16,7 @@ const ImageRoute: RouteObject = {
   children: [
     {
       path: 'image-cropper',
+      name: 'ImageCropper',
       element: LazyLoad(lazy(() => import('@/views/image/image-cropper'))),
       meta: {
         title: '图片裁剪',
@@ -23,6 +25,7 @@ const ImageRoute: RouteObject = {
     },
     {
       path: 'image-compress',
+      name: 'ImageCompress',
       element: LazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '图片压缩',
@@ -31,6 +34,7 @@ const ImageRoute: RouteObject = {
     },
     {
       path: 'image-composition',
+      name: 'ImageComposition',
       element: LazyLoad(lazy(() => import('@/views/blank'))),
       meta: {
         title: '图片合成',

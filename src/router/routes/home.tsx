@@ -5,6 +5,7 @@ import Home from '@/views/home'
 // Home route
 const HomeRoute: RouteObject = {
   path: '/home',
+  name: 'Home',
   element: <LayoutGuard />,
   meta: {
     title: '首页',
@@ -16,6 +17,7 @@ const HomeRoute: RouteObject = {
   children: [
     {
       path: '',
+      name: 'HomePage',
       element: <Home />,
       meta: {
         title: '首页',

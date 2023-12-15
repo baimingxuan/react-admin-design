@@ -6,6 +6,7 @@ import { LazyLoad } from '@/components/LazyLoad'
 // text-editor module page
 const TextEditorRoute: RouteObject = {
   path: '/editor',
+  name: 'Editor',
   element: <LayoutGuard />,
   meta: {
     title: '文本编辑器',
@@ -15,6 +16,7 @@ const TextEditorRoute: RouteObject = {
   children: [
     {
       path: 'markdown',
+      name: 'Markdown',
       element: LazyLoad(lazy(() => import('@/views/editor/markdown'))),
       meta: {
         title: 'Markdown编辑器',
@@ -23,6 +25,7 @@ const TextEditorRoute: RouteObject = {
     },
     {
       path: 'rich-text',
+      name: 'RichText',
       element: LazyLoad(lazy(() => import('@/views/editor/rich-text'))),
       meta: {
         title: '富文本编辑器',
@@ -31,6 +34,7 @@ const TextEditorRoute: RouteObject = {
     },
     {
       path: 'code-editor',
+      name: 'CodeEditor',
       element: LazyLoad(lazy(() => import('@/views/editor/code-mirror'))),
       meta: {
         title: '代码编辑器',
