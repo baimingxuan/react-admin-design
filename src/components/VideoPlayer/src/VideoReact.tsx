@@ -3,7 +3,7 @@ import videojs from 'video.js'
 import Player from 'video.js/dist/types/player'
 import 'video.js/dist/video-js.css'
 
-const VideoPlayer: FC = (props: any) => {
+const VideoReact: FC = (props: any) => {
   const videoRef = useRef<ElRef>(null)
   const playerRef = useRef(null)
   const { options, onReady } = props
@@ -52,4 +52,4 @@ const VideoPlayer: FC = (props: any) => {
   )
 }
 
-export default VideoPlayer
+export default VideoReact

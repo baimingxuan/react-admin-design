@@ -2,7 +2,7 @@
 import { Row, Col, Card } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import { VIDEO_RES_SRC, VIDEO_PLUGIN } from '@/settings/websiteSetting'
-import { VideoPlayer } from '@/components/VideoPlayer'
+import { VideoReact } from '@/components/VideoPlayer'
 
 const VideoPlayer = () => {
   return (
@@ -15,7 +15,7 @@ const VideoPlayer = () => {
         </Col>
         <Col span={12}>
           <Card title='视频播放插件' bordered={false}>
-            <VideoPlayer
+            <VideoReact
               options={{
                 sources: [{ src: VIDEO_RES_SRC, type: 'video/mp4' }],
                 playbackRates: [0.5, 1.0, 1.5, 2.0],

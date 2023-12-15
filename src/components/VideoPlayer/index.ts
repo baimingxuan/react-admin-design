@@ -1,3 +1,3 @@
-import VideoPlayer from './src/VideoPlayer'
+import VideoReact from './src/VideoReact'
 
-export { VideoPlayer }
+export { VideoReact }
