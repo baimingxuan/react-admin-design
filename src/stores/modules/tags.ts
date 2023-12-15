@@ -6,7 +6,7 @@ import { RootState, AppDispatch } from '..'
 
 const initialState: TagsState = {
   visitedTags: [],
-  cachedTags: []
+  cachedTags: new Set()
 }
 
 const createAppAsyncThunk = createAsyncThunk.withTypes<{
@@ -49,6 +49,18 @@ const tags = createSlice({
           break
       }
       state.visitedTags = affixTags.concat(restTags.filter((tag: RouteObject) => !tag.meta?.affix))
+    },
+    updateCacheTags: state => {
+      const cachedSet: Set<string> = new Set()
+      state.visitedTags.forEach((tag: RouteObject) => {
+        if (tag.meta?.keepAlive) {
+          cachedSet.add(tag.name)
+        }
+      })
+      state.cachedTags = cachedSet
+    },
+    clearCacheTags: state => {
+      state.cachedTags = new Set()
     }
   }
 })

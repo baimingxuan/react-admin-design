@@ -35,7 +35,7 @@ export interface MenuState {
 
 export interface TagsState {
   visitedTags: RouteObject[]
-  cachedTags: string[]
+  cachedTags: Set<string>
 }
 
 export interface AppState {
