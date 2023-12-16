@@ -1,6 +1,7 @@
-import { FC, useState } from 'react'
+import { FC, useState, useCallback } from 'react'
 import { useImmer } from 'use-immer'
 import { Card } from 'antd'
+import { useDebounceFn } from 'ahooks'
 import { PageWrapper } from '@/components/Page'
 import { CODEMIRROR_PLUGIN } from '@/settings/websiteSetting'
 import { ConfigState, InfoState } from './types'
@@ -23,23 +24,30 @@ const CodeMirror: FC = () => {
     length: null as null | number
   })
 
-  const handleValueChange = (values: any) => {
-    setConfig({...config, ...values})
-  }
+  const { run: handleStateUpdate } = useDebounceFn(
+    (viewUpdate: any) => {
+      const ranges = viewUpdate.state.selection.ranges
+      const lines = viewUpdate.state.doc.lines
+      const cursor = ranges[0].head
+      const selected = ranges.reduce((plus: any, range: any) => plus + range.to - range.from, 0)
+      const length = viewUpdate.state.doc.length
+      setCodeInfo({
+        lines,
+        cursor,
+        selected,
+        length
+      })
+    },
+    { wait: 200 }
+  )
 
-  const handleChange = (value: any) => {
+  const handleValueChange = useCallback((values: any) => {
+    setConfig({ ...config, ...values })
+  }, [])
+
+  const handleChange = useCallback((value: any) => {
     setCodeVal(value)
-  }
-
-  const handleStateUpdate = (viewUpdate: any) => {
-    const ranges = viewUpdate.state.selection.ranges
-    setCodeInfo({
-      lines: viewUpdate.state.doc.lines,
-      cursor: ranges[0].anchor,
-      selected: ranges.reduce((plus: any, range: any) => plus + range.to - range.from, 0),
-      length: viewUpdate.state.doc.length
-     })
-  }
+  }, [])
 
   return (
     <PageWrapper plugin={CODEMIRROR_PLUGIN}>
@@ -55,7 +63,7 @@ const CodeMirror: FC = () => {
             borderRight: 'solid 1px #ddd'
           }}
           extensions={[]}
-          placeholder="Please enter the code..."
+          placeholder='Please enter the code...'
           onChange={handleChange}
           onUpdate={handleStateUpdate}
         />
