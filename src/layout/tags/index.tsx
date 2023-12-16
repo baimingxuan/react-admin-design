@@ -140,7 +140,7 @@ const LayoutTags: FC = () => {
   const handleCloseTag = (path: string) => {
     // @ts-ignore
     dispatch(closeTagByKey(path)).then(({ payload }) => {
-      let currTag: RouteObject = {}
+      let currTag: RouteObject
       const { tagIndex, tagsList } = payload
       const tagLen = tagsList.length
       if (path === activeTag) {

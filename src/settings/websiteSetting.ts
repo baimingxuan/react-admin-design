@@ -4,7 +4,7 @@ export const GITHUB_URL = 'https://github.com/baimingxuan/vue3-admin-design'
 // Form component
 export const FORM_COMPO = {
   name: 'Form表单',
-  url: 'https://www.antdv.com/components/form',
+  url: 'https://ant-design.antgroup.com/components/form-cn',
   desc: 'ant-design-form: 使用 ant-design 的 form 组件, 可用以收集、校验和提交数据等操作。'
 }
 
@@ -18,35 +18,35 @@ export const FORM_CREATE_DESIGNER = {
 // Table component
 export const TABLE_COMPO = {
   name: 'Table表格',
-  url: 'https://ant-design.antgroup.com/components/table',
+  url: 'https://ant-design.antgroup.com/components/table-cn',
   desc: 'ant-design-table: 使用 ant-design 的 table 组件, 可用于展示多条结构类似的数据, 并对其进行相关操作。'
 }
 
 // Table edit component
 export const TABLE_EDIT_COMPO = {
   name: 'Table表格(可编辑行)',
-  url: 'https://ant-design.antgroup.com/components/table',
+  url: 'https://ant-design.antgroup.com/components/table-cn',
   desc: 'ant-design-table: 使用 ant-design 的 table 组件, 可用于展示多条结构类似的数据, 并对其进行行数据编辑操作。'
 }
 
 // Tree component
 export const TREE_COMPO = {
   name: 'Tree树形控件',
-  url: 'https://ant-design.antgroup.com/components/tree',
+  url: 'https://ant-design.antgroup.com/components/tree-cn',
   desc: 'ant-design-tree: 基于Ant-Design的Tree组件, 可以完整展现其中的层级关系, 并具有展开收起选择等交互功能。'
 }
 
 // Transfer component
 export const TRANSFER_COMPO = {
   name: 'Transfer穿梭框',
-  url: 'https://ant-design.antgroup.com/components/transfer',
+  url: 'https://ant-design.antgroup.com/components/transfer-cn',
   desc: 'ant-design-transfer: 使用 ant-design 的 transfer 组件, 可用于对列表数据进行选中、取消等操作。'
 }
 
 // Upload component
 export const UPLOAD_COMPO = {
   name: 'Upload图片上传组件',
-  url: 'https://antdv.com/components/upload',
+  url: 'https://ant-design.antgroup.com/components/upload-cn',
   desc: 'ant-design-upload: 使用 ant-design 的 upload 组件, 并具有多种列表展示方式。'
 }
 
@@ -148,4 +148,10 @@ export const MARKDOWN_EDITOR_PLUGIN = {
   name: 'Markdown编辑器',
   url: 'https://github.com/uiwjs/react-md-editor',
   desc: 'React-Md-Editor: 是一款基于 react 的 Markdown 编辑器,比较适合博客系统。'
+}
+
+export const RESULT_COMPO = {
+  name: 'Result结果',
+  url: 'https://ant-design.antgroup.com/components/result-cn',
+  desc: 'ant-design-result: 使用 ant-design 的 result 组件, 可用于反馈一系列操作任务的处理结果。'
 }
