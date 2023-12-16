@@ -2,7 +2,7 @@
 import { Row, Col, Card } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import { VIDEO_RES_SRC, VIDEO_PLUGIN } from '@/settings/websiteSetting'
-import { VideoReact } from '@/components/VideoPlayer'
+import { VideoReact } from '@/components/VideoReact'
 
 const VideoPlayer = () => {
   return (

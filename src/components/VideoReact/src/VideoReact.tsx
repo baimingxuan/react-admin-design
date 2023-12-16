@@ -6,7 +6,7 @@ import 'video.js/dist/video-js.css'
 const VideoReact: FC = (props: any) => {
   const videoRef = useRef<ElRef>(null)
   const playerRef = useRef(null)
-  const { options, onReady } = props
+  const { options } = props
 
   useEffect(() => {
     // 确保Video.js播放器只初始化一次 (Make sure Video.js player is only initialized once)
@@ -20,9 +20,7 @@ const VideoReact: FC = (props: any) => {
       }
 
       // @ts-ignore
-      const player = (playerRef.current = videojs(videoElement, options, () => {
-        onReady && onReady(player)
-      }))
+      playerRef.current = videojs(videoElement, options)
 
       // 你可以在 'else' 块中更新一个现有的播放器 (You could update an existing player in the `else` block here)
     } else {
