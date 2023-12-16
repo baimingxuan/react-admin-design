@@ -54,7 +54,7 @@ const tags = createSlice({
       const cachedSet: Set<string> = new Set()
       state.visitedTags.forEach((tag: RouteObject) => {
         if (tag.meta?.keepAlive) {
-          cachedSet.add(tag.name)
+          cachedSet.add(tag.name!)
         }
       })
       state.cachedTags = cachedSet

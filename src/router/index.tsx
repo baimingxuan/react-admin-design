@@ -21,10 +21,12 @@ Object.keys(metaRoutes).forEach(key => {
 const rootRoutes: RouteObject[] = [
   {
     path: '/',
+    name: 'Root',
     element: <Navigate to='/home' />
   },
   {
     path: '/login',
+    name: 'Login',
     element: <LoginPage />,
     meta: {
       title: '登录页',
@@ -40,15 +42,18 @@ const rootRoutes: RouteObject[] = [
   ...routeList,
   {
     path: '*',
+    name: 'RedirectTo',
     element: <Navigate to='/404' />
   },
   {
     path: '/403',
+    name: 'PageNotAuth',
     element: <PageException />,
     loader: () => ({ status: ExceptionEnum.PAGE_NOT_ACCESS, withCard: false })
   },
   {
     path: '/404',
+    name: 'PageNotFound',
     element: <PageException />,
     loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: false })
   }
