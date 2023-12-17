@@ -37,7 +37,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         localEnabled: !isBuild,
         prodEnabled: isBuild,
         injectCode: `
-          import { setupProdMockServer } from 'mock/_createProductionServer'
+          import { setupProdMockServer } from 'mock/_createProductionServer';
 
           setupProdMockServer()
           `
