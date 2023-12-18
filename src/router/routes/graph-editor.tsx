@@ -3,24 +3,24 @@ import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
 import { LazyLoad } from '@/components/LazyLoad'
 
-// graph-editor module page
-const GraphEditorRoute: RouteObject = {
-  path: '/graph-editor',
-  name: 'GraphEditor',
+// flow-editor module page
+const FlowEditorRoute: RouteObject = {
+  path: '/flow-editor',
+  name: 'FlowEditor',
   element: <LayoutGuard />,
   meta: {
-    title: '图形编辑器',
+    title: '流程图编辑器',
     icon: 'flow',
     orderNo: 8
   },
   children: [
     {
-      path: 'flow-chart',
-      name: 'FlowChart',
-      element: LazyLoad(lazy(() => import('@/views/blank'))),
+      path: 'flow-approve',
+      name: 'FlowApprove',
+      element: LazyLoad(lazy(() => import('@/views/flow/flow-approve'))),
       meta: {
-        title: '流程图',
-        key: 'flowChart'
+        title: '审批流程图',
+        key: 'flowApprove'
       }
     },
     {
@@ -35,4 +35,4 @@ const GraphEditorRoute: RouteObject = {
   ]
 }
 
-export default GraphEditorRoute
+export default FlowEditorRoute
