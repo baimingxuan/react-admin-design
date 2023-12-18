@@ -1,7 +1,6 @@
 import { Layout } from 'antd'
 import { Breadcrumb, FoldTrigger } from './components'
 import LayoutFeature from '../feature'
-import LayoutTags from '../tags'
 
 const LayoutHeader = (props: any) => {
   const { Header } = Layout
@@ -22,7 +21,6 @@ const LayoutHeader = (props: any) => {
         </div>
         <LayoutFeature />
       </div>
-      <LayoutTags />
     </Header>
   )
 }

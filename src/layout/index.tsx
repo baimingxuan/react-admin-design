@@ -2,6 +2,7 @@ import { Layout } from 'antd'
 import { Outlet } from 'react-router-dom'
 import LayoutMenu from './menu'
 import LayoutHeader from './header'
+import LayoutTags from './tags'
 import { AppLogo } from '@/components/AppLogo'
 import './index.less'
 import { useTitle } from '@/hooks/web/useTitle'
@@ -21,9 +22,12 @@ export const BasicLayout = (props: any) => {
       </Sider>
       <Layout>
         <LayoutHeader />
-        <Content>
-          <Outlet />
-        </Content>
+        <Layout id='mainCont'>
+          <LayoutTags />
+          <Content>
+            <Outlet />
+          </Content>
+        </Layout>
       </Layout>
     </Layout>
   )

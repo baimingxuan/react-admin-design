@@ -2,8 +2,9 @@ import type { MenuProps } from 'antd'
 import type { RouteObject } from '@/router/types'
 import { FC, WheelEvent, useState, useEffect, useRef } from 'react'
 import { Button, Dropdown } from 'antd'
-import { LeftOutlined, RightOutlined, RedoOutlined, CloseOutlined } from '@ant-design/icons'
+import { LeftOutlined, RightOutlined, ExpandOutlined, CompressOutlined, CloseOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useFullscreen } from 'ahooks'
 import { TagItem } from './components'
 import { basicRoutes } from '@/router'
 import { useAppSelector, useAppDispatch } from '@/stores'
@@ -39,6 +40,7 @@ const LayoutTags: FC = () => {
   const tagsMainBody = useRef<ElRef>(null)
 
   const [tagsBodyLeft, setTagsBodyLeft] = useState(0)
+  const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.querySelector('#mainCont')!)
 
   const { pathname } = useLocation()
   const navigate = useNavigate()
@@ -192,9 +194,9 @@ const LayoutTags: FC = () => {
       />
       <Button
         className={classNames(styles['layout_tags__btn'], styles['layout_tags__btn-space'])}
-        icon={<RedoOutlined />}
+        icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
         size='small'
-        onClick={() => handleReload()}
+        onClick={() => toggleFullscreen()}
       />
       <Dropdown menu={{ items, onClick }} placement='bottomLeft'>
         <Button
