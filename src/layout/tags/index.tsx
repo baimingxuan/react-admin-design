@@ -37,9 +37,10 @@ const LayoutTags: FC = () => {
   }
 
   const tagsMain = useRef<ElRef>(null)
-  const tagsMainBody = useRef<ElRef>(null)
+  const tagsMainCont = useRef<ElRef>(null)
 
-  const [tagsBodyLeft, setTagsBodyLeft] = useState(0)
+  const [canMove, setCanMove] = useState(false)
+  const [tagsContLeft, setTagsContLeft] = useState(0)
   const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.querySelector('#mainCont')!)
 
   const { pathname } = useLocation()
@@ -65,10 +66,22 @@ const LayoutTags: FC = () => {
   }, [pathname])
 
   useEffect(() => {
-    const tagNodeList = tagsMainBody.current?.childNodes as unknown as Array<HTMLElement>
+    const tagNodeList = tagsMainCont.current?.childNodes as unknown as Array<HTMLElement>
     const activeTagNode = Array.from(tagNodeList).find(item => item.dataset.path === activeTag)!
+
     moveToActiveTag(activeTagNode)
   }, [activeTag])
+
+  useEffect(() => {
+    const mainWidth = tagsMain.current?.offsetWidth!
+    const mainContWidth = tagsMainCont.current?.offsetWidth!
+
+    if (mainContWidth > mainWidth) {
+      setCanMove(true)
+    } else {
+      setCanMove(false)
+    }
+  }, [visitedTags.length])
 
   const initAffixTags = (routes: RouteObject[], basePath: string = '/') => {
     let affixTags: RouteObject[] = []
@@ -91,41 +104,42 @@ const LayoutTags: FC = () => {
 
   const moveToActiveTag = (tag: any) => {
     let leftOffset: number = 0
-    const mainBodyPadding = 4
+    const mainContPadding = 4
     const mainWidth = tagsMain.current?.offsetWidth!
-    const mainBodyWidth = tagsMainBody.current?.offsetWidth!
-    if (mainBodyWidth < mainWidth) {
+    const mainContWidth = tagsMainCont.current?.offsetWidth!
+
+    if (mainContWidth < mainWidth) {
       leftOffset = 0
-    } else if (tag?.offsetLeft! < -tagsBodyLeft) {
+    } else if (tag?.offsetLeft! < -tagsContLeft) {
       // 标签在可视区域左侧 (The active tag on the left side of the layout_tags-main)
-      leftOffset = -tag?.offsetLeft! + mainBodyPadding
-    } else if (tag?.offsetLeft! > -tagsBodyLeft && tag?.offsetLeft! + tag?.offsetWidth! < -tagsBodyLeft + mainWidth) {
+      leftOffset = -tag?.offsetLeft! + mainContPadding
+    } else if (tag?.offsetLeft! > -tagsContLeft && tag?.offsetLeft! + tag?.offsetWidth! < -tagsContLeft + mainWidth) {
       // 标签在可视区域 (The active tag on the layout_tags-main)
-      leftOffset = Math.min(0, mainWidth - tag?.offsetWidth! - tag?.offsetLeft! - mainBodyPadding)
+      leftOffset = Math.min(0, mainWidth - tag?.offsetWidth! - tag?.offsetLeft! - mainContPadding)
     } else {
       // 标签在可视区域右侧 (The active tag on the right side of the layout_tags-main)
-      leftOffset = -(tag?.offsetLeft! - (mainWidth - mainBodyPadding - tag?.offsetWidth!))
+      leftOffset = -(tag?.offsetLeft! - (mainWidth - mainContPadding - tag?.offsetWidth!))
     }
-    setTagsBodyLeft(leftOffset)
+    setTagsContLeft(leftOffset)
   }
 
   const handleMove = (offset: number) => {
     let leftOffset: number = 0
     const mainWidth = tagsMain.current?.offsetWidth!
-    const mainBodyWidth = tagsMainBody.current?.offsetWidth!
+    const mainContWidth = tagsMainCont.current?.offsetWidth!
 
     if (offset > 0) {
-      leftOffset = Math.min(0, tagsBodyLeft + offset)
+      leftOffset = Math.min(0, tagsContLeft + offset)
     } else {
-      if (mainWidth < mainBodyWidth) {
-        if (tagsBodyLeft >= -(mainBodyWidth - mainWidth)) {
-          leftOffset = Math.max(tagsBodyLeft + offset, mainWidth - mainBodyWidth)
+      if (mainWidth < mainContWidth) {
+        if (tagsContLeft >= -(mainContWidth - mainWidth)) {
+          leftOffset = Math.max(tagsContLeft + offset, mainWidth - mainContWidth)
         }
       } else {
         leftOffset = 0
       }
     }
-    setTagsBodyLeft(leftOffset)
+    setTagsContLeft(leftOffset)
   }
 
   const handleScroll = (e: WheelEvent) => {
@@ -161,18 +175,17 @@ const LayoutTags: FC = () => {
     navigate(path)
   }
 
-  const handleReload = () => {}
-
   return (
     <div className={styles['layout_tags']}>
       <Button
         className={styles['layout_tags__btn']}
         icon={<LeftOutlined />}
         size='small'
+        disabled={!canMove}
         onClick={() => handleMove(200)}
       />
       <div ref={tagsMain} className={styles['layout_tags__main']} onWheel={handleScroll}>
-        <div ref={tagsMainBody} className={styles['layout_tags__main-body']} style={{ left: tagsBodyLeft + 'px' }}>
+        <div ref={tagsMainCont} className={styles['layout_tags__main-cont']} style={{ left: tagsContLeft + 'px' }}>
           {visitedTags.map((item: RouteObject) => (
             <span key={item.fullPath} data-path={item.fullPath}>
               <TagItem
@@ -190,6 +203,7 @@ const LayoutTags: FC = () => {
         className={styles['layout_tags__btn']}
         icon={<RightOutlined />}
         size='small'
+        disabled={!canMove}
         onClick={() => handleMove(-200)}
       />
       <Button
