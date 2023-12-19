@@ -30,7 +30,7 @@ export default function ApproveExample() {
   useEffect(() => {
     const lf = new LogicFlow({
       ...config,
-      container: document.querySelector('#graph') as HTMLElement
+      container: document.querySelector('#graphApprove') as HTMLElement
     })
     setLf(lf)
     RegisteNode(lf)
@@ -63,7 +63,7 @@ export default function ApproveExample() {
   return (
     <div className='approve-example-container'>
       <div className='node-panel'>{NodePanel(lf)}</div>
-      <div id='graph' className='viewport' />
+      <div id='graphApprove' className='viewport' />
       {nodeData ? (
         <div className='property-panel'>{PropertyPanel(nodeData, updateProperty, hidePropertyPanel)}</div>
       ) : (

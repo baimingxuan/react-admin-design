@@ -24,12 +24,12 @@ const FlowEditorRoute: RouteObject = {
       }
     },
     {
-      path: 'mind-chart',
-      name: 'MindChart',
-      element: LazyLoad(lazy(() => import('@/views/blank'))),
+      path: 'flow-bpmn',
+      name: 'FlowBpmn',
+      element: LazyLoad(lazy(() => import('@/views/flow/flow-bpmn'))),
       meta: {
-        title: '思维导图',
-        key: 'mindChart'
+        title: 'BPMN流程图',
+        key: 'flowBpmn'
       }
     }
   ]
