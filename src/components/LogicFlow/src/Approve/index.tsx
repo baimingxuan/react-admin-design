@@ -5,6 +5,7 @@ import PropertyPanel from './components/property'
 import NodePanel from './components/NodePanel'
 import RegisteNode from './components/registerNode'
 import { themeApprove, data } from './config'
+import '@logicflow/core/dist/style/index.css'
 import './index.css'
 
 const config = {

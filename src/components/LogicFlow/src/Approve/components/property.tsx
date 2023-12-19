@@ -36,7 +36,7 @@ export default function PropertyPanel(nodeData, updateproperty, hidePropertyPane
   return (
     <div>
       <h2>属性面板</h2>
-      <Form key={nodeData.id} layout='inline' initialValues={nodeData.properties} onValuesChange={onFormLayoutChange}>
+      <Form key={nodeData.id} initialValues={nodeData.properties} onValuesChange={onFormLayoutChange}>
         <span className='form-property'>
           类型：<span>{nodeData.type}</span>
         </span>

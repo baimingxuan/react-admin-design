@@ -7,7 +7,9 @@ const FlowApprove = () => {
   return (
     <PageWrapper plugin={FLOW_EDITOR_PLUGIN}>
       <Card bordered={false}>
-        <Approve />
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '500px' }}>
+          <Approve />
+        </div>
       </Card>
     </PageWrapper>
   )
