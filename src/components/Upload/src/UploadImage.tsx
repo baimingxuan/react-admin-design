@@ -3,11 +3,12 @@ import type { UploadChangeParam } from 'antd/es/upload'
 import { Upload, Button, message } from 'antd'
 
 interface propState {
+  name?: string
+  isFull?: boolean
   onSuccess: (data: any) => void
 }
 
-const UploadImage: FC<propState> = ({ onSuccess }) => {
-
+const UploadImage: FC<propState> = ({ name = '上传图片', isFull, onSuccess }) => {
   const handleChange = (imageFile: UploadChangeParam) => {
     const { file } = imageFile
     const rawImage = file.originFileObj
@@ -18,7 +19,7 @@ const UploadImage: FC<propState> = ({ onSuccess }) => {
       return
     }
 
-    const isLimit1M = rawImage.size / 1024 /1024 < 5
+    const isLimit1M = rawImage.size / 1024 / 1024 < 5
     if (!isLimit1M) {
       message.warning('上传的图片大小不能超过5M!')
       return
@@ -30,7 +31,7 @@ const UploadImage: FC<propState> = ({ onSuccess }) => {
   const readImage = (image: any) => {
     const reader = new FileReader()
     reader.onload = e => {
-      const data = e.target && e.target.result as any
+      const data = e.target && (e.target.result as any)
       // Convert Array Buffer to blob if it is base64
       const result = typeof data === 'object' ? window.URL.createObjectURL(new Blob([data])) : data
       onSuccess(result)
@@ -52,7 +53,9 @@ const UploadImage: FC<propState> = ({ onSuccess }) => {
       showUploadList={false}
       onChange={handleChange}
     >
-      <Button type='primary'>上传图片</Button>
+      <Button type='primary' style={{ width: isFull ? '100%' : 'auto' }}>
+        {name}
+      </Button>
     </Upload>
   )
 }
