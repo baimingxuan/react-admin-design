@@ -42,3 +42,24 @@ export function urlToBase64(url: string, mineType?: string): Promise<string> {
     img.src = url
   })
 }
+
+/**
+ * get image size
+ * @param url
+ * @returns {Promise<{width: number; height: number}>}
+ */
+export function getImageSize(url: string): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = function () {
+      resolve({
+        width: img.width,
+        height: img.height
+      })
+    }
+    img.onerror = function () {
+      reject(new Error('获取图片信息失败！'))
+    }
+    img.src = url
+  })
+}
