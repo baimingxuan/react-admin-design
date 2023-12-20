@@ -1,3 +1,6 @@
+import { reject } from 'lodash-es'
+import { resolve } from 'path'
+
 /**
  * Image base64 to Blob
  * @param image
@@ -19,9 +22,9 @@ export function base64toBlob(base64Buf: string): Blob {
 /**
  * Image url to base64
  * @param url
- * @param mineType
+ * @param mimeType
  */
-export function urlToBase64(url: string, mineType?: string): Promise<string> {
+export function urlToBase64(url: string, mimeType?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     let canvas = document.createElement('CANVAS') as Nullable<HTMLCanvasElement>
     const ctx = canvas!.getContext('2d')
@@ -35,7 +38,7 @@ export function urlToBase64(url: string, mineType?: string): Promise<string> {
       canvas.width = img.width
       canvas.height = img.height
       ctx.drawImage(img, 0, 0)
-      const dataURL = canvas.toDataURL(mineType || 'image/png')
+      const dataURL = canvas.toDataURL(mimeType || 'image/png')
       canvas = null
       resolve(dataURL)
     }
@@ -58,7 +61,41 @@ export function getImageSize(url: string): Promise<{ width: number; height: numb
       })
     }
     img.onerror = function () {
-      reject(new Error('获取图片信息失败！'))
+      reject()
+    }
+    img.src = url
+  })
+}
+
+/**
+ * compress image
+ * @param url
+ * @param options
+ * @returns {Promise<string>}
+ */
+export function compressImage(
+  url: string,
+  options: { width: number; height: number; quality: number; mimeType: string }
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const { width, height, quality, mimeType } = options
+
+    let canvas = document.createElement('CANVAS') as Nullable<HTMLCanvasElement>
+    const ctx = canvas!.getContext('2d')
+
+    const img = new Image()
+    img.crossOrigin = ''
+    img.onload = function () {
+      if (!canvas || !ctx) {
+        return reject()
+      }
+
+      canvas.width = width
+      canvas.height = height
+      ctx.drawImage(img, 0, 0, width, height)
+      const dataURL = canvas.toDataURL(mimeType || 'image/png', quality)
+      canvas = null
+      resolve(dataURL)
     }
     img.src = url
   })

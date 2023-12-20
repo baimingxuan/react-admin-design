@@ -26,7 +26,7 @@ const ImageRoute: RouteObject = {
     {
       path: 'image-compress',
       name: 'ImageCompress',
-      element: LazyLoad(lazy(() => import('@/views/blank'))),
+      element: LazyLoad(lazy(() => import('@/views/image/image-compress'))),
       meta: {
         title: '图片压缩',
         key: 'imageCompress'

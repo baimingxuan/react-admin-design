@@ -104,7 +104,7 @@ export const COMPRESS_IMG_SRC = 'https://cdn.jsdelivr.net/gh/baimingxuan/media-s
 // Image-compress component
 export const IMAGE_COMPRESS = {
   name: 'Image图片压缩',
-  url: 'https://github.com/baimingxuan/vue3-admin-design/blob/main/src/views/image/image-compress.tsx',
+  url: 'https://github.com/baimingxuan/react-admin-design/main/src/views/image/image-compress.tsx',
   desc: 'ImageCompress: 纯JS实现对图片的等比压缩和放大的功能, 并能对图片进行下载。'
 }
 
