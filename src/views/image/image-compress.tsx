@@ -93,6 +93,10 @@ const ImageCompress: FC = () => {
           <Card title='设置区域' bordered={false} bodyStyle={{ height: '500px' }}>
             <Form
               form={form}
+              colon={false}
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              labelAlign='left'
               initialValues={{ ...defaultForm }}
               style={{ width: '60%', margin: '60px auto 0' }}
               onFinish={onFinish}
@@ -154,9 +158,11 @@ const ImageCompress: FC = () => {
                   ]}
                 />
               </Form.Item>
-              <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-                压缩图片
-              </Button>
+              <Form.Item label=' '>
+                <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+                  压缩图片
+                </Button>
+              </Form.Item>
             </Form>
           </Card>
         </Col>
