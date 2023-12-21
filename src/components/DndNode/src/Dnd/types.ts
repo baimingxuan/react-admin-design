@@ -12,7 +12,10 @@ export interface PropState {
   minH: number
   handlers: Array<handlerType>
   active: boolean
+  canDeactive: boolean
   draggable: boolean
   parent: boolean
   children: ReactNode
+  activated: () => void
+  deactivated: () => void
 }
