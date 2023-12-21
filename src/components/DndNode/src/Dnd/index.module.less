@@ -1,0 +1,96 @@
+@color: #1890ff;
+@size: 8px;
+@offset: -(@size / 2);
+
+.dnd-wrapper {
+  position: absolute;
+  border: 1px dashed transparent;
+
+  *, *:before, *:after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  &.draggable:hover {
+    cursor: move;
+  }
+
+  &.active {
+    border-color: @color;
+  }
+
+  .dnd-handler {
+    position: absolute;
+    width: @size;
+    height: @size;
+    border: 1px solid @color;
+    border-radius: 50%;
+    background: #fff;
+    box-sizing: border-box;
+
+    &.handler-n {
+      top: @offset;
+      left: 50%;
+      margin-left: @offset;
+      cursor: n-resize;
+    }
+
+    &.handler-e {
+      top: 50%;
+      right: 0;
+      margin-right: @offset;
+      margin-top: @offset;
+      cursor: e-resize;
+    }
+
+    &.handler-s {
+      bottom: 0;
+      left: 50%;
+      margin-left: @offset;
+      margin-bottom: @offset;
+      cursor: s-resize;
+    }
+
+    &.handler-w {
+      top: 50%;
+      left: 0;
+      margin-top: @offset;
+      margin-left: @offset;
+      cursor: w-resize;
+    }
+
+    &.handler-ne {
+      top: 0;
+      right: 0;
+      margin-top: @offset;
+      margin-right: @offset;
+      cursor: ne-resize;
+    }
+
+    &.handler-nw {
+      top: 0;
+      left: 0;
+      margin-top: @offset;
+      margin-left: @offset;
+      cursor: nw-resize;
+    }
+
+    &.handler-se {
+      right: 0;
+      bottom: 0;
+      margin-right: @offset;
+      margin-bottom: @offset;
+      cursor: se-resize;
+    }
+
+    &.handler-sw {
+      bottom: 0;
+      left: 0;
+      margin-left: @offset;
+      margin-bottom: @offset;
+      cursor: sw-resize;
+    }
+
+  }
+}
