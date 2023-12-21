@@ -35,7 +35,7 @@ const ImageRoute: RouteObject = {
     {
       path: 'image-composition',
       name: 'ImageComposition',
-      element: LazyLoad(lazy(() => import('@/views/blank'))),
+      element: LazyLoad(lazy(() => import('@/views/image/image-composition'))),
       meta: {
         title: '图片合成',
         key: 'imageComposition'
