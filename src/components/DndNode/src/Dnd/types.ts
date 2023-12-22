@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
-type handlerType = 'n' | 'e' | 's' | 'w' | 'nw' | 'ne' | 'se' | 'sw'
+type handlerType = 'n' | 'e' | 's' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
+type axisType = 'x' | 'y' | 'both'
 
 export interface PropState {
   x: number
@@ -14,8 +15,14 @@ export interface PropState {
   active: boolean
   canDeactive: boolean
   draggable: boolean
+  axis: axisType
+  grid: [number, number]
   parent: boolean
   children: ReactNode
-  activated: () => void
-  deactivated: () => void
+  onActivated: () => void
+  onDeactivated: () => void
+  onResizing: (left: number, top: number, width: number, height: number) => void
+  onResizeStop: (left: number, top: number, width: number, height: number) => void
+  onDraging: (left: number, top: number) => void
+  onDragStop: (left: number, top: number) => void
 }

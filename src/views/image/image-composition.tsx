@@ -1,17 +1,37 @@
 import type { FC } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Row, Col, Card, Button, Space, Form, InputNumber, Select } from 'antd'
 import { Dnd } from '@/components/DndNode'
 import { PageWrapper } from '@/components/Page'
 import { IMAGE_COMPOSITION } from '@/settings/websiteSetting'
 
 const ImageComposition: FC = () => {
+  const [config, setConfig] = useState({
+    x: 650,
+    y: 130,
+    w: 180,
+    h: 180
+  })
+
+  const handleResize = (left: number, top: number, width: number, height: number) => {
+    setConfig({
+      ...config,
+      x: left,
+      y: top,
+      w: width,
+      h: height
+    })
+  }
+
   return (
     <PageWrapper plugin={IMAGE_COMPOSITION}>
       <Row gutter={12}>
         <Col span={16}>
           <Card title='合成区域' bordered={false} bodyStyle={{ height: '550px' }}>
-            <div style={{ width: '100%', height: '500px', position: 'relative' }}>
-              <Dnd w={120} h={120} x={400} y={140} active />
+            <div className='dnd-container' style={{ width: '100%', height: '500px', position: 'relative' }}>
+              <Dnd w={config.w} h={config.h} x={config.x} y={config.y} draggable parent onResizeStop={handleResize}>
+                <div style={{ height: '100%', background: 'red' }}></div>
+              </Dnd>
             </div>
           </Card>
         </Col>
