@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { Row, Col, Card, Button, Space, Form, InputNumber, Select } from 'antd'
-import { Dnd } from '@/components/DndNode'
+import { RndNode } from '@/components/DndNode'
 import { PageWrapper } from '@/components/Page'
 import { IMAGE_COMPOSITION } from '@/settings/websiteSetting'
 
@@ -10,7 +10,8 @@ const ImageComposition: FC = () => {
     x: 650,
     y: 130,
     w: 180,
-    h: 180
+    h: 180,
+    active: false
   })
 
   const handleResize = (left: number, top: number, width: number, height: number) => {
@@ -29,9 +30,9 @@ const ImageComposition: FC = () => {
         <Col span={16}>
           <Card title='合成区域' bordered={false} bodyStyle={{ height: '550px' }}>
             <div className='dnd-container' style={{ width: '100%', height: '500px', position: 'relative' }}>
-              <Dnd w={config.w} h={config.h} x={config.x} y={config.y} draggable parent onResizeStop={handleResize}>
+              <RndNode element={config}>
                 <div style={{ height: '100%', background: 'red' }}></div>
-              </Dnd>
+              </RndNode>
             </div>
           </Card>
         </Col>

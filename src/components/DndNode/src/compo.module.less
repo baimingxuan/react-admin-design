@@ -1,0 +1,25 @@
+.rnd-node-wrapper {
+  border: 1px dashed transparent;
+
+  &.active {
+    border-color: #1890ff;
+
+    :global(.handler-box) {
+      display: flex!important;
+    }
+  }
+
+  :global(.handler-box) {
+    display: none!important;
+    height: 100%;
+  }
+
+  :global(.handler-box .circle) {
+    width: 8px;
+    height: 8px;
+    border: 1px solid #1890ff;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+}

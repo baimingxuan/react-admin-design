@@ -1,3 +1,4 @@
 import Dnd from './src/Dnd'
+import RndNode from './src/RndNode'
 
-export { Dnd }
+export { Dnd, RndNode }
