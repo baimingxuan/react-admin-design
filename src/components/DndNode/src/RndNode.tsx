@@ -1,9 +1,19 @@
-import { FC, ReactElement, useEffect, useState, useRef } from 'react'
+import { FC, ReactElement, useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import classNames from 'classnames'
 import styles from './compo.module.less'
 
-type handlerType = 'top' | 'right' | 'bottom' | 'left' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
+enum handlerEnum {
+  n = 'top',
+  e = 'right',
+  s = 'bottom',
+  w = 'left',
+  nw = 'topLeft',
+  ne = 'topRight',
+  se = 'bottomRight',
+  sw = 'bottomLeft'
+}
+type handlerType = 'n' | 'e' | 's' | 'w' | 'nw' | 'ne' | 'se' | 'sw'
 
 interface ElementState {
   x: number
@@ -20,49 +30,38 @@ interface PropState {
   children?: ReactElement
 }
 
-const CustomResizeHandler: FC = () => {
-  return (
-    <div className='flex-center handler-box'>
-      <div className='circle' />
-    </div>
-  )
-}
-
 const RndNode: FC<PropState> = props => {
-  const {
-    element,
-    children,
-    handlers = ['top', 'right', 'bottom', 'left', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight']
-  } = props
+  const { element, children, handlers = ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'] } = props
 
   const { x = 0, y = 0, w: width = 100, h: height = 28 } = element
 
-  const rndNodeRef = useRef(null)
   const [active, setActive] = useState(element.active)
 
-  const resizeHandler = handlers.reduce(
+  const handlerClasses = handlers.reduce(
     (acc, cur) => {
-      acc[cur] = <CustomResizeHandler />
+      acc[handlerEnum[cur]] = `${styles['handler']} ${styles[`handler-${cur}`]}`
       return acc
     },
-    {} as { [key in handlerType]: ReactElement }
+    {} as { [value in handlerEnum]: string }
   )
 
-  const handleMousedown = (e: any) => {
-    // const target = e.target! as HTMLElement
-    // const regex = new RegExp('handler-([nesw]{1, 2})', '')
-    // 点击在当前组件外，取消active状态
-    console.log(rndNodeRef.current)
-    // if (!rndNodeRef.current?.contains(target) && !regex.test(target.className)) {
-    //   if (active) {
-    //     setActive(false)
-    //   }
-    // }
-    setActive(true)
-  }
+  const enableHandler = handlers.reduce(
+    (acc, cur) => {
+      acc[handlerEnum[cur]] = true
+      return acc
+    },
+    {} as { [value in handlerEnum]: boolean }
+  )
 
-  const handleMouseup = () => {
-    setActive(false)
+  const handleMousedown = (e: Event) => {
+    const target = e.target! as HTMLElement
+    const rndNodeRef = document.getElementById('rndNode')
+
+    if (rndNodeRef?.contains(target)) {
+      !active && setActive(true)
+    } else {
+      active && setActive(false)
+    }
   }
 
   useEffect(() => {
@@ -70,21 +69,24 @@ const RndNode: FC<PropState> = props => {
   }, [element.active])
 
   useEffect(() => {
-    const container = document.querySelector('.dnd-container') || document.documentElement
+    const container = document.querySelector('.rnd-container') || document.documentElement
     container.addEventListener('mousedown', handleMousedown, false)
+
+    return () => {
+      container.removeEventListener('mousedown', handleMousedown, false)
+    }
   })
 
   return (
     <Rnd
-      ref={rndNodeRef}
+      id='rndNode'
       default={{ x, y, width, height }}
       minWidth={100}
       minHeight={24}
       bounds='parent'
-      resizeHandleComponent={{ ...resizeHandler }}
+      enableResizing={{ ...enableHandler }}
+      resizeHandleClasses={{ ...handlerClasses }}
       className={classNames(styles['rnd-node-wrapper'], { [styles['active']]: active })}
-      onMouseDown={e => handleMousedown(e)}
-      onMouseUp={() => handleMouseup()}
     >
       {children}
     </Rnd>
