@@ -5,12 +5,12 @@ import { Form, Button, Space, Select, ColorPicker, Dropdown } from 'antd'
 import RichTextInput from './RichTextInput'
 import SvgIcon from '@/components/SvgIcon'
 
-interface styleState {
+export interface styleState {
   fontFamily?: string
   fontSize?: string
   color?: string
   backgroundColor?: string
-  fontWeight?: string
+  fontWeight?: string | number
   textAlign?: string
 }
 
