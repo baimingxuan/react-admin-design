@@ -1,4 +1,6 @@
-import { FC, ReactElement, useEffect, useState } from 'react'
+import type { FC, ReactElement } from 'react'
+import type { Position, DraggableData } from 'react-rnd'
+import { useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import classNames from 'classnames'
 import styles from './compo.module.less'
@@ -64,6 +66,12 @@ const RndNode: FC<PropState> = props => {
     }
   }
 
+  const handleResize = (_e: any, _direction: any, _ref: any, _delta: any, position: Position) => {}
+
+  const handleResizeStop = (_e: any, _direction: any, _ref: any, _delta: any, position: Position) => {}
+
+  const handleDragStop = (_e: any, data: DraggableData) => {}
+
   useEffect(() => {
     setActive(element.active)
   }, [element.active])
@@ -87,6 +95,9 @@ const RndNode: FC<PropState> = props => {
       enableResizing={{ ...enableHandler }}
       resizeHandleClasses={{ ...handlerClasses }}
       className={classNames(styles['rnd-node-wrapper'], { [styles['active']]: active })}
+      onResize={handleResize}
+      onResizeStop={handleResizeStop}
+      onDragStop={handleDragStop}
     >
       {children}
     </Rnd>

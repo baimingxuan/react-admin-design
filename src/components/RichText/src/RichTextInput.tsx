@@ -1,12 +1,12 @@
 import type { FC, CSSProperties } from 'react'
 import { keepCursorEnd, getPasteText } from '@/utils/rich-text'
 
-interface PropState {
+interface InputState {
   value: string
   onChange: (value: string) => void
 }
 
-const RichTextInput: FC<PropState> = ({ value = '请输入文本', onChange }) => {
+const RichTextInput: FC<InputState> = ({ value = '请输入文本', onChange }) => {
   const style: CSSProperties = {
     minHeight: '20px',
     padding: '6px 8px',

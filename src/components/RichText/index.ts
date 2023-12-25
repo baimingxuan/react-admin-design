@@ -1,3 +1,4 @@
 import RichTextInput from './src/RichTextInput'
+import RichTextSetting from './src/RichTextSetting'
 
-export { RichTextInput }
+export { RichTextInput, RichTextSetting }
