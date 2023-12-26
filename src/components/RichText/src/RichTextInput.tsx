@@ -1,5 +1,6 @@
 import type { FC, CSSProperties } from 'react'
 import { useMemo } from 'react'
+import { useDebounceFn } from 'ahooks'
 import { keepCursorEnd, getPasteText } from '@/utils/rich-text'
 import { styleState } from './RichTextSetting'
 
@@ -20,9 +21,14 @@ const RichTextInput: FC<InputState> = ({ value = '请输入文本', style, onCha
     }
   }, [style]) as CSSProperties
 
-  const handleChange = (event: any) => {
-    onChange(event.target.innerHTML)
-  }
+  const { run: handleInput } = useDebounceFn(
+    (event: any) => {
+      onChange(event.target.innerHTML)
+    },
+    {
+      wait: 200
+    }
+  )
 
   const handlePaste = (event: any) => {
     event.preventDefault()
@@ -40,7 +46,7 @@ const RichTextInput: FC<InputState> = ({ value = '请输入文本', style, onCha
       contentEditable
       spellCheck='false'
       onPaste={handlePaste}
-      onChange={handleChange}
+      onInput={handleInput}
     />
   )
 }
