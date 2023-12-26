@@ -11,21 +11,19 @@ interface propState {
 const UploadImage: FC<propState> = ({ name = '上传图片', isFull, onSuccess }) => {
   const handleChange = (imageFile: UploadChangeParam) => {
     const { file } = imageFile
-    const rawImage = file.originFileObj
 
-    if (!rawImage) return
-    if (!/\.(jpg|png|bmp|jpeg|webp)$/.test(rawImage.name)) {
+    if (!/\.(jpg|png|bmp|jpeg|webp)$/.test(file.name)) {
       message.warning('图片只支持.jpg, .png, .bmp, .jpeg, .webp格式!')
       return
     }
 
-    const isLimit1M = rawImage.size / 1024 / 1024 < 5
+    const isLimit1M = file.size! / 1024 / 1024 < 5
     if (!isLimit1M) {
       message.warning('上传的图片大小不能超过5M!')
       return
     }
 
-    readImage(rawImage)
+    readImage(file)
   }
 
   const readImage = (image: any) => {
@@ -51,6 +49,7 @@ const UploadImage: FC<propState> = ({ name = '上传图片', isFull, onSuccess }
       accept='.jpg, .jpeg, .gif, .png, .bmp'
       multiple={false}
       showUploadList={false}
+      beforeUpload={() => false}
       onChange={handleChange}
     >
       <Button type='primary' style={{ width: isFull ? '100%' : 'auto' }}>
