@@ -1,8 +1,5 @@
-import { reject } from 'lodash-es'
-import { resolve } from 'path'
-
 /**
- * Image base64 to Blob
+ * 图片base64转blob
  * @param image
  * @returns {Blob}
  */
@@ -20,7 +17,7 @@ export function base64toBlob(base64Buf: string): Blob {
 }
 
 /**
- * Image url to base64
+ * 图片url转base64
  * @param url
  * @param mimeType
  */
@@ -47,7 +44,7 @@ export function urlToBase64(url: string, mimeType?: string): Promise<string> {
 }
 
 /**
- * get image size
+ * 获取图片宽高
  * @param url
  * @returns {Promise<{width: number; height: number}>}
  */
@@ -68,7 +65,7 @@ export function getImageSize(url: string): Promise<{ width: number; height: numb
 }
 
 /**
- * compress image
+ * 压缩图片
  * @param url
  * @param options
  * @returns {Promise<string>}
@@ -99,4 +96,59 @@ export function compressImage(
     }
     img.src = url
   })
+}
+
+/**
+ * 计算图片宽高及比率
+ * @param imageTrueW 图片实际宽
+ * @param imageTrueH 图片实际高
+ * @param showAreaW 展示区宽度
+ * @param showAreaH 展示区高度
+ * @returns {{width: number; height: number; ratio: number}}
+ */
+export function calcImageSize(
+  imageTrueW: number,
+  imageTrueH: number,
+  showAreaW: number,
+  showAreaH: number
+): { width: number; height: number; ratio: number } {
+  let [width, height, ratio] = [0, 0, 0]
+  // 图片真实宽大于真实高
+  if (imageTrueW > imageTrueH) {
+    if (imageTrueW >= showAreaW) {
+      // 真实宽大于或等于展示区最大宽
+      const imageRatioH = imageTrueH * (showAreaW / imageTrueW)
+      // 按展示区最大宽与实际宽比率换算后，高度大于显示高度时
+      if (imageRatioH >= showAreaW) {
+        width = imageTrueW * (showAreaH / imageTrueH)
+        height = showAreaH
+        ratio = imageTrueH / showAreaH
+      } else {
+        width = showAreaW
+        height = imageRatioH
+        ratio = imageTrueW / showAreaW
+      }
+    } else {
+      width = imageTrueW
+      height = imageTrueH
+      ratio = 1
+    }
+  } else {
+    // 图片真实宽小于或等于真实高
+    if (imageTrueH >= showAreaH) {
+      // 真实高大于或等于展示区最大高
+      width = imageTrueW * (showAreaH / imageTrueH)
+      height = showAreaH
+      ratio = imageTrueH / showAreaH
+    } else {
+      width = imageTrueW
+      height = imageTrueH
+      ratio = 1
+    }
+  }
+  return {
+    width,
+    height,
+    ratio
+  }
 }
