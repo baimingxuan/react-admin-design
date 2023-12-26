@@ -1,21 +1,24 @@
 import type { FC, CSSProperties } from 'react'
+import { useMemo } from 'react'
 import { keepCursorEnd, getPasteText } from '@/utils/rich-text'
 import { styleState } from './RichTextSetting'
 
 interface InputState {
   value: string
-  styles?: styleState
+  style?: styleState
   onChange: (value: string) => void
 }
 
-const RichTextInput: FC<InputState> = ({ value = '请输入文本', styles, onChange }) => {
-  const style = {
-    minHeight: '20px',
-    padding: '6px 8px',
-    outline: 'none',
-    wordBreak: 'break-all',
-    ...styles!
-  }
+const RichTextInput: FC<InputState> = ({ value = '请输入文本', style, onChange }) => {
+  const styles = useMemo(() => {
+    return {
+      minHeight: '20px',
+      padding: '6px 8px',
+      outline: 'none',
+      wordBreak: 'break-all',
+      ...style
+    }
+  }, [style]) as CSSProperties
 
   const handleChange = (event: any) => {
     onChange(event.target.innerHTML)
@@ -33,7 +36,7 @@ const RichTextInput: FC<InputState> = ({ value = '请输入文本', styles, onCh
   return (
     <div
       dangerouslySetInnerHTML={{ __html: value }}
-      style={{ ...style } as CSSProperties}
+      style={{ ...styles }}
       contentEditable
       spellCheck='false'
       onPaste={handlePaste}
