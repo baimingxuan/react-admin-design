@@ -98,7 +98,7 @@ const ImageCompress: FC = () => {
               wrapperCol={{ span: 18 }}
               labelAlign='left'
               initialValues={{ ...defaultForm }}
-              style={{ width: '60%', margin: '60px auto 0' }}
+              style={{ width: '300px', margin: '60px auto 0' }}
               onFinish={onFinish}
             >
               <Form.Item label='图片上传'>

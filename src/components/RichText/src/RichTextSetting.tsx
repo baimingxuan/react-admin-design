@@ -50,7 +50,7 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles, onChangeValue, 
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 18 }}
       labelAlign='left'
-      style={{ width: '50%', margin: '0 auto' }}
+      style={{ width: '300px', margin: '0 auto' }}
     >
       <Form.Item label='文本'>
         <RichTextInput value={value} onChange={val => setValue(val)} />
@@ -74,7 +74,7 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles, onChangeValue, 
         />
       </Form.Item>
       <Form.Item label='颜色'>
-        <Space>
+        <Space size={6}>
           <ColorPicker>
             <Button icon={<SvgIcon name='color-font' size={20} />} />
           </ColorPicker>
@@ -83,8 +83,10 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles, onChangeValue, 
           </ColorPicker>
           <Button icon={<SvgIcon name='font-bold' size={20} />} />
           <Dropdown menu={{ items: alignItems, onClick }} placement='bottomRight' trigger={['click']}>
-            <Button icon={<SvgIcon name='font-align' size={20} />} />
+            <Button icon={<SvgIcon name='font-h-align' size={20} />} />
           </Dropdown>
+          <Button icon={<SvgIcon name='font-italic' size={20} />} />
+          <Button icon={<SvgIcon name='font-v-align' size={20} />} />
         </Space>
       </Form.Item>
     </Form>

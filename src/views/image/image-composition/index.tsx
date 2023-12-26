@@ -184,7 +184,7 @@ const ImageComposition: FC = () => {
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
               labelAlign='left'
-              style={{ width: '50%', margin: '0 auto' }}
+              style={{ width: '300px', margin: '0 auto' }}
             >
               <Form.Item label='选择底图'>
                 <UploadImage name='选择底图' isFull onSuccess={changeBgImg} />
