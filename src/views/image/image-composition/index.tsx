@@ -1,58 +1,36 @@
-import type { FC } from 'react'
-import type { styleState } from '@/components/RichText/src/RichTextSetting'
-import { useState, useEffect, useCallback } from 'react'
+import type { FC, CSSProperties } from 'react'
+import type { TextElementState, ImageElementState, ContainerState, ImageObjState } from './types'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useImmer } from 'use-immer'
 import { Row, Col, Card, Button, Space, Form, InputNumber, Select, message } from 'antd'
 import { RndNode } from '@/components/DndNode'
 import { PageWrapper } from '@/components/Page'
-import { IMAGE_COMPOSITION, COMPOSITION_IMG_SRC, COMPOSITION_IMG_SRC2 } from '@/settings/websiteSetting'
+import { IMAGE_COMPOSITION } from '@/settings/websiteSetting'
 import { RichTextInput, RichTextSetting } from '@/components/RichText'
 import { UploadImage } from '@/components/Upload'
-
-export interface baseElementState {
-  x: number
-  y: number
-  z: number
-  w: number
-  h: number
-  type: 'text' | 'image'
-  tag: string
-  active: boolean
-}
-
-export interface textElementState extends baseElementState {
-  type: 'text'
-  text: string
-  style: styleState
-}
-
-export interface imageElementState extends baseElementState {
-  type: 'image'
-  url: string
-}
-
-export interface ImageObjState {
-  url: string
-  width: number
-  height: number
-}
+import { getImageSize, calcImageSize } from '@/utils/image'
+import { textElement, imageElement, containerObj } from './data'
 
 const ImageComposition: FC = () => {
-  const [elements, setElements] = useImmer<Array<textElementState | imageElementState>>([])
-  const [activeElement, setActiveElement] = useState<textElementState | imageElementState | null>(null)
-  const [elementIndex, setElementIndex] = useState<number>(1)
+  const [container, setContainer] = useImmer<ContainerState>(containerObj)
+  const [elements, setElements] = useImmer<Array<TextElementState | ImageElementState>>([textElement, imageElement])
+  const [activeElement, setActiveElement] = useState<TextElementState | ImageElementState | null>(null)
+  const [elementIndex, setElementIndex] = useState<number>(elements.length)
 
-  useEffect(() => {
-    handleAddText()
-    handleAddImage({
-      url: COMPOSITION_IMG_SRC2,
-      width: 132,
-      height: 132
-    })
-  }, [])
+  const containerStyle: CSSProperties = useMemo(() => {
+    return {
+      position: 'relative',
+      width: container.width,
+      height: container.height,
+      backgroundImage: `url(${container.bgImgUrl})`,
+      backgroundSize: 'contain',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }
+  }, [container])
 
   const handleAddText = () => {
-    const textElement: textElementState = {
+    const textElement: TextElementState = {
       x: 300,
       y: 100,
       z: elements.length,
@@ -83,7 +61,7 @@ const ImageComposition: FC = () => {
   }
 
   const handleAddImage = (imgObj: ImageObjState) => {
-    const imageElement: imageElementState = {
+    const imageElement: ImageElementState = {
       x: 320,
       y: 300,
       z: elements.length,
@@ -115,6 +93,36 @@ const ImageComposition: FC = () => {
     }
   }
 
+  const changeBgImg = (url: string) => {
+    getImageSize(url).then(({ width, height }) => {
+      const { width: containerWidth, height: containerHeight } = calcImageSize(width, height, 850, 550)
+
+      setContainer(draft => {
+        draft.bgImgUrl = url
+        draft.width = containerWidth
+        draft.height = containerHeight
+      })
+    })
+  }
+
+  const uploadImage = (url: string) => {
+    console.log(url)
+    getImageSize(url).then(({ width, height }) => {
+      const { width: imgWidth, height: imgHeight } = calcImageSize(
+        width,
+        height,
+        Math.floor(container.width / 4),
+        Math.floor(container.height / 4)
+      )
+
+      handleAddImage({
+        url,
+        width: imgWidth,
+        height: imgHeight
+      })
+    })
+  }
+
   const [config, setConfig] = useState({
     x: 650,
     y: 130,
@@ -142,26 +150,30 @@ const ImageComposition: FC = () => {
       <Row gutter={12}>
         <Col span={16}>
           <Card title='合成区域' bordered={false} bodyStyle={{ height: '600px' }}>
-            <div className='dnd-container' style={{ width: '100%', height: '550px', position: 'relative' }}>
-              {elements.map((item, index) => {
-                return (
-                  <RndNode key={item.tag} element={item}>
-                    {item.type === 'text' ? (
-                      <RichTextInput
-                        value={item.text}
-                        styles={item.style}
-                        onChange={val => {
-                          setElements((draft: any) => {
-                            draft[index].text = val
-                          })
-                        }}
-                      />
-                    ) : (
-                      <img src={item.url} draggable='false' />
-                    )}
-                  </RndNode>
-                )
-              })}
+            <div className='flex-center'>
+              <div className='dnd-container' style={{ ...containerStyle }}>
+                {elements.map((item, index) => {
+                  return (
+                    <RndNode key={item.tag} element={item}>
+                      {item.type === 'text' ? (
+                        <RichTextInput
+                          value={item.text}
+                          style={item.style}
+                          onChange={val => {
+                            setElements((draft: any) => {
+                              draft[index].text = val
+                            })
+                          }}
+                        />
+                      ) : item.type === 'image' ? (
+                        <img src={item.url} draggable='false' />
+                      ) : (
+                        <></>
+                      )}
+                    </RndNode>
+                  )
+                })}
+              </div>
             </div>
           </Card>
         </Col>
@@ -175,15 +187,15 @@ const ImageComposition: FC = () => {
               style={{ width: '50%', margin: '0 auto' }}
             >
               <Form.Item label='选择底图'>
-                <UploadImage name='选择底图' isFull onSuccess={handleSuccess} />
+                <UploadImage name='选择底图' isFull onSuccess={changeBgImg} />
               </Form.Item>
               <Form.Item label='添加文本'>
-                <Button block style={{ width: '100%' }}>
+                <Button block style={{ width: '100%' }} onClick={handleAddText}>
                   添加文本
                 </Button>
               </Form.Item>
               <Form.Item label='添加图片'>
-                <UploadImage name='选择图片' isFull onSuccess={handleSuccess} />
+                <UploadImage name='选择图片' isFull onSuccess={uploadImage} />
               </Form.Item>
               <Form.Item label='删除元素'>
                 <Button type='primary' danger style={{ width: '100%' }}>
