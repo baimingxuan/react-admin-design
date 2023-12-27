@@ -1,4 +1,4 @@
-import type { styleState } from '@/components/RichText/src/RichTextSetting'
+import type { styleState } from '@/types'
 
 interface BaseElementState {
   x: number

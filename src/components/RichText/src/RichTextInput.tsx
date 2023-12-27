@@ -2,7 +2,7 @@ import type { FC, CSSProperties } from 'react'
 import { useMemo } from 'react'
 import { useDebounceFn } from 'ahooks'
 import { keepCursorEnd, getPasteText } from '@/utils/rich-text'
-import { styleState } from './RichTextSetting'
+import { styleState } from '@/types'
 
 interface InputState {
   value: string

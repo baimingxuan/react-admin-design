@@ -1,17 +1,9 @@
 import type { FC } from 'react'
 import type { MenuProps } from 'antd'
+import type { styleState } from '@/types'
 import { Form, Button, Space, Select, ColorPicker, Dropdown } from 'antd'
 import RichTextInput from './RichTextInput'
 import SvgIcon from '@/components/SvgIcon'
-
-export interface styleState {
-  fontFamily?: string
-  fontSize?: string
-  color?: string
-  backgroundColor?: string
-  fontWeight?: string | number
-  textAlign?: string
-}
 
 interface textState {
   textValue: string
@@ -36,7 +28,7 @@ const alignItems: MenuProps['items'] = [
 ]
 
 const RichTextSetting: FC<textState> = ({ textValue, textStyles = {}, onChangeValue, onChangeStyles }) => {
-  const onClick: MenuProps['onClick'] = ({ key }) => {
+  const handleTextAlign: MenuProps['onClick'] = ({ key }) => {
     onChangeStyles?.({ ...textStyles, textAlign: key })
   }
 
@@ -68,10 +60,10 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles = {}, onChangeVa
             value: item + 'px',
             label: item + 'px'
           }))}
-          onChange={(value: string) => onChangeStyles?.({ ...textStyles, fontSize: value })}
+          onChange={(value: string) => onChangeStyles?.({ ...textStyles, fontSize: value, lineHeight: value })}
         />
       </Form.Item>
-      <Form.Item label='颜色'>
+      <Form.Item label='样式'>
         <Space size={6}>
           <ColorPicker onChange={(_, hex: string) => onChangeStyles?.({ ...textStyles, color: hex })}>
             <Button icon={<SvgIcon name='color-font' size={20} />} style={{ color: textStyles.color }} />
@@ -80,14 +72,14 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles = {}, onChangeVa
             <Button icon={<SvgIcon name='color-bg' size={20} />} style={{ color: textStyles.backgroundColor }} />
           </ColorPicker>
           <Button icon={<SvgIcon name='font-bold' size={20} />} />
+          <Button icon={<SvgIcon name='font-italic' size={20} />} />
           <Dropdown
-            menu={{ items: alignItems, selectedKeys: [textStyles.textAlign!], onClick }}
+            menu={{ items: alignItems, selectedKeys: [textStyles.textAlign!], onClick: handleTextAlign }}
             placement='bottomRight'
             trigger={['click']}
           >
             <Button icon={<SvgIcon name='font-h-align' size={20} />} />
           </Dropdown>
-          <Button icon={<SvgIcon name='font-italic' size={20} />} />
           <Button icon={<SvgIcon name='font-v-align' size={20} />} />
         </Space>
       </Form.Item>
