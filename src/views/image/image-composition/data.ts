@@ -19,7 +19,7 @@ export const textElement: TextElementState = {
     backgroundColor: '#05f8e8',
     fontWeight: 400,
     fontStyle: 'normal',
-    textShadow: 'none',
+    textShadow: '',
     textAlign: 'left'
   }
 }

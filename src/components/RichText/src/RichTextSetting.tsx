@@ -73,14 +73,14 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles = {}, onChangeVa
           </ColorPicker>
           <Button icon={<SvgIcon name='font-bold' size={20} />} />
           <Button icon={<SvgIcon name='font-italic' size={20} />} />
+          <Button icon={<SvgIcon name='font-shadow' size={20} />} />
           <Dropdown
             menu={{ items: alignItems, selectedKeys: [textStyles.textAlign!], onClick: handleTextAlign }}
             placement='bottomRight'
             trigger={['click']}
           >
-            <Button icon={<SvgIcon name='font-h-align' size={20} />} />
+            <Button icon={<SvgIcon name='font-align' size={20} />} />
           </Dropdown>
-          <Button icon={<SvgIcon name='font-v-align' size={20} />} />
         </Space>
       </Form.Item>
     </Form>
