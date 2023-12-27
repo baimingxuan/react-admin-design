@@ -22,6 +22,8 @@ export interface ImageElementState extends BaseElementState {
   url: string
 }
 
+export type ElementState = TextElementState | ImageElementState
+
 export interface ContainerState {
   width: number
   height: number

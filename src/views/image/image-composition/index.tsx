@@ -1,8 +1,8 @@
 import type { FC, CSSProperties } from 'react'
-import type { TextElementState, ImageElementState, ContainerState, ImageObjState } from './types'
+import type { TextElementState, ImageElementState, ElementState, ContainerState, ImageObjState } from './types'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useImmer } from 'use-immer'
-import { Row, Col, Card, Button, Space, Form, InputNumber, Select, message } from 'antd'
+import { Row, Col, Card, Button, Space, Form, message } from 'antd'
 import { RndNode } from '@/components/DndNode'
 import { PageWrapper } from '@/components/Page'
 import { IMAGE_COMPOSITION } from '@/settings/websiteSetting'
@@ -13,8 +13,8 @@ import { textElement, imageElement, containerObj } from './data'
 
 const ImageComposition: FC = () => {
   const [container, setContainer] = useImmer<ContainerState>(containerObj)
-  const [elements, setElements] = useImmer<Array<TextElementState | ImageElementState>>([textElement, imageElement])
-  const [activeElement, setActiveElement] = useState<TextElementState | ImageElementState | null>(null)
+  const [elements, setElements] = useImmer<Array<ElementState>>([textElement, imageElement])
+  const [activeElementTag, setActiveElementTag] = useState<string>(elements[0].tag)
   const [elementIndex, setElementIndex] = useState<number>(elements.length)
 
   const containerStyle: CSSProperties = useMemo(() => {
@@ -29,7 +29,13 @@ const ImageComposition: FC = () => {
     }
   }, [container])
 
+  const activeElement = useMemo(() => {
+    return elements.find(item => item.tag === activeElementTag)
+  }, [activeElementTag, elements])
+
   const handleAddText = () => {
+    const tagIndex = elementIndex + 1
+
     const textElement: TextElementState = {
       x: 300,
       y: 100,
@@ -37,7 +43,7 @@ const ImageComposition: FC = () => {
       w: 180,
       h: 36,
       type: 'text',
-      tag: `text_${elementIndex}`,
+      tag: `text_${tagIndex}`,
       active: false,
       text: '请输入文本',
       style: {
@@ -56,11 +62,13 @@ const ImageComposition: FC = () => {
       setElements(draft => {
         draft.push(textElement)
       })
-      setElementIndex(elementIndex + 1)
+      setElementIndex(tagIndex)
     }
   }
 
   const handleAddImage = (imgObj: ImageObjState) => {
+    const tagIndex = elementIndex + 1
+
     const imageElement: ImageElementState = {
       x: 320,
       y: 300,
@@ -68,7 +76,7 @@ const ImageComposition: FC = () => {
       w: imgObj.width,
       h: imgObj.height,
       type: 'image',
-      tag: `image_${elementIndex}`,
+      tag: `image_${tagIndex}`,
       active: false,
       url: imgObj.url
     }
@@ -79,18 +87,20 @@ const ImageComposition: FC = () => {
       setElements(draft => {
         draft.push(imageElement)
       })
-      setElementIndex(elementIndex + 1)
+      setElementIndex(tagIndex)
     }
   }
 
   const handleDeleteElement = () => {
-    if (activeElement) {
-      const activeElementIndex = elements.findIndex(item => item.tag === activeElement.tag)
-      setElements(draft => {
-        draft.splice(activeElementIndex, 1)
-      })
-      setActiveElement(null)
+    if (!activeElementTag) {
+      message.warning('请先选择元素!')
+      return
     }
+    const activeElementIndex = elements.findIndex(item => item.tag === activeElementTag)
+    setElements(draft => {
+      draft.splice(activeElementIndex, 1)
+    })
+    setActiveElementTag('')
   }
 
   const changeBgImg = (url: string) => {
@@ -106,7 +116,6 @@ const ImageComposition: FC = () => {
   }
 
   const uploadImage = (url: string) => {
-    console.log(url)
     getImageSize(url).then(({ width, height }) => {
       const { width: imgWidth, height: imgHeight } = calcImageSize(
         width,
@@ -119,6 +128,26 @@ const ImageComposition: FC = () => {
         url,
         width: imgWidth,
         height: imgHeight
+      })
+    })
+  }
+
+  const handleSettingText = (val: string) => {
+    setElements((draft: any) => {
+      draft.forEach((item: any) => {
+        if (item.tag === activeElementTag) {
+          item.text = val
+        }
+      })
+    })
+  }
+
+  const handleSettingStyles = (style: any) => {
+    setElements((draft: any) => {
+      draft.forEach((item: any) => {
+        if (item.tag === activeElementTag) {
+          item.style = style
+        }
       })
     })
   }
@@ -140,10 +169,6 @@ const ImageComposition: FC = () => {
       h: height
     })
   }
-
-  const [value, setValue] = useState('请输入文本')
-
-  const handleSuccess = (url: string) => {}
 
   return (
     <PageWrapper plugin={IMAGE_COMPOSITION}>
@@ -198,12 +223,21 @@ const ImageComposition: FC = () => {
                 <UploadImage name='选择图片' isFull onSuccess={uploadImage} />
               </Form.Item>
               <Form.Item label='删除元素'>
-                <Button type='primary' danger style={{ width: '100%' }}>
+                <Button type='primary' danger style={{ width: '100%' }} onClick={handleDeleteElement}>
                   删除元素
                 </Button>
               </Form.Item>
             </Form>
-            <RichTextSetting textValue={value} textStyles={{}} onChangeValue={val => setValue(val)} />
+            {activeElement && activeElement.type === 'text' ? (
+              <RichTextSetting
+                textValue={activeElement.text}
+                textStyles={activeElement.style}
+                onChangeValue={val => handleSettingText(val)}
+                onChangeStyles={style => handleSettingStyles(style)}
+              />
+            ) : (
+              <></>
+            )}
           </Card>
         </Col>
       </Row>
