@@ -17,8 +17,8 @@ export const textElement: TextElementState = {
     lineHeight: '24px',
     color: '#f70707',
     backgroundColor: '#05f8e8',
-    fontWeight: 400,
-    fontStyle: 'normal',
+    fontWeight: '',
+    fontStyle: '',
     textShadow: '',
     textAlign: 'left'
   }

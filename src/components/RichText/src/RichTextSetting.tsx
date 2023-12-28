@@ -32,6 +32,22 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles = {}, onChangeVa
     onChangeStyles?.({ ...textStyles, textAlign: key })
   }
 
+  const handleChangeStyle = (type: 'fontWeight' | 'fontStyle' | 'textShadow', val: string) => {
+    let styleVal = ''
+    switch (type) {
+      case 'fontWeight':
+        styleVal = val ? '' : 'bold'
+        break
+      case 'fontStyle':
+        styleVal = val ? '' : 'italic'
+        break
+      case 'textShadow':
+        styleVal = val ? '' : '1px 1px 1px #333'
+        break
+    }
+    onChangeStyles?.({ ...textStyles, [type]: styleVal ? styleVal : '' })
+  }
+
   return (
     <Form
       colon={false}
@@ -71,9 +87,21 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles = {}, onChangeVa
           <ColorPicker onChange={(_, hex: string) => onChangeStyles?.({ ...textStyles, backgroundColor: hex })}>
             <Button icon={<SvgIcon name='color-bg' size={20} />} style={{ color: textStyles.backgroundColor }} />
           </ColorPicker>
-          <Button icon={<SvgIcon name='font-bold' size={20} />} />
-          <Button icon={<SvgIcon name='font-italic' size={20} />} />
-          <Button icon={<SvgIcon name='font-shadow' size={20} />} />
+          <Button
+            icon={<SvgIcon name='font-bold' size={20} />}
+            style={{ color: textStyles.fontWeight ? '#1890ff' : '' }}
+            onClick={() => handleChangeStyle('fontWeight', textStyles.fontWeight!)}
+          />
+          <Button
+            icon={<SvgIcon name='font-italic' size={20} />}
+            style={{ color: textStyles.fontStyle ? '#1890ff' : '' }}
+            onClick={() => handleChangeStyle('fontStyle', textStyles.fontStyle!)}
+          />
+          <Button
+            icon={<SvgIcon name='font-shadow' size={20} />}
+            style={{ color: textStyles.textShadow ? '#1890ff' : '' }}
+            onClick={() => handleChangeStyle('textShadow', textStyles.textShadow!)}
+          />
           <Dropdown
             menu={{ items: alignItems, selectedKeys: [textStyles.textAlign!], onClick: handleTextAlign }}
             placement='bottomRight'

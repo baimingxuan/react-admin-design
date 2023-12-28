@@ -23,7 +23,7 @@ export interface styleState {
   lineHeight?: string
   color?: string
   backgroundColor?: string
-  fontWeight?: string | number
+  fontWeight?: string
   fontStyle?: string
   textShadow?: string
   textAlign?: string
