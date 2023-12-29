@@ -1,5 +1,12 @@
 import type { FC, CSSProperties } from 'react'
-import type { TextElementState, ImageElementState, ElementState, ContainerState, ImageObjState } from './types'
+import type {
+  TextElementState,
+  ImageElementState,
+  ElementState,
+  ContainerState,
+  ImageObjState,
+  handlerType
+} from './types'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useImmer } from 'use-immer'
 import { Row, Col, Card, Button, Space, Form, message } from 'antd'
@@ -14,7 +21,7 @@ import { textElement, imageElement, containerObj } from './data'
 const ImageComposition: FC = () => {
   const [container, setContainer] = useImmer<ContainerState>(containerObj)
   const [elements, setElements] = useImmer<Array<ElementState>>([textElement, imageElement])
-  const [activeElementTag, setActiveElementTag] = useState<string>(elements[0].tag)
+  const [activeElementTag, setActiveElementTag] = useState<string>(elements[0]?.tag || '')
   const [elementIndex, setElementIndex] = useState<number>(elements.length)
 
   const containerStyle: CSSProperties = useMemo(() => {
@@ -32,6 +39,13 @@ const ImageComposition: FC = () => {
   const activeElement = useMemo(() => {
     return elements.find(item => item.tag === activeElementTag)
   }, [activeElementTag, elements])
+
+  const elementHandler = (type: 'text' | 'image'): handlerType[] => {
+    if (type === 'text') {
+      return ['e', 'w']
+    }
+    return ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw']
+  }
 
   const handleAddText = () => {
     const tagIndex = elementIndex + 1
@@ -155,6 +169,22 @@ const ImageComposition: FC = () => {
     })
   }
 
+  const handleChangeElement = (ele: any, index: number) => {
+    setElements((draft: any) => {
+      draft[index] = ele
+    })
+    if (ele.active) {
+      setActiveElementTag(ele.tag)
+      setElements((draft: any) => {
+        draft.forEach((item: any) => {
+          if (item.tag !== ele.tag) {
+            item.active = false
+          }
+        })
+      })
+    }
+  }
+
   const [config, setConfig] = useState({
     x: 650,
     y: 130,
@@ -182,7 +212,12 @@ const ImageComposition: FC = () => {
               <div className='dnd-container' style={{ ...containerStyle }}>
                 {elements.map((item, index) => {
                   return (
-                    <RndNode key={item.tag} element={item}>
+                    <RndNode
+                      key={item.tag}
+                      element={item}
+                      handlers={elementHandler(item.type)}
+                      onChange={ele => handleChangeElement(ele, index)}
+                    >
                       {item.type === 'text' ? (
                         <RichTextInput
                           value={item.text}

@@ -35,3 +35,5 @@ export interface ImageObjState {
   width: number
   height: number
 }
+
+export type handlerType = 'n' | 'e' | 's' | 'w' | 'nw' | 'ne' | 'se' | 'sw'
