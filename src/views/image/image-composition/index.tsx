@@ -47,12 +47,15 @@ const ImageComposition: FC = () => {
       active: false,
       text: '请输入文本',
       style: {
-        textAlign: 'left',
-        fontSize: '24px',
         fontFamily: '微软雅黑',
-        fontWeight: 400,
+        fontSize: '24px',
+        lineHeight: '24px',
         color: '#f70707',
-        backgroundColor: '#05f8e8'
+        backgroundColor: '#05f8e8',
+        fontWeight: '',
+        fontStyle: '',
+        textShadow: '',
+        textAlign: 'left'
       }
     }
     if (elements.length > 4) {

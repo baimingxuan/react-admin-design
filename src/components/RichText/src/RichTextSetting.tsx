@@ -57,27 +57,35 @@ const RichTextSetting: FC<textState> = ({ textValue, textStyles = {}, onChangeVa
       style={{ width: '300px', margin: '0 auto' }}
     >
       <Form.Item label='文本'>
-        <RichTextInput value={textValue} onChange={val => onChangeValue(val)} />
+        <RichTextInput value={textValue} hasBorder onChange={val => onChangeValue(val)} />
       </Form.Item>
       <Form.Item label='字体'>
         <Select
           value={textStyles.fontFamily}
-          options={['黑体', '宋体', '楷体', '隶书', '微软雅黑', '华文行楷', '方正姚体'].map(item => ({
-            value: item,
-            label: item
-          }))}
           onChange={(value: string) => onChangeStyles?.({ ...textStyles, fontFamily: value })}
-        />
+        >
+          {['黑体', '宋体', '楷体', '隶书', '微软雅黑', '华文行楷', '方正姚体'].map(item => {
+            return (
+              <Select.Option value={item} key={item} style={{ fontFamily: item }}>
+                {item}
+              </Select.Option>
+            )
+          })}
+        </Select>
       </Form.Item>
       <Form.Item label='字号'>
         <Select
           value={textStyles.fontSize}
-          options={[12, 14, 16, 18, 24, 32, 48].map(item => ({
-            value: item + 'px',
-            label: item + 'px'
-          }))}
           onChange={(value: string) => onChangeStyles?.({ ...textStyles, fontSize: value, lineHeight: value })}
-        />
+        >
+          {[12, 14, 16, 20, 24, 32, 48].map(item => {
+            return (
+              <Select.Option value={item + 'px'} key={item} style={{ fontSize: item + 'px' }}>
+                {item + 'px'}
+              </Select.Option>
+            )
+          })}
+        </Select>
       </Form.Item>
       <Form.Item label='样式'>
         <Space size={6}>
