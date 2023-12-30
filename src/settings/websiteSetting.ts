@@ -91,8 +91,8 @@ export const REACT_CROPPER_PLUGIN = {
 // Image-composition component
 export const IMAGE_COMPOSITION = {
   name: 'Image图片合成',
-  url: 'https://github.com/xyxiao001/vue-cropper',
-  desc: '图片合成: 基于VueDRR拖拽功能, 在其上通过叠加图片、文字等, 实现图片的叠加伪合成功能。'
+  url: 'https://github.com/bokuweb/react-rnd',
+  desc: '图片合成: 基于React-Rnd的拖拽功能, 在其上通过叠加图片、文字等, 实现图片的叠加，并合成新图片的功能。'
 }
 
 // Cropper image src

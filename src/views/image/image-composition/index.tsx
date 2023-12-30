@@ -7,7 +7,7 @@ import type {
   ImageObjState,
   handlerType
 } from './types'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useImmer } from 'use-immer'
 import { Row, Col, Card, Button, Form, message } from 'antd'
 import { RndNode } from '@/components/DndNode'
@@ -17,6 +17,7 @@ import { RichTextInput, RichTextSetting } from '@/components/RichText'
 import { UploadImage } from '@/components/Upload'
 import { getImageSize, calcImageSize } from '@/utils/image'
 import { textElement, imageElement, containerObj } from './data'
+import dom2image from 'dom-to-image'
 
 const ImageComposition: FC = () => {
   const [container, setContainer] = useImmer<ContainerState>(containerObj)
@@ -185,13 +186,22 @@ const ImageComposition: FC = () => {
     }
   }
 
+  const handleComposition = async () => {
+    dom2image.toPng(document.getElementById('imageComposition')!).then(dataUrl => {
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = `composition-image.png`
+      a.click()
+    })
+  }
+
   return (
     <PageWrapper plugin={IMAGE_COMPOSITION}>
       <Row gutter={12}>
         <Col span={16}>
           <Card title='合成区域' bordered={false} bodyStyle={{ height: '600px' }}>
             <div className='flex-center'>
-              <div className='dnd-container' style={{ ...containerStyle }}>
+              <div id='imageComposition' className='dnd-container' style={{ ...containerStyle }}>
                 {elements.map((item, index) => {
                   return (
                     <RndNode
@@ -258,6 +268,11 @@ const ImageComposition: FC = () => {
             ) : (
               <></>
             )}
+            <div style={{ width: '300px', margin: '0 auto' }}>
+              <Button type='primary' style={{ width: '100%' }} onClick={handleComposition}>
+                合成图片
+              </Button>
+            </div>
           </Card>
         </Col>
       </Row>
