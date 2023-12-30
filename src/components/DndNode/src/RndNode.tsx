@@ -1,6 +1,6 @@
 import type { FC, ReactElement } from 'react'
 import type { Position, DraggableData } from 'react-rnd'
-import { useEffect, useState, useId } from 'react'
+import { useEffect, useState, useId, useRef } from 'react'
 import { useImmer } from 'use-immer'
 import { Rnd } from 'react-rnd'
 import classNames from 'classnames'
@@ -25,6 +25,7 @@ interface ElementState {
   w: number
   h: number
   active: boolean
+  type: 'text' | 'image'
 }
 
 interface PropState {
@@ -45,6 +46,7 @@ const RndNode: FC<PropState> = props => {
   const { element, children, handlers = ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'], onChange } = props
   const { x = 0, y = 0, w: width = 100, h: height = 28 } = element
 
+  const rndRef = useRef<Rnd>(null)
   const rndNodeId = `rndNode_${useId()}`
   const [nodeData, setNodeData] = useImmer<nodeDataState>({ x, y, width, height })
   const [active, setActive] = useState(element.active)
@@ -63,7 +65,7 @@ const RndNode: FC<PropState> = props => {
   }, [element.active])
 
   useEffect(() => {
-    onChange?.({ ...element, ...nodeData, active })
+    onChange?.({ ...element, x: nodeData.x, y: nodeData.y, w: nodeData.width, h: nodeData.height, active })
   }, [active, nodeData])
 
   useEffect(() => {
@@ -102,17 +104,55 @@ const RndNode: FC<PropState> = props => {
     }
   }
 
-  const handleResize = (_e: any, _direction: any, _ref: any, _delta: any, position: Position) => {}
+  const calcTextNodeHeight = (position: Position) => {
+    const rndNodeRef = document.getElementById(rndNodeId)
+    if (rndNodeRef && element.type === 'text') {
+      const viewHeight = Math.ceil((rndNodeRef.parentNode as HTMLDivElement)?.getBoundingClientRect().height)
+      const childNodeHeight = Math.ceil(rndNodeRef.querySelector('.rich-text-input')!.getBoundingClientRect().height)
+      if (position.y + childNodeHeight >= viewHeight) {
+        setNodeData(draft => {
+          draft.y = viewHeight - childNodeHeight
+        })
+        rndRef.current?.updatePosition({ y: nodeData.y } as Position)
+      }
+      rndNodeRef.style.height = `${childNodeHeight}px`
+      setNodeData(draft => {
+        draft.height = childNodeHeight
+      })
+    }
+  }
 
-  const handleResizeStop = (_e: any, _direction: any, _ref: any, _delta: any, position: Position) => {}
+  const handleResize = (_e: any, _direction: any, _ref: any, _delta: any, position: Position) => {
+    if (element.type === 'text') {
+      calcTextNodeHeight(position)
+    }
+  }
 
-  const handleDragStop = (_e: any, data: DraggableData) => {}
+  const handleResizeStop = (_e: any, _direction: any, ref: any, _delta: any, position: Position) => {
+    setNodeData(draft => {
+      draft.width = ref.offsetWidth
+      draft.height = ref.offsetHeight
+      draft.x = position.x
+      draft.y = position.y
+    })
+    if (element.type === 'text') {
+      calcTextNodeHeight(position)
+    }
+  }
+
+  const handleDragStop = (_e: any, data: DraggableData) => {
+    setNodeData(draft => {
+      draft.x = data.x
+      draft.y = data.y
+    })
+  }
 
   return (
     <Rnd
+      ref={rndRef}
       id={rndNodeId}
       default={{ ...nodeData }}
-      minWidth={100}
+      minWidth={80}
       minHeight={24}
       bounds='parent'
       enableResizing={{ ...enableHandler }}

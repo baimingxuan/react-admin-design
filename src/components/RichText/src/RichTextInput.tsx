@@ -46,6 +46,7 @@ const RichTextInput: FC<InputState> = ({ value = '请输入文本', style = {}, 
   return (
     <div
       dangerouslySetInnerHTML={{ __html: value }}
+      className='rich-text-input'
       style={{ ...styles }}
       contentEditable
       spellCheck='false'

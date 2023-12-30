@@ -9,7 +9,7 @@ import type {
 } from './types'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useImmer } from 'use-immer'
-import { Row, Col, Card, Button, Space, Form, message } from 'antd'
+import { Row, Col, Card, Button, Form, message } from 'antd'
 import { RndNode } from '@/components/DndNode'
 import { PageWrapper } from '@/components/Page'
 import { IMAGE_COMPOSITION } from '@/settings/websiteSetting'
@@ -183,24 +183,6 @@ const ImageComposition: FC = () => {
         })
       })
     }
-  }
-
-  const [config, setConfig] = useState({
-    x: 650,
-    y: 130,
-    w: 180,
-    h: 180,
-    active: false
-  })
-
-  const handleResize = (left: number, top: number, width: number, height: number) => {
-    setConfig({
-      ...config,
-      x: left,
-      y: top,
-      w: width,
-      h: height
-    })
   }
 
   return (
