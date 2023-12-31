@@ -61,7 +61,7 @@ export const VIDEO_PLUGIN = {
 export const VIDEO_WATERMARK = {
   name: 'Video视频水印',
   url: 'https://github.com/bokuweb/react-rnd',
-  desc: '视频水印: 基于React-Rnd的拖拽功能, 在视频上通过叠加图片、文字等, 实现视频添加水印的功能'
+  desc: '视频水印: 基于React-Rnd的拖拽功能, 在视频上通过叠加图片、文字等, 实现视频添加水印的功能。'
 }
 
 // Video resource src

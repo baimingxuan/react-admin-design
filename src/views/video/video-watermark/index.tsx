@@ -116,18 +116,6 @@ const VideoWatermark: FC = () => {
     setActiveElementTag('')
   }
 
-  const changeBgImg = (url: string) => {
-    getImageSize(url).then(({ width, height }) => {
-      const { width: containerWidth, height: containerHeight } = calcImageSize(width, height, 850, 550)
-
-      setContainer(draft => {
-        draft.videoUrl = url
-        draft.width = containerWidth
-        draft.height = containerHeight
-      })
-    })
-  }
-
   const uploadImage = (url: string) => {
     getImageSize(url).then(({ width, height }) => {
       const { width: imgWidth, height: imgHeight } = calcImageSize(
@@ -233,7 +221,13 @@ const VideoWatermark: FC = () => {
               style={{ width: '300px', margin: '0 auto' }}
             >
               <Form.Item label='选择视频'>
-                <UploadImage name='选择视频' isFull onSuccess={changeBgImg} />
+                <Button
+                  type='primary'
+                  style={{ width: '100%' }}
+                  onClick={() => message.warning('请配置视频资源服务接口！')}
+                >
+                  选择视频
+                </Button>
               </Form.Item>
               <Form.Item label='添加文本'>
                 <Button block style={{ width: '100%' }} onClick={handleAddText}>
