@@ -1,6 +1,7 @@
 // 配置文档: https://eslint.nodejs.cn/
+import { defineConfig } from 'eslint-define-config'
 
-export default {
+export default defineConfig({
   root: true,
   env: {
     browser: true,
@@ -125,4 +126,4 @@ export default {
     'react-hooks/rules-of-hooks': 'off',
     'react-hooks/exhaustive-deps': 'off'
   }
-}
+})

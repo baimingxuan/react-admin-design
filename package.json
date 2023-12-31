@@ -7,7 +7,7 @@
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
     "clean:cache": "rimraf .eslintcache && rimraf node_modules && pnpm install",
-    "lint:eslint": "eslint --cache --fix  \"{src,mock,build}/**/*.{js,ts,tsx}\"",
+    "lint:eslint": "eslint --cache --max-warnings 0  \"src/**/*.{ts,tsx}\" --fix",
     "lint:prettier": "prettier --write \"src/**/*.{js,json,ts,tsx,css,less,html,md}\"",
     "lint:lint-staged": "lint-staged",
     "prepare": "husky install"
@@ -73,6 +73,7 @@
     "esbuild": "^0.19.6",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-define-config": "^2.1.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
