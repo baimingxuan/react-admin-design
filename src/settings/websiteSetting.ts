@@ -57,8 +57,16 @@ export const VIDEO_PLUGIN = {
   desc: 'Video.JS: 一个为 HTML5 世界构建的web视频播放器, 适用于目前主流网络视频的播放。'
 }
 
+// Video watermark component
+export const VIDEO_WATERMARK = {
+  name: 'Video视频水印',
+  url: 'https://github.com/bokuweb/react-rnd',
+  desc: '视频水印: 基于React-Rnd的拖拽功能, 在视频上通过叠加图片、文字等, 实现视频添加水印的功能'
+}
+
 // Video resource src
 export const VIDEO_RES_SRC = 'https://cdn.jsdelivr.net/gh/baimingxuan/media-store/videos/houlang.mp4'
+export const VIDEO_IMG_SRC = 'https://cdn.jsdelivr.net/gh/baimingxuan/media-store/images/img06.jpg'
 
 // Xlsx plugin
 export const XLSX_PLUGIN = {

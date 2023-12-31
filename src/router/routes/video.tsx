@@ -24,12 +24,12 @@ const VideoRoute: RouteObject = {
       }
     },
     {
-      path: 'video-mark',
-      name: 'VideoMark',
-      element: LazyLoad(lazy(() => import('@/views/blank'))),
+      path: 'video-watermark',
+      name: 'VideoWatermark',
+      element: LazyLoad(lazy(() => import('@/views/video/video-watermark'))),
       meta: {
         title: '视频水印',
-        key: 'videoMark'
+        key: 'videoWatermark'
       }
     }
   ]

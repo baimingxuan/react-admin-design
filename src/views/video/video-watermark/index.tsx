@@ -12,14 +12,13 @@ import { useImmer } from 'use-immer'
 import { Row, Col, Card, Button, Form, message } from 'antd'
 import { RndNode } from '@/components/DndNode'
 import { PageWrapper } from '@/components/Page'
-import { IMAGE_COMPOSITION } from '@/settings/websiteSetting'
+import { VIDEO_WATERMARK } from '@/settings/websiteSetting'
 import { RichTextInput, RichTextSetting } from '@/components/RichText'
 import { UploadImage } from '@/components/Upload'
 import { getImageSize, calcImageSize } from '@/utils/image'
 import { textElement, imageElement, containerObj } from './data'
-import dom2image from 'dom-to-image'
 
-const ImageComposition: FC = () => {
+const VideoWatermark: FC = () => {
   const [container, setContainer] = useImmer<ContainerState>(containerObj)
   const [elements, setElements] = useImmer<Array<ElementState>>([textElement, imageElement])
   const [activeElementTag, setActiveElementTag] = useState<string>(elements[0]?.tag || '')
@@ -29,11 +28,7 @@ const ImageComposition: FC = () => {
     return {
       position: 'relative',
       width: container.width,
-      height: container.height,
-      backgroundImage: `url(${container.bgImgUrl})`,
-      backgroundSize: 'contain',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
+      height: container.height
     }
   }, [container])
 
@@ -65,8 +60,8 @@ const ImageComposition: FC = () => {
         fontFamily: '微软雅黑',
         fontSize: '24px',
         lineHeight: '24px',
-        color: '#f70707',
-        backgroundColor: '#05f8e8',
+        color: '#687684',
+        backgroundColor: '#9ac8d8',
         fontWeight: '',
         fontStyle: '',
         textShadow: '',
@@ -89,7 +84,7 @@ const ImageComposition: FC = () => {
 
     const imageElement: ImageElementState = {
       x: 320,
-      y: 300,
+      y: 260,
       z: elements.length,
       w: imgObj.width,
       h: imgObj.height,
@@ -126,7 +121,7 @@ const ImageComposition: FC = () => {
       const { width: containerWidth, height: containerHeight } = calcImageSize(width, height, 850, 550)
 
       setContainer(draft => {
-        draft.bgImgUrl = url
+        draft.videoUrl = url
         draft.width = containerWidth
         draft.height = containerHeight
       })
@@ -186,22 +181,18 @@ const ImageComposition: FC = () => {
     }
   }
 
-  const handleComposition = async () => {
-    dom2image.toPng(document.getElementById('imageComposition')!).then(dataUrl => {
-      const a = document.createElement('a')
-      a.href = dataUrl
-      a.download = `composition-image.png`
-      a.click()
-    })
-  }
-
   return (
-    <PageWrapper plugin={IMAGE_COMPOSITION}>
+    <PageWrapper plugin={VIDEO_WATERMARK}>
       <Row gutter={12}>
         <Col span={16}>
-          <Card title='合成区域' bordered={false} bodyStyle={{ height: '600px' }}>
+          <Card title='合成区域' bordered={false} bodyStyle={{ height: '550px' }}>
             <div className='flex-center'>
-              <div id='imageComposition' className='dnd-container' style={{ ...containerStyle }}>
+              <div className='dnd-container' style={{ ...containerStyle }}>
+                <video
+                  src={container.videoUrl}
+                  controls
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                />
                 {elements.map((item, index) => {
                   return (
                     <RndNode
@@ -233,7 +224,7 @@ const ImageComposition: FC = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title='设置区域' bordered={false} bodyStyle={{ height: '600px' }}>
+          <Card title='设置区域' bordered={false} bodyStyle={{ height: '550px' }}>
             <Form
               colon={false}
               labelCol={{ span: 6 }}
@@ -241,8 +232,8 @@ const ImageComposition: FC = () => {
               labelAlign='left'
               style={{ width: '300px', margin: '0 auto' }}
             >
-              <Form.Item label='选择底图'>
-                <UploadImage name='选择底图' isFull onSuccess={changeBgImg} />
+              <Form.Item label='选择视频'>
+                <UploadImage name='选择视频' isFull onSuccess={changeBgImg} />
               </Form.Item>
               <Form.Item label='添加文本'>
                 <Button block style={{ width: '100%' }} onClick={handleAddText}>
@@ -268,11 +259,6 @@ const ImageComposition: FC = () => {
             ) : (
               <></>
             )}
-            <div style={{ width: '300px', margin: '0 auto' }}>
-              <Button type='primary' style={{ width: '100%' }} onClick={handleComposition}>
-                合成图片
-              </Button>
-            </div>
           </Card>
         </Col>
       </Row>
@@ -280,4 +266,4 @@ const ImageComposition: FC = () => {
   )
 }
 
-export default ImageComposition
+export default VideoWatermark
