@@ -2,7 +2,8 @@ import { lazy } from 'react'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
 import { ExceptionEnum } from '@/enums/exceptionEnum'
-import { LazyLoad } from '@/components/LazyLoad'
+// import { LazyLoad } from '@/components/LazyLoad'
+import Exception from '@/views/exception'
 
 // exception module page
 const ExceptionRoute: RouteObject = {
@@ -18,7 +19,8 @@ const ExceptionRoute: RouteObject = {
     {
       path: 'page-403',
       name: 'Page403',
-      element: LazyLoad(lazy(() => import('@/views/exception'))),
+      element: <Exception />,
+      // element: LazyLoad(lazy(() => import('@/views/exception'))),
       meta: {
         title: '403页面',
         key: 'page403'
@@ -28,7 +30,8 @@ const ExceptionRoute: RouteObject = {
     {
       path: 'page-404',
       name: 'Page404',
-      element: LazyLoad(lazy(() => import('@/views/exception'))),
+      element: <Exception />,
+      // element: LazyLoad(lazy(() => import('@/views/exception'))),
       meta: {
         title: '404页面',
         key: 'page404'
@@ -38,7 +41,8 @@ const ExceptionRoute: RouteObject = {
     {
       path: 'page-500',
       name: 'Page500',
-      element: LazyLoad(lazy(() => import('@/views/exception'))),
+      element: <Exception />,
+      // element: LazyLoad(lazy(() => import('@/views/exception'))),
       meta: {
         title: '500页面',
         key: 'page500'
