@@ -1,12 +1,13 @@
 import { ReactNode, Suspense, LazyExoticComponent } from 'react'
 import { Spin } from 'antd'
+import { LoadableComponent } from '@loadable/component'
 
 /**
  * @description 路由懒加载
  * @param {Element} Component 需要访问的组件
  * @returns element
  */
-const LazyLoad = (Component: LazyExoticComponent<any>): ReactNode => {
+const LazyLoad = (Component: LoadableComponent<any>): ReactNode => {
   return (
     <Suspense
       fallback={

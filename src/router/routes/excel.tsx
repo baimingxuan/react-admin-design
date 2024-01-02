@@ -1,7 +1,7 @@
-import { lazy } from 'react'
+import { lazy } from '@loadable/component'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
-// import { LazyLoad } from '@/components/LazyLoad'
+import { LazyLoad } from '@/components/LazyLoad'
 import ExportExcel from '@/views/excel/export-excel'
 import ImportExcel from '@/views/excel/import-excel'
 
@@ -19,8 +19,8 @@ const ExcelRoute: RouteObject = {
     {
       path: 'export-excel',
       name: 'ExportExcel',
-      element: <ExportExcel />,
-      // element: LazyLoad(lazy(() => import('@/views/excel/export-excel'))),
+      // element: <ExportExcel />,
+      element: LazyLoad(lazy(() => import('@/views/excel/export-excel'))),
       meta: {
         title: '导出Excel',
         key: 'exportExcel'
@@ -29,8 +29,8 @@ const ExcelRoute: RouteObject = {
     {
       path: 'import-excel',
       name: 'ImportExcel',
-      element: <ImportExcel />,
-      // element: LazyLoad(lazy(() => import('@/views/excel/import-excel'))),
+      // element: <ImportExcel />,
+      element: LazyLoad(lazy(() => import('@/views/excel/import-excel'))),
       meta: {
         title: '导入Excel',
         key: 'importExcel'
