@@ -5,11 +5,12 @@ import { useDebounceFn } from 'ahooks'
 import { PageWrapper } from '@/components/Page'
 import { CODEMIRROR_PLUGIN } from '@/settings/websiteSetting'
 import { ConfigState, InfoState } from './types'
-import Codemirror from '@uiw/react-codemirror'
+import CodeMirror from '@uiw/react-codemirror'
+import { javascript } from '@codemirror/lang-javascript'
 import Toolbar from './components/Toolbar'
 import CodeInfo from './components/CodeInfo'
 
-const CodeMirror: FC = () => {
+const CodeMirrorEditor: FC = () => {
   const [codeVal, setCodeVal] = useState(`console.log('Hello, world!')`)
   const [config, setConfig] = useState<ConfigState>({
     language: 'javascript',
@@ -53,7 +54,7 @@ const CodeMirror: FC = () => {
     <PageWrapper plugin={CODEMIRROR_PLUGIN}>
       <Card bordered={false}>
         <Toolbar config={config} valueChange={handleValueChange} />
-        <Codemirror
+        <CodeMirror
           value={codeVal}
           height={config.height}
           autoFocus={config.autoFocus}
@@ -62,7 +63,7 @@ const CodeMirror: FC = () => {
             borderLeft: 'solid 1px #ddd',
             borderRight: 'solid 1px #ddd'
           }}
-          extensions={[]}
+          extensions={[javascript({ jsx: true })]}
           placeholder='Please enter the code...'
           onChange={handleChange}
           onUpdate={handleStateUpdate}
@@ -73,4 +74,4 @@ const CodeMirror: FC = () => {
   )
 }
 
-export default CodeMirror
+export default CodeMirrorEditor
