@@ -1,6 +1,8 @@
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
 import Home from '@/views/home'
+import { lazy } from '@loadable/component'
+import { LazyLoad } from '@/components/LazyLoad'
 
 // Home route
 const HomeRoute: RouteObject = {
@@ -18,7 +20,7 @@ const HomeRoute: RouteObject = {
     {
       path: '',
       name: 'HomePage',
-      element: <Home />,
+      element: LazyLoad(lazy(() => import('@/views/home'))),
       meta: {
         title: '首页',
         key: 'home',

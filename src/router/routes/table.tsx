@@ -1,7 +1,7 @@
-import { lazy } from 'react'
+import { lazy } from '@loadable/component'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
-// import { LazyLoad } from '@/components/LazyLoad'
+import { LazyLoad } from '@/components/LazyLoad'
 import TableBasic from '@/views/table/table-basic'
 import TableEditRow from '@/views/table/table-edit-row'
 
@@ -19,8 +19,8 @@ const TableRoute: RouteObject = {
     {
       path: 'table-basic',
       name: 'TableBasic',
-      element: <TableBasic />,
-      // element: LazyLoad(lazy(() => import('@/views/table/table-basic'))),
+      // element: <TableBasic />,
+      element: LazyLoad(lazy(() => import('@/views/table/table-basic'))),
       meta: {
         title: '基础表格',
         key: 'tableBasic'
@@ -29,8 +29,8 @@ const TableRoute: RouteObject = {
     {
       path: 'table-edit-row',
       name: 'TableEditRow',
-      element: <TableEditRow />,
-      // element: LazyLoad(lazy(() => import('@/views/table/table-edit-row'))),
+      // element: <TableEditRow />,
+      element: LazyLoad(lazy(() => import('@/views/table/table-edit-row'))),
       meta: {
         title: '可编辑行表格',
         key: 'tableEditRow'

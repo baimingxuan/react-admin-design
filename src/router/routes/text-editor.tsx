@@ -1,7 +1,7 @@
-import { lazy } from 'react'
+import { lazy } from '@loadable/component'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
-// import { LazyLoad } from '@/components/LazyLoad'
+import { LazyLoad } from '@/components/LazyLoad'
 import MarkdownEditor from '@/views/editor/markdown'
 import RichTextEditor from '@/views/editor/rich-text'
 import CodeMirror from '@/views/editor/code-mirror'
@@ -20,8 +20,8 @@ const TextEditorRoute: RouteObject = {
     {
       path: 'markdown',
       name: 'Markdown',
-      element: <MarkdownEditor />,
-      // element: LazyLoad(lazy(() => import('@/views/editor/markdown'))),
+      // element: <MarkdownEditor />,
+      element: LazyLoad(lazy(() => import('@/views/editor/markdown'))),
       meta: {
         title: 'Markdown编辑器',
         key: 'markdown'
@@ -30,8 +30,8 @@ const TextEditorRoute: RouteObject = {
     {
       path: 'rich-text',
       name: 'RichText',
-      element: <RichTextEditor />,
-      // element: LazyLoad(lazy(() => import('@/views/editor/rich-text'))),
+      // element: <RichTextEditor />,
+      element: LazyLoad(lazy(() => import('@/views/editor/rich-text'))),
       meta: {
         title: '富文本编辑器',
         key: 'richText'
@@ -40,8 +40,8 @@ const TextEditorRoute: RouteObject = {
     {
       path: 'code-editor',
       name: 'CodeEditor',
-      element: <CodeMirror />,
-      // element: LazyLoad(lazy(() => import('@/views/editor/code-mirror'))),
+      // element: <CodeMirror />,
+      element: LazyLoad(lazy(() => import('@/views/editor/code-mirror'))),
       meta: {
         title: '代码编辑器',
         key: 'codeEditor'
