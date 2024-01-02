@@ -1,6 +1,6 @@
-import { ReactNode, Suspense, LazyExoticComponent } from 'react'
+import type { LoadableComponent } from '@loadable/component'
+import { ReactNode, Suspense } from 'react'
 import { Spin } from 'antd'
-import { LoadableComponent } from '@loadable/component'
 
 /**
  * @description 路由懒加载

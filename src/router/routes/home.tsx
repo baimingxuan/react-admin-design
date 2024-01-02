@@ -1,7 +1,6 @@
+import { lazy } from '@loadable/component'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
-import Home from '@/views/home'
-import { lazy } from '@loadable/component'
 import { LazyLoad } from '@/components/LazyLoad'
 
 // Home route

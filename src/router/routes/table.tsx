@@ -2,8 +2,6 @@ import { lazy } from '@loadable/component'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
 import { LazyLoad } from '@/components/LazyLoad'
-import TableBasic from '@/views/table/table-basic'
-import TableEditRow from '@/views/table/table-edit-row'
 
 // table module page
 const TableRoute: RouteObject = {
@@ -19,7 +17,6 @@ const TableRoute: RouteObject = {
     {
       path: 'table-basic',
       name: 'TableBasic',
-      // element: <TableBasic />,
       element: LazyLoad(lazy(() => import('@/views/table/table-basic'))),
       meta: {
         title: '基础表格',
@@ -29,7 +26,6 @@ const TableRoute: RouteObject = {
     {
       path: 'table-edit-row',
       name: 'TableEditRow',
-      // element: <TableEditRow />,
       element: LazyLoad(lazy(() => import('@/views/table/table-edit-row'))),
       meta: {
         title: '可编辑行表格',

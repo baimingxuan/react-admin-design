@@ -2,8 +2,6 @@ import { lazy } from '@loadable/component'
 import { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
 import { LazyLoad } from '@/components/LazyLoad'
-import FlowApprove from '@/views/flow/flow-approve'
-import FlowBpmn from '@/views/flow/flow-bpmn'
 
 // flow-editor module page
 const FlowEditorRoute: RouteObject = {
@@ -19,7 +17,6 @@ const FlowEditorRoute: RouteObject = {
     {
       path: 'flow-approve',
       name: 'FlowApprove',
-      // element: <FlowApprove />,
       element: LazyLoad(lazy(() => import('@/views/flow/flow-approve'))),
       meta: {
         title: '审批流程图',
@@ -29,7 +26,6 @@ const FlowEditorRoute: RouteObject = {
     {
       path: 'flow-bpmn',
       name: 'FlowBpmn',
-      // element: <FlowBpmn />,
       element: LazyLoad(lazy(() => import('@/views/flow/flow-bpmn'))),
       meta: {
         title: 'BPMN流程图',
