@@ -5,7 +5,6 @@
 
 /public
 /docs
-mock/*
 dist
 node_modules
 

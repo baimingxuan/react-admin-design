@@ -1,13 +1,14 @@
 {
   "name": "react-admin-design",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "serve": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
     "clean:cache": "rimraf .eslintcache && rimraf node_modules && pnpm install",
-    "lint:eslint": "eslint --cache --max-warnings 0  \"src/**/*.{ts,tsx}\" --fix",
+    "lint": "pnpm run lint:eslint && pnpm run lint:prettier",
+    "lint:eslint": "eslint --cache --fix --ext .js,.ts,.tsx ./src",
     "lint:prettier": "prettier --write \"src/**/*.{js,json,ts,tsx,css,less,html,md}\"",
     "lint:lint-staged": "lint-staged",
     "prepare": "husky install"

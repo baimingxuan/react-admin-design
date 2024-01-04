@@ -20,16 +20,12 @@
       "@/*": ["src/*"],
       "#/*": ["types/*"]
     },
-    "types": [
-      "vite/client",
-      "vite-plugin-svg-icons/client"
-    ]
+    "types": ["vite/client", "vite-plugin-svg-icons/client"]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue",
     "typings/**/*.d.ts",
     "typings/**/*.ts",
     "build/**/*.ts",
@@ -37,9 +33,5 @@
     "mock/*.ts",
     "vite.config.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.js"
-  ]
+  "exclude": ["node_modules", "dist", "**/*.js"]
 }
