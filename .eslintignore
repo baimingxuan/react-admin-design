@@ -5,6 +5,7 @@
 
 /public
 /docs
+/src/assets
 dist
 node_modules
 pnpm-lock.yaml

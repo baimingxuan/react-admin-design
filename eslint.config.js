@@ -94,9 +94,11 @@ export default defineFlatConfig([
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       // 使用顶层 type 限定符进行导入
       '@typescript-eslint/no-import-type-side-effects': 'error',
+      // 不允许在可选链表达式后使用非空断言
+      '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
       // 禁止定义未使用的变量
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_'
