@@ -2,26 +2,29 @@
   "name": "react-admin-design",
   "version": "1.0.0",
   "type": "module",
+  "author": {
+    "name": "baimingxuan",
+    "email": "354372738@qq.com",
+    "url": "https://github.com/baimingxuan"
+  },
   "scripts": {
     "serve": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
     "clean:cache": "rimraf .eslintcache && rimraf node_modules && pnpm install",
-    "lint": "pnpm run lint:eslint && pnpm run lint:prettier",
-    "lint:eslint": "eslint --cache --fix --ext .js,.ts,.tsx ./src",
+    "lint:eslint": "eslint --cache \"{src,mock,build}/**/*.{js,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write \"src/**/*.{js,json,ts,tsx,css,less,html,md}\"",
     "lint:lint-staged": "lint-staged",
     "prepare": "husky install"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
-    "@codemirror/lang-javascript": "^6.2.1",
     "@codemirror/view": "^6.22.0",
     "@loadable/component": "^5.16.3",
     "@logicflow/core": "^1.2.18",
     "@logicflow/extension": "^1.2.19",
     "@reduxjs/toolkit": "^2.0.1",
-    "@uiw/react-codemirror": "^4.21.21",
+    "@uiw/react-codemirror": "^4.21.20",
     "@uiw/react-md-editor": "^3.25.6",
     "@wangeditor/editor": "^5.1.23",
     "ahooks": "^3.7.8",
@@ -57,6 +60,7 @@
     "@babel/core": "^7.23.3",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@eslint/js": "^8.56.0",
     "@types/crypto-js": "^4.2.1",
     "@types/dom-to-image": "^2.6.7",
     "@types/file-saver": "^2.0.7",
@@ -75,7 +79,7 @@
     "cssnano": "^6.0.1",
     "cz-git": "^1.7.1",
     "esbuild": "^0.19.6",
-    "eslint": "^8.54.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -96,6 +100,29 @@
     "vite-plugin-mock": "2.9.8",
     "vite-plugin-svg-icons": "^2.0.1"
   },
+  "keywords": [
+    "react",
+    "react-router",
+    "redux",
+    "redux-toolkit",
+    "vite",
+    "typescript",
+    "react-admin",
+    "react-admin-design"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/baimingxuan/react-admin-design",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baimingxuan/react-admin-design.git"
+  },
+  "bugs": {
+    "url": "https://github.com/baimingxuan/react-admin-design/issues"
+  },
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=8"
+  },
   "lint-staged": {
     "{src,mock,build}/**/*.{js,ts,tsx}": [
       "eslint --fix"
@@ -104,6 +131,18 @@
   "config": {
     "commitizen": {
       "path": "node_modules/cz-git"
+    }
+  },
+  "pnpm": {
+    "allowedDeprecatedVersions": {
+      "stable": "*",
+      "abab": "*",
+      "urix": "*",
+      "domexception": "*",
+      "w3c-hr-time": "*",
+      "resolve-url": "*",
+      "source-map-url": "*",
+      "source-map-resolve": "*"
     }
   }
 }
