@@ -7,9 +7,11 @@
 /docs
 dist
 node_modules
+pnpm-lock.yaml
 
 eslint.config.js
 prettier.config.js
+commitlint.config.js
 
 *.md
 *.woff

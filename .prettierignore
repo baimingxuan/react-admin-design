@@ -4,3 +4,7 @@
 
 .local
 **/*.svg
+
+eslint.config.js
+prettier.config.js
+commitlint.config.js
