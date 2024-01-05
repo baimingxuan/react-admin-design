@@ -1,5 +1,5 @@
 // 配置文档: https://eslint.nodejs.cn/
-import { defineFlatConfig } from "eslint-define-config";
+import { defineFlatConfig } from 'eslint-define-config'
 import configPrettier from 'eslint-config-prettier'
 import pluginPrettier from 'eslint-plugin-prettier'
 import * as parserTypeScript from '@typescript-eslint/parser'
