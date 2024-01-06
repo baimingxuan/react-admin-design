@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 import type { UploadChangeParam } from 'antd/es/upload'
 import { Upload, Button, message } from 'antd'
 

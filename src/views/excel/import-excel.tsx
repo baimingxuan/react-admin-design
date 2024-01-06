@@ -7,7 +7,7 @@ import { PageWrapper } from '@/components/Page'
 import { XLSX_PLUGIN } from '@/settings/websiteSetting'
 import { useExcel } from './useExcel'
 
-const ImportExcel = (props: any) => {
+const ImportExcel = () => {
   const { Dragger } = Upload
   const [tableData, setTableData] = useState<object[]>([])
   const [tableColumns, setTableColumns] = useState<ColumnType<any>[]>([])
@@ -23,7 +23,7 @@ const ImportExcel = (props: any) => {
       return
     }
 
-    const isLimit1M = rawFile.size / 1024 /1024 < 1
+    const isLimit1M = rawFile.size / 1024 / 1024 < 1
     if (!isLimit1M) {
       message.warning('上传的Excel文件大小不能超过1M!')
       return
@@ -37,7 +37,7 @@ const ImportExcel = (props: any) => {
     reader.onload = e => {
       const data = e.target && e.target.result
       const { header, results } = readDataFromExcel(data, 'array')
-      const columns = header.map(key => ({title: key, dataIndex: key, align: 'center'})) as ColumnType<any>[]
+      const columns = header.map(key => ({ title: key, dataIndex: key, align: 'center' })) as ColumnType<any>[]
       setTableColumns(columns)
       setTableData(results as object[])
     }
@@ -50,23 +50,16 @@ const ImportExcel = (props: any) => {
   return (
     <PageWrapper plugin={XLSX_PLUGIN}>
       <Card bordered={false}>
-        <Space direction='vertical' size={16} style={{width: '100%'}}>
-          <Dragger
-            accept='.xlsx, .xls, .csv'
-            showUploadList={false}
-            maxCount={1}
-            onChange={handleChange}
-          >
-            <p className="ant-upload-drag-icon" style={{marginBottom: 0}}>
+        <Space direction='vertical' size={16} style={{ width: '100%' }}>
+          <Dragger accept='.xlsx, .xls, .csv' showUploadList={false} maxCount={1} onChange={handleChange}>
+            <p className='ant-upload-drag-icon' style={{ marginBottom: 0 }}>
               <CloudUploadOutlined rev={undefined} />
             </p>
-            <p>将Excel文件拖到此处, 或<span style={{color: '#1890ff'}}>点击上传</span></p>
+            <p>
+              将Excel文件拖到此处, 或<span style={{ color: '#1890ff' }}>点击上传</span>
+            </p>
           </Dragger>
-          <Table
-            dataSource={tableData}
-            columns={tableColumns}
-            pagination={false}
-          />
+          <Table dataSource={tableData} columns={tableColumns} pagination={false} />
         </Space>
       </Card>
     </PageWrapper>

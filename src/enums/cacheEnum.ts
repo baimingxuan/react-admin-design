@@ -14,5 +14,5 @@ export const APP_SESSION_CACHE_KEY = 'APP_SESSION_CACHE_KEY'
 
 export enum CacheTypeEnum {
   SESSION,
-  LOCAL,
+  LOCAL
 }

@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 import { Card } from 'antd'
 import CountUp from 'react-countup'
 import SvgIcon from '@/components/SvgIcon'
@@ -11,14 +11,9 @@ interface propState {
   countNum: number
 }
 
-const CountUpCard: FC<propState> = (props) => {
-
+const CountUpCard: FC<propState> = props => {
   return (
-    <Card
-      loading={props.loading}
-      bordered={false}
-      bodyStyle={{padding: 0}}
-    >
+    <Card loading={props.loading} bordered={false} bodyStyle={{ padding: 0 }}>
       <div className='flex-center-v'>
         <div
           className='flex-center'
@@ -29,13 +24,9 @@ const CountUpCard: FC<propState> = (props) => {
             background: props.color
           }}
         >
-          <SvgIcon
-            name={props.iconName}
-            size={40}
-            style={{color: '#fff'}}
-          />
+          <SvgIcon name={props.iconName} size={40} style={{ color: '#fff' }} />
         </div>
-        <div style={{ flex: 1, textAlign: 'center'}}>
+        <div style={{ flex: 1, textAlign: 'center' }}>
           <CountUp
             start={0}
             end={props.countNum}
@@ -45,7 +36,7 @@ const CountUpCard: FC<propState> = (props) => {
               color: '#515a6e'
             }}
           />
-          <p style={{fontSize: '16px'}}>{props.title}</p>
+          <p style={{ fontSize: '16px' }}>{props.title}</p>
         </div>
       </div>
     </Card>

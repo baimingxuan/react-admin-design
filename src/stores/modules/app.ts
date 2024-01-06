@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AppState } from '../types'
+import type { AppState } from '../types'
 import { Persistent } from '@/utils/cache/persistent'
 import { APP_CONFIG_KEY } from '@/enums/cacheEnum'
 import { deepMerge } from '@/utils'

@@ -1,6 +1,6 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 import { Form, Select, Checkbox } from 'antd'
-import { ConfigState } from '../types'
+import type { ConfigState } from '../types'
 
 interface PropState {
   config: ConfigState
@@ -18,16 +18,11 @@ const CodeToolbar: FC<PropState> = ({ config, valueChange }) => {
     <div
       className='flex-between-h'
       style={{
-        padding: '8px', border: 'solid 1px #ddd'
+        padding: '8px',
+        border: 'solid 1px #ddd'
       }}
     >
-      <Form
-        form={form}
-        initialValues={{...config}}
-        layout='inline'
-        labelAlign='left'
-        onValuesChange={onValuesChange}
-      >
+      <Form form={form} initialValues={{ ...config }} layout='inline' labelAlign='left' onValuesChange={onValuesChange}>
         <Form.Item label='language' name='language'>
           <Select
             size='small'
@@ -36,7 +31,7 @@ const CodeToolbar: FC<PropState> = ({ config, valueChange }) => {
               { label: 'javascript', value: 'javascript' },
               { label: 'typescript', value: 'typescript' }
             ]}
-            style={{width: '100px'}}
+            style={{ width: '100px' }}
           />
         </Form.Item>
         <Form.Item label='autoFocus' name='autoFocus' valuePropName='checked'>
@@ -53,7 +48,7 @@ const CodeToolbar: FC<PropState> = ({ config, valueChange }) => {
               { label: '350px', value: '350px' },
               { label: '500px', value: '500px' }
             ]}
-            style={{width: '100px'}}
+            style={{ width: '100px' }}
           />
         </Form.Item>
       </Form>

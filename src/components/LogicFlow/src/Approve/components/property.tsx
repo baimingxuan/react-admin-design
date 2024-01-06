@@ -1,7 +1,7 @@
 import { Form, Select, Input, Button } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import { approveUser } from '../config'
-import { IApproveUser } from '../type'
+import type { IApproveUser } from '../type'
 
 // @ts-ignore
 export default function PropertyPanel(nodeData, updateproperty, hidePropertyPanel) {
@@ -25,7 +25,7 @@ export default function PropertyPanel(nodeData, updateproperty, hidePropertyPane
     )
     return Api
   }
-  const onFormLayoutChange = (value: any, all: any) => {
+  const onFormLayoutChange = (value: any, _all: any) => {
     approveUser.forEach(item => {
       if (item.value === value.approveType) {
         value['approveTypeLabel'] = item.label

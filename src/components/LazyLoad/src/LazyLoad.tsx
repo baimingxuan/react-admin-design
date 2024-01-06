@@ -1,5 +1,5 @@
 import type { LoadableComponent } from '@loadable/component'
-import { ReactNode, Suspense } from 'react'
+import { type ReactNode, Suspense } from 'react'
 import { Spin } from 'antd'
 
 /**

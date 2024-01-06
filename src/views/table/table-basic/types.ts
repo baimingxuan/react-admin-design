@@ -1,5 +1,5 @@
 export interface APIResult {
-  list: any[],
+  list: any[]
   total: number
 }
 

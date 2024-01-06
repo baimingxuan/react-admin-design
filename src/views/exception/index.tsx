@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react'
+import type { FC, ReactNode } from 'react'
 import { Result, Card, Button } from 'antd'
 import { useNavigate, useLoaderData } from 'react-router-dom'
 import { PageWrapper } from '@/components/Page'

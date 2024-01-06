@@ -12,5 +12,5 @@ export const getOpenKeys = (path: string) => {
       openKeys.push(pathStr)
     }
   })
-	return openKeys.slice(0, -1)
+  return openKeys.slice(0, -1)
 }

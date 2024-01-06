@@ -15,7 +15,6 @@ interface PageProp {
 }
 
 const PageWrapper = (props: PageProp) => {
-
   function openGithub() {
     openWindow(props.plugin?.url!)
   }
@@ -30,12 +29,12 @@ const PageWrapper = (props: PageProp) => {
         <p>{props.plugin?.desc}</p>
         <p>
           <span>github源码:</span>
-          <Button type='link' size='small' onClick={openGithub}>立即访问</Button>
+          <Button type='link' size='small' onClick={openGithub}>
+            立即访问
+          </Button>
         </p>
       </div>
-      <div className={compoStyle['page-content']}>
-        {props.children}
-      </div>
+      <div className={compoStyle['page-content']}>{props.children}</div>
     </div>
   )
 }

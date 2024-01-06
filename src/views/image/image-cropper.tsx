@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Row, Col, Card, Button, Space } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import { REACT_CROPPER_PLUGIN, CROPPER_IMG_SRC } from '@/settings/websiteSetting'
-import Cropper, { ReactCropperElement } from 'react-cropper'
+import Cropper, { type ReactCropperElement } from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import { downloadImgByUrl } from '@/utils/download'
 import { UploadImage } from '@/components/Upload'
@@ -18,7 +18,7 @@ const ImageCropper: React.FC = () => {
   const downloadImage = () => {
     if (typeof cropperRef.current?.cropper !== 'undefined') {
       const imgUrl = cropperRef.current?.cropper.getCroppedCanvas().toDataURL()
-      
+
       downloadImgByUrl(imgUrl, 'demo.png')
     }
   }
@@ -27,7 +27,7 @@ const ImageCropper: React.FC = () => {
     <PageWrapper plugin={REACT_CROPPER_PLUGIN}>
       <Row gutter={12}>
         <Col span={10}>
-          <Card title='裁剪区域' bordered={false} bodyStyle={{height: '400px'}}>
+          <Card title='裁剪区域' bordered={false} bodyStyle={{ height: '400px' }}>
             <Cropper
               ref={cropperRef}
               src={imgSrc}
@@ -46,16 +46,18 @@ const ImageCropper: React.FC = () => {
         </Col>
         <Col span={4}>
           <Card title='设置区域' bordered={false}>
-            <div className='flex-center' style={{height: '352px'}}>
+            <div className='flex-center' style={{ height: '352px' }}>
               <Space direction='vertical'>
                 <UploadImage onSuccess={handleSuccess} />
-                <Button type='primary' onClick={downloadImage}>下载图片</Button>
+                <Button type='primary' onClick={downloadImage}>
+                  下载图片
+                </Button>
               </Space>
             </div>
           </Card>
         </Col>
         <Col span={10}>
-          <Card title='预览区域' bordered={false} bodyStyle={{height: '400px'}}>
+          <Card title='预览区域' bordered={false} bodyStyle={{ height: '400px' }}>
             <div
               className='img-preview'
               style={{
@@ -63,7 +65,8 @@ const ImageCropper: React.FC = () => {
                 height: '100%',
                 overflow: 'hidden',
                 margin: 'auto'
-              }} />
+              }}
+            />
           </Card>
         </Col>
       </Row>

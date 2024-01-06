@@ -1,11 +1,11 @@
 import type { ColumnsType } from 'antd/es/table'
-import { FC, useState, useEffect } from 'react'
-import { Card, Button, Table, Tag, Select, Switch, Popover, Space, Modal, TableProps } from 'antd'
+import { type FC, useState, useEffect } from 'react'
+import { Card, Button, Table, Tag, Select, Switch, Popover, Space, Modal, type TableProps } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { TABLE_COMPO } from '@/settings/websiteSetting'
 import { getTableList } from '@/api'
 import { PageWrapper } from '@/components/Page'
-import { APIResult, PageState, TableDataType } from './types'
+import type { APIResult, PageState, TableDataType } from './types'
 
 const marriedOptions = [
   { label: '单身', value: 0 },
@@ -15,7 +15,6 @@ const marriedOptions = [
 ]
 
 const TableBasic: FC = () => {
-
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<TableDataType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
@@ -67,11 +66,7 @@ const TableBasic: FC = () => {
       dataIndex: 'married',
       align: 'center',
       render: (text, record: any) => (
-        <Select
-          options={marriedOptions}
-          defaultValue={record.married}
-          onChange={(value) => record.married = value}
-        />
+        <Select options={marriedOptions} defaultValue={record.married} onChange={value => (record.married = value)} />
       )
     },
     {
@@ -79,19 +74,14 @@ const TableBasic: FC = () => {
       dataIndex: 'forbid',
       align: 'center',
       render: (_, record: any) => (
-        <Switch
-          defaultChecked={record.forbid}
-          onChange={(checked) => record.forbid = checked}
-        />
+        <Switch defaultChecked={record.forbid} onChange={checked => (record.forbid = checked)} />
       )
     },
     {
       title: '爱好',
       dataIndex: 'hobby',
       align: 'center',
-      render: (_, record: any) => (
-        <span>{record.hobby.join('、')}</span>
-      )
+      render: (_, record: any) => <span>{record.hobby.join('、')}</span>
     },
     {
       title: '操作',
@@ -100,7 +90,9 @@ const TableBasic: FC = () => {
       render: (_, record: any) => (
         <Space>
           <Button disabled={record.forbid}>编辑</Button>
-          <Button danger onClick={handleDelete}>删除</Button>
+          <Button danger onClick={handleDelete}>
+            删除
+          </Button>
         </Space>
       )
     }

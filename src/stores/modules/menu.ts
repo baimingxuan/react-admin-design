@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { MenuState } from '@/stores/types'
+import type { MenuState } from '@/stores/types'
 
 const initialState: MenuState = {
   menuList: [],

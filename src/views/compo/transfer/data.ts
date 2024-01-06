@@ -1,5 +1,3 @@
-import type { TransferItem, TransferProps } from 'antd/es/transfer'
-
 interface DataState {
   key: string
   title: string
@@ -24,7 +22,7 @@ const treeData: DataState[] = [
       { key: '2-1', title: '备选项 2-1' },
       { key: '2-2', title: '备选项 2-2' },
       { key: '2-3', title: '备选项 2-3' }
-    ],
+    ]
   },
   { key: '3', title: '备选项 3-1' },
   {
@@ -35,9 +33,7 @@ const treeData: DataState[] = [
       {
         key: '4-2',
         title: '备选项 4-2',
-        children: [
-          { key: '4-2-1', title: '备选项 4-2-1' }
-        ]
+        children: [{ key: '4-2-1', title: '备选项 4-2-1' }]
       },
       { key: '4-3', title: '备选项 4-3' }
     ]

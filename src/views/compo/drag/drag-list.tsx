@@ -23,10 +23,7 @@ const DragList: React.FC = () => {
     { name: 'TypeScript', id: 7 }
   ])
 
-  const [dragLogs, setDragLogs] = useState<string[]>([
-    '列表1 => 列表2, 6 => 1',
-    '列表1 => 列表2, 6 => 2'
-  ])
+  const [dragLogs, setDragLogs] = useState<string[]>(['列表1 => 列表2, 6 => 1', '列表1 => 列表2, 6 => 2'])
 
   const handleDrop = (event: any) => {
     const listMap = new Map([
@@ -46,59 +43,71 @@ const DragList: React.FC = () => {
     <PageWrapper plugin={SORTABLE_PLUGIN}>
       <Row gutter={12}>
         <Col span={5}>
-          <Card title='列表1事项' bordered={false} bodyStyle={{height: '520px'}}>
-            <ReactSortable list={listOne} setList={setListOne} onEnd={handleDrop} group='list' className='list1' style={{height: '100%'}}>
-              {
-                listOne.map(item => (
-                  <Card
-                    key={item.id}
-                    hoverable
-                    size='small'
-                    style={{marginBottom: '12px'}}
-                  >
-                    {item.name}
-                  </Card>
-                ))
-              }
+          <Card title='列表1事项' bordered={false} bodyStyle={{ height: '520px' }}>
+            <ReactSortable
+              list={listOne}
+              setList={setListOne}
+              onEnd={handleDrop}
+              group='list'
+              className='list1'
+              style={{ height: '100%' }}
+            >
+              {listOne.map(item => (
+                <Card key={item.id} hoverable size='small' style={{ marginBottom: '12px' }}>
+                  {item.name}
+                </Card>
+              ))}
             </ReactSortable>
           </Card>
         </Col>
         <Col span={5}>
-          <Card title='列表2事项' bordered={false} bodyStyle={{height: '520px'}}>
-            <ReactSortable list={listTwo} setList={setListTwo} onEnd={handleDrop} group='list' className='list2' style={{height: '100%'}}>
-              {
-                listTwo.map(item => (
-                  <Card
-                    key={item.id}
-                    hoverable
-                    size='small'
-                    style={{marginBottom: '12px'}}
-                  >
-                    {item.name}
-                  </Card>
-                ))
-              }
+          <Card title='列表2事项' bordered={false} bodyStyle={{ height: '520px' }}>
+            <ReactSortable
+              list={listTwo}
+              setList={setListTwo}
+              onEnd={handleDrop}
+              group='list'
+              className='list2'
+              style={{ height: '100%' }}
+            >
+              {listTwo.map(item => (
+                <Card key={item.id} hoverable size='small' style={{ marginBottom: '12px' }}>
+                  {item.name}
+                </Card>
+              ))}
             </ReactSortable>
           </Card>
         </Col>
         <Col span={4}>
-          <Card title='操作记录' bordered={false} bodyStyle={{height: '520px'}}>
-            { dragLogs.map(item => {
-              return <p key={item} style={{marginBottom: '8px'}}>{item}</p>
-            }) }
+          <Card title='操作记录' bordered={false} bodyStyle={{ height: '520px' }}>
+            {dragLogs.map(item => {
+              return (
+                <p key={item} style={{ marginBottom: '8px' }}>
+                  {item}
+                </p>
+              )
+            })}
           </Card>
         </Col>
         <Col span={5}>
-          <Card title='列表1数据' bordered={false} bodyStyle={{height: '520px'}}>
+          <Card title='列表1数据' bordered={false} bodyStyle={{ height: '520px' }}>
             <pre>
-              {JSON.stringify(listOne.map(({ name, id }) => ({ name, id })), null, 2)}
+              {JSON.stringify(
+                listOne.map(({ name, id }) => ({ name, id })),
+                null,
+                2
+              )}
             </pre>
           </Card>
         </Col>
         <Col span={5}>
-          <Card title='列表2数据' bordered={false} bodyStyle={{height: '520px'}}>
+          <Card title='列表2数据' bordered={false} bodyStyle={{ height: '520px' }}>
             <pre>
-              {JSON.stringify(listTwo.map(({ name, id }) => ({ name, id })), null, 2)}
+              {JSON.stringify(
+                listTwo.map(({ name, id }) => ({ name, id })),
+                null,
+                2
+              )}
             </pre>
           </Card>
         </Col>

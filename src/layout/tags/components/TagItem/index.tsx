@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 import { Tag } from 'antd'
 import classNames from 'classnames'
 import styles from './index.module.less'

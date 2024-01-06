@@ -1,16 +1,8 @@
-import LogicFlow, {
-  BaseNodeModel,
-  ConnectRule,
-  CircleNodeModel,
-  CircleNode,
-  h,
-  RectNode,
-  RectNodeModel,
-  PolygonNode,
-  PolygonNodeModel
-} from '@logicflow/core'
-import GraphModel from '@logicflow/core/types/model/GraphModel'
-import { nodeProperty } from '../type'
+import type { BaseNodeModel, ConnectRule } from '@logicflow/core'
+import type LogicFlow from '@logicflow/core'
+import { CircleNodeModel, CircleNode, h, RectNode, RectNodeModel, PolygonNode, PolygonNodeModel } from '@logicflow/core'
+import type GraphModel from '@logicflow/core/types/model/GraphModel'
+import type { nodeProperty } from '../type'
 
 export default function RegisteNode(lf: LogicFlow) {
   class ApplyNodeModel extends CircleNodeModel {

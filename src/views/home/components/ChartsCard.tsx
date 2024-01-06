@@ -1,5 +1,5 @@
 import type { EChartsOption } from 'echarts'
-import { FC } from 'react'
+import type { FC } from 'react'
 import { Card } from 'antd'
 import { useECharts } from '@/hooks/web/useECharts'
 
@@ -10,14 +10,10 @@ interface propState {
 }
 
 const ChartsCard: FC<propState> = ({ loading, options, height }) => {
-
   const { chartRef } = useECharts(options, loading)
 
   return (
-    <Card
-      loading={loading}
-      bordered={false}
-    >
+    <Card loading={loading} bordered={false}>
       <div
         ref={chartRef}
         style={{

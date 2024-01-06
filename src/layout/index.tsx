@@ -8,7 +8,7 @@ import './index.less'
 import { useTitle } from '@/hooks/web/useTitle'
 import { useAppSelector } from '@/stores'
 
-export const BasicLayout = (props: any) => {
+export const BasicLayout = () => {
   useTitle()
   const { Sider, Content } = Layout
 

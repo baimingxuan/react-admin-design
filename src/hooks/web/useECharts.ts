@@ -8,7 +8,6 @@ export function useECharts(
   loading: boolean = true,
   theme: 'light' | 'dark' | 'default' = 'default'
 ) {
-
   const chartRef = useRef<HTMLDivElement>(null)
   let chartInstance: echarts.ECharts | null = null
 

@@ -1,18 +1,18 @@
 import type { RouteObject } from '@/router/types'
 
 import { Memory } from './memory'
-import { AppConfig } from '@/types/config'
+import type { AppConfig } from '@/types/config'
 import {
-  TOKEN_KEY,
-  USER_INFO_KEY,
-  APP_CONFIG_KEY,
-  APP_TAGS_KEY,
+  type TOKEN_KEY,
+  type USER_INFO_KEY,
+  type APP_CONFIG_KEY,
+  type APP_TAGS_KEY,
   APP_LOCAL_CACHE_KEY,
   APP_SESSION_CACHE_KEY
 } from '@/enums/cacheEnum'
 import { createLocalStorage, createSessionStorage } from '@/utils/cache'
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting'
-import { UserInfo } from '@/types'
+import type { UserInfo } from '@/types'
 
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined

@@ -9,5 +9,5 @@ export async function getAsyncMenus(): Promise<AppMenu[]> {
     return (a?.orderNo || staticMenus.length) - (b?.orderNo || staticMenus.length)
   })
 
-  return staticMenus.filter((item) => !item.hideMenu)
+  return staticMenus.filter(item => !item.hideMenu)
 }

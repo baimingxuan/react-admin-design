@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import {SlateDescendant, IEditorConfig, createEditor, IDomEditor, SlateEditor, SlateTransforms } from '@wangeditor/editor'
+import { type SlateDescendant, type IEditorConfig, createEditor, type IDomEditor } from '@wangeditor/editor'
 
 interface IProps {
   defaultContent?: SlateDescendant[]
@@ -14,7 +14,17 @@ interface IProps {
 }
 
 function EditorComponent(props: Partial<IProps>) {
-  const { defaultContent = [], onCreated, defaultHtml = '', value = '', onChange, defaultConfig = {}, mode = 'default', style = {}, className } = props
+  const {
+    defaultContent = [],
+    onCreated,
+    defaultHtml = '',
+    value = '',
+    onChange,
+    defaultConfig = {},
+    mode = 'default',
+    style = {},
+    className
+  } = props
   const ref = useRef<HTMLDivElement>(null)
   const [editor, setEditor] = useState<IDomEditor | null>(null)
   const [curValue, setCurValue] = useState('')
@@ -43,7 +53,7 @@ function EditorComponent(props: Partial<IProps>) {
   const handleDestroyed = (editor: IDomEditor) => {
     const { onDestroyed } = defaultConfig
     setEditor(null)
-    if(onDestroyed) {
+    if (onDestroyed) {
       onDestroyed(editor)
     }
   }
@@ -61,7 +71,6 @@ function EditorComponent(props: Partial<IProps>) {
     } catch (error) {
       console.error(error)
     }
-
   }, [value])
 
   useEffect(() => {
@@ -76,11 +85,11 @@ function EditorComponent(props: Partial<IProps>) {
         ...defaultConfig,
         onCreated: handleCreated,
         onChange: handleChanged,
-        onDestroyed: handleDestroyed,
+        onDestroyed: handleDestroyed
       },
       content: defaultContent,
       html: defaultHtml || value,
-      mode,
+      mode
     })
     setEditor(newEditor)
   }, [editor])
