@@ -9,8 +9,10 @@
 dist
 node_modules
 pnpm-lock.yaml
+Dockerfile
 
 eslint.config.js
+postcss.config.js
 prettier.config.js
 commitlint.config.js
 
