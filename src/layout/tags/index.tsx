@@ -1,6 +1,6 @@
 import type { MenuProps } from 'antd'
 import type { RouteObject } from '@/router/types'
-import { FC, WheelEvent, useState, useEffect, useRef } from 'react'
+import { type FC, type WheelEvent, useState, useEffect, useRef } from 'react'
 import { Button, Dropdown } from 'antd'
 import { LeftOutlined, RightOutlined, ExpandOutlined, CompressOutlined, CloseOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'

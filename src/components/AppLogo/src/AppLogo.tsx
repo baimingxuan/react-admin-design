@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 import { Space } from 'antd'
 import { useAppSelector } from '@/stores'
 import classNames from 'classnames'

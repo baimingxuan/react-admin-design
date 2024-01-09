@@ -5,10 +5,10 @@ import { PageWrapper } from '@/components/Page'
 import { treeData } from './data'
 
 interface DataNode {
-  title: string;
-  key: string;
-  isLeaf?: boolean;
-  children?: DataNode[];
+  title: string
+  key: string
+  isLeaf?: boolean
+  children?: DataNode[]
 }
 
 const initTreeData: DataNode[] = [
@@ -43,32 +43,18 @@ const AntdTree = () => {
     <PageWrapper plugin={TREE_COMPO}>
       <Row gutter={12}>
         <Col span={8}>
-          <Card title='可选择节点' bordered={false} bodyStyle={{height: '420px'}}>
-            <Tree
-              treeData={treeData}
-              checkable
-              defaultExpandAll
-            />
+          <Card title='可选择节点' bordered={false} bodyStyle={{ height: '420px' }}>
+            <Tree treeData={treeData} checkable defaultExpandAll />
           </Card>
         </Col>
         <Col span={8}>
-          <Card title='懒加载节点' bordered={false} bodyStyle={{height: '420px'}}>
-            <Tree
-              checkable
-              treeData={lazyTreeData}
-              loadData={handleLoadData}
-            />
+          <Card title='懒加载节点' bordered={false} bodyStyle={{ height: '420px' }}>
+            <Tree checkable treeData={lazyTreeData} loadData={handleLoadData} />
           </Card>
         </Col>
         <Col span={8}>
-          <Card title='可拖拽节点' bordered={false} bodyStyle={{height: '420px'}}>
-            <Tree
-              treeData={treeData}
-              draggable
-              blockNode
-              defaultExpandAll
-              onDrop={handleDrop}
-            />
+          <Card title='可拖拽节点' bordered={false} bodyStyle={{ height: '420px' }}>
+            <Tree treeData={treeData} draggable blockNode defaultExpandAll onDrop={handleDrop} />
           </Card>
         </Col>
       </Row>

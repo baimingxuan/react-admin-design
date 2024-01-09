@@ -19,7 +19,7 @@ import { getImageSize, calcImageSize } from '@/utils/image'
 import { textElement, imageElement, containerObj } from './data'
 
 const VideoWatermark: FC = () => {
-  const [container, setContainer] = useImmer<ContainerState>(containerObj)
+  const [container] = useImmer<ContainerState>(containerObj)
   const [elements, setElements] = useImmer<Array<ElementState>>([textElement, imageElement])
   const [activeElementTag, setActiveElementTag] = useState<string>(elements[0]?.tag || '')
   const [elementIndex, setElementIndex] = useState<number>(elements.length)

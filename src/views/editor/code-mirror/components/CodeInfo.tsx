@@ -1,15 +1,14 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 import { Form } from 'antd'
-import { InfoState } from '../types'
+import type { InfoState } from '../types'
 
 interface PropState {
   info: InfoState
 }
 
 const CodeInfo: FC<PropState> = ({ info }) => {
-
   return (
-    <div style={{padding: '4px 8px', border: 'solid 1px #ddd'}}>
+    <div style={{ padding: '4px 8px', border: 'solid 1px #ddd' }}>
       <Form layout='inline'>
         <Form.Item label='Length'>
           <span>{info.length}</span>

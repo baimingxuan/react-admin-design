@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Form, Button, Card, Input, Radio, Select, Table, Space, message } from 'antd'
-import { ColumnType } from 'antd/es/table'
+import type { ColumnType } from 'antd/es/table'
 import { PageWrapper } from '@/components/Page'
 import { XLSX_PLUGIN } from '@/settings/websiteSetting'
 import { useExcel } from '../useExcel'
-import { DataToSheet } from '../types'
+import type { DataToSheet } from '../types'
 import { tableData } from './data'
 
 type FileType = 'xlsx' | 'csv' | 'txt'
@@ -15,7 +15,7 @@ interface FormState {
   fileType: FileType
 }
 
-const ExportExcel = (props: any) => {
+const ExportExcel = () => {
   const { Item } = Form
   const { Group } = Radio
 
@@ -43,18 +43,13 @@ const ExportExcel = (props: any) => {
     setTableSelectedKeys(selectedKeys)
   }
 
-  function handleTableSelect(
-    _record: object,
-    _selected: boolean,
-    selectedRows: object[]
-  ) {
+  function handleTableSelect(_record: object, _selected: boolean, selectedRows: object[]) {
     setTableSelectedRows(selectedRows)
   }
 
   function handleTableSelectAll(_selected: boolean, selectedRows: object[]) {
     setTableSelectedRows(selectedRows)
   }
-
 
   function handleExport(values: FormState) {
     console.log('values', values)
@@ -68,7 +63,9 @@ const ExportExcel = (props: any) => {
       data: tableSelectedRows,
       header: ['编号', '姓名', '性别', '手机', '学历', '爱好'],
       key: ['key', 'name', 'sex', 'phone', 'education', 'hobby'],
-      fileName, autoWidth, bookType
+      fileName,
+      autoWidth,
+      bookType
     }
     exportDataToExcel(params)
     setTableSelectedKeys([])
@@ -78,8 +75,8 @@ const ExportExcel = (props: any) => {
   return (
     <PageWrapper plugin={XLSX_PLUGIN}>
       <Card bordered={false}>
-        <Space direction='vertical' size={16} style={{width: '100%'}}>
-          <Form layout='inline' autoComplete="off" initialValues={formParam} onFinish={handleExport}>
+        <Space direction='vertical' size={16} style={{ width: '100%' }}>
+          <Form layout='inline' autoComplete='off' initialValues={formParam} onFinish={handleExport}>
             <Item label='文件名:' name='fileName'>
               <Input placeholder='文件名' />
             </Item>
@@ -98,11 +95,13 @@ const ExportExcel = (props: any) => {
                   { label: 'csv', value: 'csv' },
                   { label: 'txt', value: 'txt' }
                 ]}
-                style={{width: '180px'}}
+                style={{ width: '180px' }}
               />
             </Item>
             <Item>
-              <Button type='primary' htmlType='submit'>导出Excel</Button>
+              <Button type='primary' htmlType='submit'>
+                导出Excel
+              </Button>
             </Item>
           </Form>
           <Table

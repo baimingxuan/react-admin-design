@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react'
+import { type FC, useState, useEffect } from 'react'
 import { Row, Col, Card, Button, Space, Form, InputNumber, Select } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import { IMAGE_COMPRESS, COMPRESS_IMG_SRC } from '@/settings/websiteSetting'

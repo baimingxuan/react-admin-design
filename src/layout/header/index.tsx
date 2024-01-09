@@ -2,7 +2,7 @@ import { Layout } from 'antd'
 import { Breadcrumb, FoldTrigger } from './components'
 import LayoutFeature from '../feature'
 
-const LayoutHeader = (props: any) => {
+const LayoutHeader = () => {
   const { Header } = Layout
 
   return (

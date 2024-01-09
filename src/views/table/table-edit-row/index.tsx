@@ -1,10 +1,24 @@
 import React, { useState } from 'react'
-import { Form, Button, Table, Select, Switch, InputNumber, Input, DatePicker, Radio, Checkbox, Card, Popconfirm, Space } from 'antd'
-import { ColumnType } from 'antd/es/table'
+import {
+  Form,
+  Button,
+  Table,
+  Select,
+  Switch,
+  InputNumber,
+  Input,
+  DatePicker,
+  Radio,
+  Checkbox,
+  Card,
+  Popconfirm,
+  Space
+} from 'antd'
+import type { ColumnType } from 'antd/es/table'
 import { PageWrapper } from '@/components/Page'
 import dayjs from 'dayjs'
 import { TABLE_EDIT_COMPO } from '@/settings/websiteSetting'
-import { tableData, DataItem } from './data'
+import { tableData, type DataItem } from './data'
 
 type CellType = 'number' | 'text' | 'radio' | 'date' | 'select' | 'checkbox' | 'switch'
 
@@ -18,7 +32,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode
 }
 
-type theadKey = Record<string, { title: string, type: string }>
+type theadKey = Record<string, { title: string; type: string }>
 const theadMap: theadKey = {
   key: { title: '数字输入框', type: 'number' },
   name: { title: '输入框', type: 'text' },
@@ -37,11 +51,17 @@ const nodeType = (type: CellType, record: DataItem) => {
     case 'text':
       return <Input />
     case 'radio':
-      return <Radio.Group options={['男', '女'].map(item => ({value: item, label: item}))} />
+      return <Radio.Group options={['男', '女'].map(item => ({ value: item, label: item }))} />
     case 'date':
-      return <div><DatePicker defaultValue={dayjs(record.birth, 'YYYY-MM-DD')} format='YYYY-MM-DD' /></div>
+      return (
+        <div>
+          <DatePicker defaultValue={dayjs(record.birth, 'YYYY-MM-DD')} format='YYYY-MM-DD' />
+        </div>
+      )
     case 'select':
-      return <Select options={['初中', '高中', '大专', '本科'].map(item => ({ value: item }))} style={{width: '80px'}} />
+      return (
+        <Select options={['初中', '高中', '大专', '本科'].map(item => ({ value: item }))} style={{ width: '80px' }} />
+      )
     case 'checkbox':
       return <Checkbox.Group options={record.hobby.split('、')} defaultValue={record.hobby.split('、')} />
     case 'switch':
@@ -52,10 +72,8 @@ const nodeType = (type: CellType, record: DataItem) => {
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
-  title,
   cellType,
   record,
-  index,
   children,
   ...restProps
 }) => {
@@ -64,10 +82,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return (
     <td {...restProps}>
       {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-        >
+        <Form.Item name={dataIndex} style={{ margin: 0 }}>
           {cellNode}
         </Form.Item>
       ) : (
@@ -78,7 +93,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
 }
 
 const TableEditRow: React.FC = () => {
-
   const [form] = Form.useForm()
   const [data, setData] = useState(tableData)
   const [editingKey, setEditingKey] = useState('')
@@ -99,7 +113,7 @@ const TableEditRow: React.FC = () => {
       const row = (await form.validateFields()) as DataItem
 
       const newData = [...data]
-      const index = newData.findIndex((item) => key === item.key)
+      const index = newData.findIndex(item => key === item.key)
 
       if (index > -1) {
         const item = newData[index]
@@ -115,7 +129,7 @@ const TableEditRow: React.FC = () => {
         setEditingKey('')
       }
     } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
+      console.log('Validate Failed:', errInfo)
     }
   }
 
@@ -219,9 +233,7 @@ const TableEditRow: React.FC = () => {
       editable: true,
       align: 'center',
       render: (text: string, record: DataItem) => {
-        return (
-          <span>{record.forbid ? '是' : '否'}</span>
-        )
+        return <span>{record.forbid ? '是' : '否'}</span>
       }
     },
     {
@@ -236,37 +248,29 @@ const TableEditRow: React.FC = () => {
       dataIndex: 'action',
       width: 70,
       align: 'center',
-      render:  (_: any, record: DataItem) => {
+      render: (_: any, record: DataItem) => {
         const editable = isEditing(record)
         return editable ? (
           <Space>
-            <Button
-              type='primary'
-              ghost
-              onClick={() => save(record.key)}
-            >保存</Button>
-            <Popconfirm
-              title='是否取消编辑？'
-              onConfirm={cancel}
-            >
-              <Button
-                type='primary'
-                danger
-                ghost
-              >取消</Button>
+            <Button type='primary' ghost onClick={() => save(record.key)}>
+              保存
+            </Button>
+            <Popconfirm title='是否取消编辑？' onConfirm={cancel}>
+              <Button type='primary' danger ghost>
+                取消
+              </Button>
             </Popconfirm>
           </Space>
         ) : (
-          <Button
-            disabled={editingKey !== ''}
-            onClick={() => edit(record)}
-          >编辑</Button>
+          <Button disabled={editingKey !== ''} onClick={() => edit(record)}>
+            编辑
+          </Button>
         )
       }
     }
   ]
 
-  const mergedColumns = columns.map((col) => {
+  const mergedColumns = columns.map(col => {
     if (!col.editable) {
       return col
     }

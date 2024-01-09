@@ -1,6 +1,6 @@
-import LogicFlow from '@logicflow/core'
+import type LogicFlow from '@logicflow/core'
 import { approveNodes } from '../config'
-import { HtmlNodeConfig } from '../type'
+import type { HtmlNodeConfig } from '../type'
 
 export default function NodePanel(lf: LogicFlow) {
   // 拖拽创建

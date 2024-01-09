@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { type FC, useState } from 'react'
 import { Card, Form, Radio, Switch } from 'antd'
 import { PageWrapper } from '@/components/Page'
 import { React_TREE_ORG_PLUGIN } from '@/settings/websiteSetting'
@@ -15,15 +15,15 @@ const OrgTreePage: FC = () => {
 
   const onValuesChange = (values: any) => {
     console.log('values', values)
-    setConfig({...config, ...values})
+    setConfig({ ...config, ...values })
   }
 
   return (
     <PageWrapper plugin={React_TREE_ORG_PLUGIN}>
-      <Card bordered={false} bodyStyle={{minHeight: '400px'}}>
+      <Card bordered={false} bodyStyle={{ minHeight: '400px' }}>
         <Form
           form={form}
-          initialValues={{...config}}
+          initialValues={{ ...config }}
           layout='inline'
           labelAlign='left'
           onValuesChange={onValuesChange}
@@ -38,13 +38,8 @@ const OrgTreePage: FC = () => {
             <Switch />
           </Form.Item>
         </Form>
-        <div style={{textAlign: 'center'}}>
-          <OrgTree
-            data={data}
-            collapsable={true}
-            horizontal={config.horizontal}
-            expandAll={config.expandAll}
-          />
+        <div style={{ textAlign: 'center' }}>
+          <OrgTree data={data} collapsable={true} horizontal={config.horizontal} expandAll={config.expandAll} />
         </div>
       </Card>
     </PageWrapper>

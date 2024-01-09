@@ -1,5 +1,5 @@
 import { lazy } from '@loadable/component'
-import { RouteObject } from '../types'
+import type { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
 import { ExceptionEnum } from '@/enums/exceptionEnum'
 import { LazyLoad } from '@/components/LazyLoad'

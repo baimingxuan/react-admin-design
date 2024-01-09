@@ -1,8 +1,8 @@
 // import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RouteObject } from '@/router/types'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { TagsState } from '@/stores/types'
-import { RootState, AppDispatch } from '..'
+import type { TagsState } from '@/stores/types'
+import type { RootState, AppDispatch } from '..'
 
 const initialState: TagsState = {
   visitedTags: [],

@@ -1,6 +1,6 @@
 import type { FormInstance } from 'antd/es/form'
 import type { LoginParams, UserInfo } from '@/types'
-import { FC, useRef, useState } from 'react'
+import { type FC, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Input, Checkbox, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'

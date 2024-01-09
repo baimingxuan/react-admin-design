@@ -21,7 +21,7 @@ function ToolbarComponent(props: IProps) {
       editor,
       selector: ref.current,
       config: defaultConfig,
-      mode,
+      mode
     })
   }, [editor])
 

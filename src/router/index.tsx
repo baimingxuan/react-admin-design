@@ -1,4 +1,4 @@
-import { RouteObject } from './types'
+import type { RouteObject } from './types'
 import { Navigate, createHashRouter, redirect } from 'react-router-dom'
 import { genFullPath } from './helpers'
 import { ExceptionEnum } from '@/enums/exceptionEnum'
