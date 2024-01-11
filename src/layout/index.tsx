@@ -1,5 +1,5 @@
 import { Layout } from 'antd'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import LayoutMenu from './menu'
 import LayoutHeader from './header'
 import LayoutTags from './tags'
@@ -11,8 +11,9 @@ import { useAppSelector } from '@/stores'
 export const BasicLayout = () => {
   useTitle()
   const { Sider, Content } = Layout
-
-  const getMenuFold = useAppSelector(state => state.app.appConfig?.menuSetting?.menuFold)
+  const { state } = useLocation()
+  const { key = 'key' } = state || {}
+  const getMenuFold = useAppSelector(st => st.app.appConfig?.menuSetting?.menuFold)
 
   return (
     <Layout className='layout_wrapper'>
@@ -25,7 +26,7 @@ export const BasicLayout = () => {
         <Layout id='mainCont'>
           <LayoutTags />
           <Content>
-            <Outlet />
+            <Outlet key={key} />
           </Content>
         </Layout>
       </Layout>

@@ -2,7 +2,14 @@ import type { MenuProps } from 'antd'
 import type { RouteObject } from '@/router/types'
 import { type FC, type WheelEvent, useState, useEffect, useRef } from 'react'
 import { Button, Dropdown } from 'antd'
-import { LeftOutlined, RightOutlined, ExpandOutlined, CompressOutlined, CloseOutlined } from '@ant-design/icons'
+import {
+  LeftOutlined,
+  RightOutlined,
+  ExpandOutlined,
+  CompressOutlined,
+  CloseOutlined,
+  RedoOutlined
+} from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useFullscreen } from 'ahooks'
 import { TagItem } from './components'
@@ -174,7 +181,17 @@ const LayoutTags: FC = () => {
     setActiveTag(path)
     navigate(path)
   }
-
+  const getKey = () => {
+    return new Date().getTime().toString()
+  }
+  const handleReload = () => {
+    // 刷新当前路由，页面不刷新
+    const index = visitedTags.findIndex(tab => tab.fullPath === activeTag)
+    if (index >= 0) {
+      // 这个是react的特性，key变了，组件会卸载重新渲染
+      navigate(activeTag, { replace: true, state: { key: getKey() } })
+    }
+  }
   return (
     <div className={styles['layout_tags']}>
       <Button
@@ -211,6 +228,12 @@ const LayoutTags: FC = () => {
         icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
         size='small'
         onClick={() => toggleFullscreen()}
+      />
+      <Button
+        className={classNames(`${styles.layout_tags}__btn`, `${styles.layout_tags}__btn-space`)}
+        icon={<RedoOutlined />}
+        size='small'
+        onClick={() => handleReload()}
       />
       <Dropdown menu={{ items, onClick }} placement='bottomLeft'>
         <Button
