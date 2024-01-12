@@ -53,7 +53,7 @@ export default defineFlatConfig([
     languageOptions: {
       parser: parserTypeScript,
       parserOptions: {
-        ecmaVersion: 7,
+        ecmaVersion: 2020,
         sourceType: 'module',
         jsxPragma: 'React',
         ecmaFeatures: {
