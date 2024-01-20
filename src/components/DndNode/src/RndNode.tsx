@@ -65,6 +65,12 @@ const RndNode: FC<PropState> = props => {
   }, [element.active])
 
   useEffect(() => {
+    if (element.type === 'text') {
+      calcTextNodeHeight({ x: nodeData.x, y: nodeData.y } as Position)
+    }
+  }, [element])
+
+  useEffect(() => {
     onChange?.({ ...element, x: nodeData.x, y: nodeData.y, w: nodeData.width, h: nodeData.height, active })
   }, [active, nodeData])
 
