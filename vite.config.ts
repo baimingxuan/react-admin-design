@@ -23,6 +23,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     server: {
       // Listening on all local ips
       host: true,
+      open: true,
       port: VITE_PORT
     },
     plugins: [
