@@ -1,6 +1,5 @@
-import type { FormInstance } from 'antd/es/form'
 import type { LoginParams, UserInfo } from '@/types'
-import { type FC, useRef, useState } from 'react'
+import { type FC, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Input, Checkbox, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -11,11 +10,10 @@ import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { loginApi, getUserInfo } from '@/api'
 import logoIcon from '@/assets/images/logo_name.png'
 import classNames from 'classnames'
-import './index.less'
+import styles from './index.module.less'
 
 const LoginPage: FC = () => {
   const [form] = Form.useForm()
-  const loginFormRef = useRef<FormInstance>(null)
   const [loading, setLoading] = useState(false)
 
   const dispatch = useAppDispatch()
@@ -92,21 +90,20 @@ const LoginPage: FC = () => {
   }
 
   return (
-    <div className='login-wrapper'>
-      <div className='login-box'>
-        <div className='login-box-title'>
+    <div className={styles['login-wrapper']}>
+      <div className={styles['login-box']}>
+        <div className={styles['login-box-title']}>
           <img src={logoIcon} alt='icon' />
           <p>账 号 登 录</p>
         </div>
         <Form
-          ref={loginFormRef}
           form={form}
           initialValues={{
             username: 'admin',
             password: '123456',
             remember: true
           }}
-          className='login-box-form'
+          className={styles['login-box-form']}
           onFinish={handleLogin}
         >
           <Form.Item name='username' rules={[{ required: true, message: '请输入账号' }]}>
@@ -123,15 +120,15 @@ const LoginPage: FC = () => {
             />
           </Form.Item>
           <Form.Item>
-            <Form.Item name='remember' className={classNames('fl', 'no-margin')} valuePropName='checked'>
+            <Form.Item name='remember' className={classNames('fl', styles['no-margin'])} valuePropName='checked'>
               <Checkbox>记住我</Checkbox>
             </Form.Item>
-            <Form.Item className={classNames('fr', 'no-margin')}>
+            <Form.Item className={classNames('fr', styles['no-margin'])}>
               <a href=''>忘记密码？</a>
             </Form.Item>
           </Form.Item>
           <Form.Item>
-            <Button type='primary' htmlType='submit' className='login-btn' loading={loading}>
+            <Button type='primary' htmlType='submit' className={styles['login-btn']} loading={loading}>
               登 录
             </Button>
           </Form.Item>
