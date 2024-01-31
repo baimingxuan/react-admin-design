@@ -12,7 +12,7 @@ interface FormState {
   height: number
   ratio: number
   quality: number
-  type: string
+  mimeType: string
 }
 
 interface ImageState {
@@ -27,7 +27,7 @@ const defaultForm: FormState = {
   height: 1080,
   ratio: 100,
   quality: 1,
-  type: 'image/png'
+  mimeType: 'image/png'
 }
 
 const defaultImage: ImageState = {
@@ -57,13 +57,16 @@ const ImageCompress: FC = () => {
   }
 
   const handleChange = (value: number, type: 'width' | 'height') => {
-    const getCalcVal = Number(Math.round(value / imageInfo.aspectRatio).toFixed(0))
+    const getCalcVal =
+      type === 'width'
+        ? Number(Math.round(value * imageInfo.aspectRatio).toFixed(0))
+        : Number(Math.round(value / imageInfo.aspectRatio).toFixed(0))
     const ratio = Number(Math.round((getCalcVal / imageInfo[type]) * 100).toFixed(2))
     form.setFieldsValue({ [type]: getCalcVal, ratio })
   }
 
   const onFinish = (values: FormState) => {
-    const { width, height, quality, type: mimeType } = values
+    const { width, height, quality, mimeType } = values
     const fileType = mimeType.replace(/image\//, '') || 'png'
     compressImage(imageInfo.imgSrc, { width, height, quality, mimeType }).then((img: string) => {
       downloadImgByBase64(img, `compress-image.${fileType}`)
@@ -149,7 +152,7 @@ const ImageCompress: FC = () => {
                   ]}
                 />
               </Form.Item>
-              <Form.Item label='图片格式' name='type'>
+              <Form.Item label='图片格式' name='mimeType'>
                 <Select
                   options={[
                     { value: 'image/png', label: 'PNG' },

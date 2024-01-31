@@ -14,7 +14,6 @@ const OrgTreePage: FC = () => {
   })
 
   const onValuesChange = (values: any) => {
-    console.log('values', values)
     setConfig({ ...config, ...values })
   }
 

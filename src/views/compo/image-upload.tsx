@@ -5,6 +5,7 @@ import { Row, Col, Card, Button, Upload, Modal } from 'antd'
 import { CloudUploadOutlined, PlusOutlined } from '@ant-design/icons'
 import { PageWrapper } from '@/components/Page'
 import { UPLOAD_COMPO } from '@/settings/websiteSetting'
+import { UPLOAD_IMG_SRC, UPLOAD_IMG_SRC2 } from '@/settings/websiteSetting'
 
 const ImageUpload: React.FC = () => {
   const { Dragger } = Upload
@@ -22,15 +23,15 @@ const ImageUpload: React.FC = () => {
       uid: '-1',
       name: 'beautiful-girl.jpg',
       status: 'done',
-      url: 'https://cdn.jsdelivr.net/gh/baimingxuan/media-store/images/img04.jpg',
-      thumbUrl: 'https://cdn.jsdelivr.net/gh/baimingxuan/media-store/images/img04.jpg'
+      url: UPLOAD_IMG_SRC,
+      thumbUrl: UPLOAD_IMG_SRC
     },
     {
       uid: '-2',
       name: 'beautiful-sunshine.jpg',
       status: 'done',
-      url: 'https://cdn.jsdelivr.net/gh/baimingxuan/media-store/images/img03.jpg',
-      thumbUrl: 'https://cdn.jsdelivr.net/gh/baimingxuan/media-store/images/img03.jpg'
+      url: UPLOAD_IMG_SRC2,
+      thumbUrl: UPLOAD_IMG_SRC2
     }
   ])
 
