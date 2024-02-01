@@ -1,6 +1,20 @@
 import type { ColumnsType } from 'antd/es/table'
 import { type FC, useState, useEffect } from 'react'
-import { Card, Button, Table, Tag, Select, Switch, Popover, Space, Modal, type TableProps } from 'antd'
+import {
+  type TableProps,
+  Card,
+  Button,
+  Table,
+  Tag,
+  Switch,
+  Popover,
+  Space,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Checkbox
+} from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { TABLE_COMPO } from '@/settings/websiteSetting'
 import { getTableList } from '@/api'
@@ -19,6 +33,10 @@ const TableBasic: FC = () => {
   const [tableData, setTableData] = useState<TableDataType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
   const [tableQuery, setTableQuery] = useState<PageState>({ current: 1, pageSize: 10 })
+
+  const [form] = Form.useForm()
+  const [modalVisibel, setModalVisibel] = useState<boolean>(false)
+  const [editHobbys, setEditHobbys] = useState<string[]>([])
 
   const columns: ColumnsType<TableDataType> = [
     {
@@ -89,7 +107,9 @@ const TableBasic: FC = () => {
       align: 'center',
       render: (_, record: any) => (
         <Space>
-          <Button disabled={record.forbid}>编辑</Button>
+          <Button disabled={record.forbid} onClick={() => handleEdit(record)}>
+            编辑
+          </Button>
           <Button danger onClick={handleDelete}>
             删除
           </Button>
@@ -137,6 +157,22 @@ const TableBasic: FC = () => {
     })
   }
 
+  function handleEdit(record: TableDataType) {
+    form.setFieldsValue({ ...record })
+    setEditHobbys(record.hobby)
+    setModalVisibel(true)
+  }
+
+  function handleConfirm() {
+    // 调用接口
+    setModalVisibel(false)
+  }
+
+  function handleCancle() {
+    setEditHobbys([])
+    setModalVisibel(false)
+  }
+
   return (
     <PageWrapper plugin={TABLE_COMPO}>
       <Card bordered={false}>
@@ -156,6 +192,36 @@ const TableBasic: FC = () => {
             onChange: handlePageChange
           }}
         />
+        <Modal
+          open={modalVisibel}
+          title='编辑'
+          width='600px'
+          okText='确定'
+          cancelText='取消'
+          onCancel={handleCancle}
+          onOk={handleConfirm}
+        >
+          <Form
+            form={form}
+            colon={false}
+            labelCol={{ span: 4 }}
+            labelAlign='left'
+            style={{ width: '80%', margin: '0 auto' }}
+          >
+            <Form.Item label='姓名' name='name'>
+              <Input disabled />
+            </Form.Item>
+            <Form.Item label='手机' name='phone'>
+              <Input placeholder='请输入手机号码' />
+            </Form.Item>
+            <Form.Item label='学历' name='education'>
+              <Select options={['初中', '高中', '大专', '本科'].map(item => ({ value: item }))} />
+            </Form.Item>
+            <Form.Item label='爱好' name='hobby'>
+              <Checkbox.Group options={editHobbys.map(item => ({ label: item, value: item }))} />
+            </Form.Item>
+          </Form>
+        </Modal>
       </Card>
     </PageWrapper>
   )
