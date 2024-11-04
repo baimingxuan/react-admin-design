@@ -16,7 +16,7 @@ const getEducation = () => {
 }
 
 const getMarried = () => {
-  return Math.floor(Math.random() * 4)
+  return Math.floor(Math.random() * 400)
 }
 
 const getHobby = () => {
@@ -48,6 +48,22 @@ const genList = () => {
   return list
 }
 
+const getAllList = () => {
+  const list: any[] = []
+  for (let index = 0; index < 100; index++) {
+    const num = index < 10 ? '0' + index : index
+    list.push({
+      id: Number(`10${num}`) + 1,
+      time: Number(`10${num}`) + 1,
+      user: getMarried(),
+      information: getMarried(),
+      news_flash: getMarried(),
+      ai: getMarried(),
+    })
+  }
+  return list
+}
+
 export default [
   {
     url: '/api/table/getTableList',
@@ -56,6 +72,15 @@ export default [
     response: ({ query }) => {
       const { current = 1, pageSize = 10 } = query
       return resultPageSuccess(current, pageSize, genList())
+    }
+  },
+  {
+    url: '/api/table/getAllTableList',
+    timeout: 200,
+    method: 'get',
+    response: ({ query }) => {
+      const { current = 1, pageSize = 10 } = query
+      return resultPageSuccess(current, pageSize, getAllList())
     }
   }
 ] as MockMethod[]

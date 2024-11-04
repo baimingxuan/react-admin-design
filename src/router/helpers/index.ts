@@ -21,11 +21,13 @@ export function transformRouteToMenu(routes: RouteObject[]) {
   const cloneRoutes = cloneDeep(routes)
   const routeList: RouteObject[] = []
 
-  cloneRoutes.forEach(item => {
+  cloneRoutes.forEach((item: any) => {
     if (item.meta!.hideChildrenInMenu) {
       item.children = []
     }
-
+    if (item.children?.length > 0) {
+      item.children = item.children?.filter(((item: { meta: { hideMenu: any } }) => !item.meta?.hideMenu))
+    }
     routeList.push(item)
   })
 

@@ -30,6 +30,15 @@ export function logoutApi() {
   })
 }
 
+// All Table list
+export function getTableAllList(params: any) {
+  return service({
+    url: '/table/getAllTableList',
+    method: 'get',
+    params
+  })
+}
+
 // Table list
 export function getTableList(params: any) {
   return service({
