@@ -16,25 +16,32 @@ const TextEditorRoute: RouteObject = {
     },
     children: [
         {
-            path: 'label',
-            name: 'Label',
-            element: LazyLoad(lazy(() => import('@/views/exception'))),
-            loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: true }),
-            meta: {
-                title: '快讯源列表',
-                key: 'news-flash-label'
-            }
-        },
-        {
-            path: 'list',
-            name: 'List',
-            element: LazyLoad(lazy(() => import('@/views/exception'))),
-            loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: true }),
+            path: 'news-flash-list',
+            name: 'NewsFlashList',
+            element: LazyLoad(lazy(() => import('@/views/news-flash/news-flash-list'))),
             meta: {
                 title: '快讯列表',
                 key: 'news-flash-list'
             }
-        }
+        },
+        {
+            path: 'news-flash-label',
+            name: 'NewsFlashLabel',
+            element: LazyLoad(lazy(() => import('@/views/news-flash/news-flash-label'))),
+            meta: {
+                title: '快讯标签',
+                key: 'news-flash-label'
+            }
+        },
+        {
+            path: 'news-flash-source',
+            name: 'NewsFlashSource',
+            element: LazyLoad(lazy(() => import('@/views/news-flash/news-flash-source'))),
+            meta: {
+                title: '快讯源列表',
+                key: 'news-flash-source'
+            }
+        },
     ]
 }
 

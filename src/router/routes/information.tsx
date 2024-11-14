@@ -16,19 +16,57 @@ const TextEditorRoute: RouteObject = {
     },
     children: [
         {
-            path: 'list',
-            name: 'List',
-            element: LazyLoad(lazy(() => import('@/views/exception'))),
-            loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: true }),
+            path: 'information-content',
+            name: 'InformationContent',
             meta: {
-                title: '资讯列表',
-                key: 'information-list',
-            }
+                title: '资讯内容管理',
+                key: 'information-content',
+            },
+            children: [
+                {
+                    path: 'information-list',
+                    name: 'InformationList',
+                    element: LazyLoad(lazy(() => import('@/views/information/information-content/information-list'))),
+                    meta: {
+                        title: '资讯列表',
+                        key: 'information-list',
+                    },
+                },
+                {
+                    path: "information-detail",
+                    name: "InformationDetail",
+                    element: LazyLoad(lazy(() => import('@/views/information/information-content/information-detail'))),
+                    meta: {
+                        title: '资讯详情',
+                        key: 'information-detail',
+                    },
+                },
+                {
+                    path: "information-edit",
+                    name: "InformationEdit",
+                    element: LazyLoad(lazy(() => import("@/views/information/information-content/information-edit"))),
+                    loader: () => ({ id: 0 }),
+                    meta: {
+                        title: '修改资讯',
+                        key: 'information-edit',
+                    },
+                },
+                {
+                    path: "information-add",
+                    name: "InformationAdd",
+                    element: LazyLoad(lazy(() => import("@/views/information/information-content/information-edit"))),
+                    loader: () => ({ id: 'add' }),
+                    meta: {
+                        title: '新增资讯',
+                        key: 'information-add',
+                    },
+                }
+            ]
         },
         {
-            path: 'label',
-            name: 'Label',
-            element: LazyLoad(lazy(() => import('@/views/exception'))),
+            path: 'information-label',
+            name: 'InformationLabel',
+            element: LazyLoad(lazy(() => import('@/views/information/information-lable'))),
             loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: true }),
             meta: {
                 title: '资讯标签',
@@ -36,37 +74,14 @@ const TextEditorRoute: RouteObject = {
             },
         },
         {
-            path: 'special-topic',
-            name: 'SpecialTopic',
-            element: LazyLoad(lazy(() => import('@/views/exception'))),
-            loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: true }),
+            path: 'information-special-topic',
+            name: 'InformationSpecialTopic',
+            element: LazyLoad(lazy(() => import('@/views/information/information-special-topic'))),
             meta: {
                 title: '资讯专题',
                 key: 'information-special-topic'
             }
         },
-        {
-            path: "detail",
-            name: "Detail",
-            element: LazyLoad(lazy(() => import('@/views/exception'))),
-            loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: true }),
-            meta: {
-                title: '资讯详情',
-                key: 'information-detail',
-                hideMenu: true
-            },
-        },
-        {
-            path: "new",
-            name: "New",
-            element: LazyLoad(lazy(() => import('@/views/exception'))),
-            loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: true }),
-            meta: {
-                title: '新增资讯',
-                key: 'information-new',
-                hideMenu: true
-            },
-        }
     ]
 }
 

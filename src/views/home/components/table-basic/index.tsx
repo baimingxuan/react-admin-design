@@ -5,41 +5,44 @@ import {
   Card,
   Table,
 } from 'antd'
-import { getTableAllList } from '@/api'
-import type { APIResult, PageState, TableDataType } from './types'
+import { getHomeAllList } from '@/api'
+import type { APIResult, PageState, TableAllDataType } from './types'
+import dayjs from 'dayjs'
 
 const TableBasic: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
-  const [tableData, setTableData] = useState<TableDataType[]>([])
+  const [tableData, setTableData] = useState<TableAllDataType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
   const [tableQuery, setTableQuery] = useState<PageState>({ current: 1, pageSize: 10 })
 
 
-  const columns: ColumnsType<TableDataType> = [
+  const columns: ColumnsType<TableAllDataType> = [
     {
       title: '日期',
-      dataIndex: 'time',
+      dataIndex: 'create_time',
       align: 'center',
-      sorter: true
+      render: (create_time) => {
+        return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      }
     },
     {
       title: '新增人数（人）',
-      dataIndex: 'user',
+      dataIndex: 'user_number',
       align: 'center'
     },
     {
       title: '新增资讯',
-      dataIndex: 'information',
+      dataIndex: 'information_number',
       align: 'center'
     },
     {
       title: '新增快讯',
-      dataIndex: 'news_flash',
+      dataIndex: 'news_flash_number',
       align: 'center'
     },
     {
       title: '新增AI问答',
-      dataIndex: 'ai',
+      dataIndex: 'ai_number',
       align: 'center'
     },
   ]
@@ -56,7 +59,7 @@ const TableBasic: FC = () => {
 
   async function fetchData() {
     setTableLoading(true)
-    const data = await getTableAllList(tableQuery)
+    const data = await getHomeAllList(tableQuery)
     const { list, total } = data as unknown as APIResult
     setTableData(list)
     setTableTotal(total)

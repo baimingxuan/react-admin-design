@@ -8,11 +8,11 @@ export interface PageState {
   pageSize: number
 }
 
-export interface TableDataType {
+export interface TableAllDataType {
   id: number
-  time: number
-  user: number
-  information: number
-  news_flash: number
-  ai: number
+  create_time: string
+  user_number: number
+  information_number: number
+  news_flash_number: number
+  ai_number: number
 }

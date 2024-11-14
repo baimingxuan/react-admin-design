@@ -5,13 +5,10 @@ import { Button, Dropdown } from 'antd'
 import {
   LeftOutlined,
   RightOutlined,
-  ExpandOutlined,
-  CompressOutlined,
   CloseOutlined,
   RedoOutlined
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useFullscreen } from 'ahooks'
 import { TagItem } from './components'
 import { basicRoutes } from '@/router'
 import { useAppSelector, useAppDispatch } from '@/stores'
@@ -48,7 +45,6 @@ const LayoutTags: FC = () => {
 
   const [canMove, setCanMove] = useState(false)
   const [tagsContLeft, setTagsContLeft] = useState(0)
-  const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.querySelector('#mainCont')!)
 
   const { pathname } = useLocation()
   const navigate = useNavigate()

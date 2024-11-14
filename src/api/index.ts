@@ -30,19 +30,82 @@ export function logoutApi() {
   })
 }
 
-// All Table list
-export function getTableAllList(params: any) {
+// User list
+export function getUserList(params: any) {
   return service({
-    url: '/table/getAllTableList',
+    url: '/getUserList',
     method: 'get',
     params
   })
 }
 
-// Table list
-export function getTableList(params: any) {
+// home page data
+export function getHomeAllList(params: any) {
   return service({
-    url: '/table/getTableList',
+    url: '/home/getAllList',
+    method: 'get',
+    params
+  })
+}
+
+// Information list
+export function getInformationList(params: any) {
+  return service({
+    url: '/information/getInformationList',
+    method: 'get',
+    params
+  })
+}
+
+// Information label list
+export function getInformationLabelList(params: any) {
+  return service({
+    url: '/information/getInformationLabelList',
+    method: 'get',
+    params
+  })
+}
+
+// Information special topic list
+export function getInformationSpecialTopicList(params: any) {
+  return service({
+    url: '/information/getInformationSpecialTopicList',
+    method: 'get',
+    params
+  })
+}
+
+// Information detail by id
+export function getInformationDetailById(params: { id: number }) {
+  return service({
+    url: '/information/getInformationDetailById',
+    method: 'get',
+    params
+  })
+}
+
+// News Flash label list
+export function getNewsFlashLabelList(params: any) {
+  return service({
+    url: '/newsFlash/getNewsFlashLabelList',
+    method: 'get',
+    params
+  })
+}
+
+// News Flash list
+export function getNewsFlashList(params: any) {
+  return service({
+    url: '/newsFlash/getNewsFlashList',
+    method: 'get',
+    params
+  })
+}
+
+// News Flash source list
+export function getNewsFlashSourceList(params: any) {
+  return service({
+    url: '/newsFlash/getNewsFlashSourceList',
     method: 'get',
     params
   })
