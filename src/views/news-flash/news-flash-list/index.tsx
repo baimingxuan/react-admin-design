@@ -20,6 +20,7 @@ import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { getNewsFlashList } from '@/api'
 import dayjs from 'dayjs'
 const { TextArea } = Input;
+const { RangePicker } = DatePicker;
 
 const NewsFlashList: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
@@ -29,6 +30,8 @@ const NewsFlashList: FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
   const [selectLanguage, setSelectLanguage] = useState<string>('zh')
   const [selectLable, setSelectLable] = useState<string>('1')
+  const [selectDate, setSelectDate] = useState<any>(null)
+  const [searchValue, setSearchValue] = useState<string>('')
 
   const [form] = Form.useForm()
   const [modalVisibel, setModalVisibel] = useState<boolean>(false)
@@ -61,15 +64,15 @@ const NewsFlashList: FC = () => {
       title: '快讯标签',
       dataIndex: 'news_flash_label',
       align: 'center',
-      render: (news_flash_label) => {
+      render: (news_flash_label, record) => {
         return news_flash_label?.map((label: API.NewsFlashLabelType) => {
-          return <Tag color="orange">{label.label_name}</Tag>
+          return <Tag color="orange" key={record.id + label.label_name}>{label.label_name}</Tag>
         })
       }
     },
     {
       title: '创建时间',
-      dataIndex: 'create_time ',
+      dataIndex: 'create_time',
       align: 'center',
       render: (create_time) => {
         return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
@@ -125,12 +128,11 @@ const NewsFlashList: FC = () => {
     }
   }
 
-
   useEffect(() => {
     fetchData()
   }, [tableQuery])
 
-  async function fetchData() {
+  async function fetchData(searchValue?: string, selectDate?: any) {
     setTableLoading(true)
     const data = await getNewsFlashList(tableQuery)
     const { list, total } = data as unknown as API.APIResult
@@ -218,14 +220,14 @@ const NewsFlashList: FC = () => {
             </Space>
             <Space>
               <h3>筛选日期：</h3>
-              <DatePicker /> - <DatePicker />
-              <Button type='primary'>筛选</Button>
+              <RangePicker onChange={(value) => { setSelectDate(value) }} value={selectDate} />
+              <Button type='primary' onClick={() => fetchData(searchValue, selectDate)}>筛选</Button>
             </Space>
             <Space>
               <h3>搜索：</h3>
-              <Input placeholder='请输入搜索内容' />
-              <Button type='primary'>搜索</Button>
-              <Button type='primary' danger>重置</Button>
+              <Input placeholder='请输入搜索内容' onChange={(e) => { setSearchValue(e.target.value) }} value={searchValue} />
+              <Button type='primary' onClick={() => fetchData(searchValue, selectDate)}>搜索</Button>
+              <Button type='primary' danger onClick={() => fetchData()}>重置</Button>
             </Space>
           </Space>
         </div>
@@ -253,6 +255,7 @@ const NewsFlashList: FC = () => {
           title='修改快讯'
           width='600px'
           footer={null}
+          forceRender
         >
           <Form
             form={form}
@@ -290,7 +293,7 @@ const NewsFlashList: FC = () => {
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 20, offset: 16 }}>
-              <Button type='primary' htmlType='submit'>
+              <Button type='primary' htmlType="button">
                 确认
               </Button>
               <Button style={{ marginLeft: '12px' }} onClick={handleCancle}>

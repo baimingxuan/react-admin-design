@@ -159,7 +159,7 @@ const InformationEdit: FC = () => {
                 <Input style={{ width: '100%' }} placeholder='请输入英文专题' />
               </Form.Item>
               <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯封面</h3>} name='information_background_img' rules={formRules.all}>
-                <Card title='' bordered={false} bodyStyle={{ height: '150px' }}>
+                <Card title='' bordered={false} styles={{ body: { height: '150px' } }} >
                   <Upload
                     fileList={listImgs}
                     action='https://www.mocky.io/v2/5cc8019d300000980a055e76'

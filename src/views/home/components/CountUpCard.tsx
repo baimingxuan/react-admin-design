@@ -13,7 +13,7 @@ interface propState {
 
 const CountUpCard: FC<propState> = props => {
   return (
-    <Card loading={props.loading} bordered={false} bodyStyle={{ padding: 0 }}>
+    <Card loading={props.loading} bordered={false} styles={{ body: { padding: 0 } }}>
       <div className='flex-center-v'>
         <div
           className='flex-center'

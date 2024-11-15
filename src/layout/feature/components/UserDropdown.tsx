@@ -1,6 +1,6 @@
 import type { MenuProps } from 'antd'
 import { Space, Dropdown } from 'antd'
-import { LockOutlined, PoweroffOutlined } from '@ant-design/icons'
+import { PoweroffOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { getAuthCache, clearAuthCache } from '@/utils/auth'
 import { TOKEN_KEY } from '@/enums/cacheEnum'
@@ -12,15 +12,6 @@ import headerImg from '@/assets/images/avatar.jpeg'
 
 export default function UserDropdown() {
   const items: MenuProps['items'] = [
-    {
-      key: 'lock',
-      label: (
-        <Space size={4}>
-          <LockOutlined rev={undefined} />
-          <span>锁定屏幕</span>
-        </Space>
-      )
-    },
     {
       key: 'logout',
       label: (
@@ -34,9 +25,6 @@ export default function UserDropdown() {
 
   const onClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
-      case 'lock':
-        handleLock()
-        break
       case 'logout':
         handleLogout()
         break
@@ -51,7 +39,6 @@ export default function UserDropdown() {
     return token || getAuthCache<string>(TOKEN_KEY)
   }
 
-  const handleLock = () => {}
 
   const handleLogout = () => {
     const { createConfirm } = useMessage()

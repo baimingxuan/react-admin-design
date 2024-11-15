@@ -29,12 +29,12 @@ const InformationSpecialTopicList: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<API.InformationSpecialTopicType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
-  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 15 })
+  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 10 })
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
   const [selectLanguage, setSelectLanguage] = useState<string>('zh')
-  const [loadingSwitchId, setLoadingSwitchId] = useState<number>(-1)
   const [showAddTable, setShowAddTable] = useState<boolean>(false)
-  const [informationSpecialTopicDetail, setInformationSpecialTopicDetail] = useState<API.InformationSpecialTopicType | null>(null)
+  const [loadingEdit, setLoadingEdit] = useState<boolean>(false)
+
   const [listImgs, setListImgs] = useState<UploadFile[]>([
     {
       uid: '-1',
@@ -44,6 +44,7 @@ const InformationSpecialTopicList: FC = () => {
       thumbUrl: UPLOAD_IMG_SRC
     }
   ])
+
   const columns: ColumnsType<API.InformationSpecialTopicType> = [
     {
       title: '专题ID',
@@ -79,6 +80,16 @@ const InformationSpecialTopicList: FC = () => {
       }
     },
     {
+      title: '更新人',
+      dataIndex: 'update_user',
+      align: 'center',
+      render: (update_user) => {
+        return (
+          <Tag color='blue'>{update_user}</Tag>
+        )
+      }
+    },
+    {
       title: '创建时间',
       dataIndex: 'create_time',
       align: 'center',
@@ -87,11 +98,27 @@ const InformationSpecialTopicList: FC = () => {
       }
     },
     {
+      title: '更新时间',
+      dataIndex: 'update_time',
+      align: 'center',
+      render: (update_time) => {
+        return <span>{dayjs(update_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      }
+    },
+    {
+      title: '专题封面',
+      dataIndex: 'special_topic_background_img',
+      align: 'center',
+      render: (special_topic_background_img) => {
+        return <img src={special_topic_background_img} alt='专题封面' style={{ width: '100px', height: 'auto' }} />
+      }
+    },
+    {
       title: '专题禁用状态',
       dataIndex: 'special_topic_status',
       align: 'center',
       render: (special_topic_status, record) => (
-        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" loading={loadingSwitchId == record.id} checked={special_topic_status} onClick={() => handleSwitchChange(special_topic_status, record)} />
+        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" checked={special_topic_status} onClick={() => handleSwitchStatus(special_topic_status, record)} />
       )
     },
     {
@@ -103,7 +130,7 @@ const InformationSpecialTopicList: FC = () => {
           <Button type="primary" onClick={() => { handleEdit(record.id) }}>
             修改
           </Button>
-          <Button type="dashed" danger onClick={() => { handleDelete(record.id) }}>
+          <Button type="dashed" danger onClick={() => { handleDelete([record.id]) }}>
             删除
           </Button>
         </Space>
@@ -136,16 +163,16 @@ const InformationSpecialTopicList: FC = () => {
     setTableQuery({ ...tableQuery, current: page, pageSize })
   }
 
-  function handleDelete(id: number) {
-    if (id) {
+  function handleDelete(ids: number[]) {
+    if (ids.length > 0) {
       Modal.confirm({
-        title: '此操作将删除该标签, 是否继续?',
+        title: '此操作将删除该专题, 是否继续?',
         icon: <ExclamationCircleOutlined rev={undefined} />,
         okType: 'danger',
         okText: '删除',
         cancelText: '取消',
         onOk() {
-          console.log('OK')
+          return deleteSpecialTopic(ids)
         },
         onCancel() {
           console.log('Cancel')
@@ -153,16 +180,16 @@ const InformationSpecialTopicList: FC = () => {
       })
     } else {
       if (selectedRowKeys.length === 0) {
-        message.error('请选择要删除的标签')
+        message.error('请选择要删除的专题')
       } else {
         Modal.confirm({
-          title: '此操作将删除选中标签, 是否继续?',
+          title: '此操作将删除选中专题, 是否继续?',
           icon: <ExclamationCircleOutlined rev={undefined} />,
           okType: 'danger',
           okText: '删除',
           cancelText: '取消',
           onOk() {
-            console.log('OK')
+            return deleteSpecialTopic(selectedRowKeys)
           },
           onCancel() {
             console.log('Cancel')
@@ -172,10 +199,17 @@ const InformationSpecialTopicList: FC = () => {
     }
   }
 
+  async function deleteSpecialTopic(ids: number[]) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 1000);
+    })
+  }
+
   function handleEdit(id: number) {
     let item = tableData.find((item) => item.id === id)
     form.setFieldsValue({ ...item })
-    setInformationSpecialTopicDetail(item || null)
     setListImgs([{
       uid: '-1',
       name: 'beautiful-girl.jpg',
@@ -188,7 +222,6 @@ const InformationSpecialTopicList: FC = () => {
 
   function addInformationSpecialTopic() {
     setShowAddTable(true)
-    setInformationSpecialTopicDetail(null)
     form.resetFields()
     form.setFieldsValue({})
     setListImgs([{
@@ -200,17 +233,76 @@ const InformationSpecialTopicList: FC = () => {
     }])
   }
 
-  function handleSwitchChange(checked: boolean, record: API.InformationSpecialTopicType) {
-    setLoadingSwitchId(record.id)
-    console.log(checked)
+  function handleSwitchStatus(checked: boolean, record: API.InformationSpecialTopicType) {
+    if (checked) {
+      Modal.confirm({
+        title: '此操作将禁用专题, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'danger',
+        okText: '禁用',
+        cancelText: '取消',
+        onOk() {
+          return switchStatus(!checked, record)
+        },
+        onCancel() {
+        }
+      })
+    } else {
+      Modal.confirm({
+        title: '此操作将启用专题, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'danger',
+        okText: '启用',
+        cancelText: '取消',
+        onOk() {
+          return switchStatus(!checked, record)
+        },
+        onCancel() {
+        }
+      })
+    }
+  }
+
+  async function switchStatus(checked: boolean, record: API.InformationSpecialTopicType) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => { resolve(true) }, 1000)
+    }).then(() => {
+      message.success('操作成功')
+      setTableData(tableData.map((item) => {
+        if (item.id === record.id) {
+          return { ...item, special_topic_status: checked }
+        }
+        return item
+      }))
+    }).catch(() => {
+      message.error('操作失败')
+    })
   }
 
   const onFinish = (values: any) => {
-    console.log('Success:', values)
-    setShowAddTable(false)
+    setLoadingEdit(true)
+    if (values.create_user) {
+      editOnFinish(values)
+    } else {
+      addOnFinish(values)
+    }
   }
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setListImgs(newFileList)
+  const editOnFinish = async (values: any) => {
+    setTimeout(() => {
+      setLoadingEdit(false)
+      setShowAddTable(false)
+    }, 1000);
+  }
+
+  const addOnFinish = async (values: any) => {
+    setTimeout(() => {
+      setLoadingEdit(false)
+      setShowAddTable(false)
+    }, 1000);
+  }
+
+  const updateListImgs: UploadProps['onChange'] = ({ fileList: newFileList }) => setListImgs(newFileList)
 
   return (
     <>
@@ -218,7 +310,7 @@ const InformationSpecialTopicList: FC = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Space>
             <Button type='primary' onClick={() => { addInformationSpecialTopic() }}><PlusOutlined />新增专题</Button>
-            <Button type='primary' danger onClick={() => { handleDelete(0) }}><DeleteOutlined />批量删除</Button>
+            <Button type='primary' danger onClick={() => { handleDelete([]) }}><DeleteOutlined />批量删除</Button>
             <Space>
               <h3>选择语言:</h3>
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
@@ -254,22 +346,12 @@ const InformationSpecialTopicList: FC = () => {
           }}
         />
         <Modal
-          open={loadingSwitchId !== -1}
-          title='禁用专题'
-          width='400px'
-          okText='禁用'
-          cancelText='取消'
-          onCancel={() => setLoadingSwitchId(-1)}
-          onOk={() => setLoadingSwitchId(-1)}
-        >
-          专题被禁用后线上将不再显示，推荐位也不会显示该专题
-        </Modal>
-        <Modal
           open={showAddTable}
-          title={informationSpecialTopicDetail ? '修改专题' : '新增专题'}
+          title={form.getFieldValue('create_user') ? '修改专题' : '新增专题'}
           closable={false}
           footer={null}
-          width='800px'
+          width='1000px'
+          forceRender
         >
           <Form form={form} onFinish={onFinish}>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(中文)</h4>} name='special_topic_name_zh' rules={[{ required: true, message: '请输入专题名称' }]}>
@@ -285,7 +367,7 @@ const InformationSpecialTopicList: FC = () => {
               <TextArea rows={4} />
             </Form.Item>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题封面</h4>} name='special_topic_background_img' rules={[{ required: true, message: '请上传专题封面' }]}>
-              <Card title='' bordered={false} bodyStyle={{ height: '150px' }}>
+              <Card title='' bordered={false} styles={{ body: { height: '150px' } }}>
                 <Upload
                   fileList={listImgs}
                   action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
@@ -293,7 +375,7 @@ const InformationSpecialTopicList: FC = () => {
                   listType='picture-card'
                   className='list-upload'
                   style={{ height: '100px', width: 'auto' }}
-                  onChange={handleChange}
+                  onChange={updateListImgs}
                   maxCount={1}
                 >
                   {listImgs.length === 0 && (
@@ -305,8 +387,22 @@ const InformationSpecialTopicList: FC = () => {
                 </Upload>
               </Card>
             </Form.Item>
+            {
+              form.getFieldValue('create_user') ? <>
+                <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题禁用状态</h4>} name='special_topic_status' rules={[{ required: true, message: '请选择专题禁用状态' }]}>
+                  <Select>
+                    <Select.Option value={true}>上线中</Select.Option>
+                    <Select.Option value={false}>已禁用</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>创建人</h4>} name='create_user' hidden>
+                  <Input />
+                </Form.Item>
+              </> : null
+            }
+
             <Form.Item wrapperCol={{ span: 12, offset: 14 }}>
-              <Button type='primary' htmlType='submit'>
+              <Button type='primary' htmlType='submit' loading={loadingEdit}>
                 确认
               </Button>
               <Button style={{ marginLeft: '12px' }} onClick={() => { setShowAddTable(false); }}>

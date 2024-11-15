@@ -11,7 +11,8 @@ import {
   Modal,
   Input,
   message,
-  Form
+  Form,
+  Select
 } from 'antd'
 import { DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { getNewsFlashLabelList } from '@/api'
@@ -24,8 +25,8 @@ const NewsFlashLabelList: FC = () => {
   const [tableTotal, setTableTotal] = useState<number>(0)
   const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 15 })
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
-  const [loadingSwitchId, setLoadingSwitchId] = useState<number>(-1)
   const [showAddTable, setShowAddTable] = useState<boolean>(false)
+  const [loadingEdit, setLoadingEdit] = useState<boolean>(false)
   const columns: ColumnsType<API.NewsFlashLabelType> = [
     {
       title: '标签ID',
@@ -54,6 +55,16 @@ const NewsFlashLabelList: FC = () => {
       }
     },
     {
+      title: '更新人',
+      dataIndex: 'update_user',
+      align: 'center',
+      render: (update_user) => {
+        return (
+          <Tag color='blue'>{update_user}</Tag>
+        )
+      }
+    },
+    {
       title: '创建时间',
       dataIndex: 'create_time',
       align: 'center',
@@ -62,11 +73,19 @@ const NewsFlashLabelList: FC = () => {
       }
     },
     {
+      title: '更新时间',
+      dataIndex: 'update_time',
+      align: 'center',
+      render: (update_time) => {
+        return <span>{dayjs(update_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      }
+    },
+    {
       title: '标签禁用状态',
       dataIndex: 'label_status',
       align: 'center',
       render: (label_status, record) => (
-        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" loading={loadingSwitchId == record.id} checked={label_status} onClick={() => handleSwitchChange(label_status, record)} />
+        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" checked={label_status} onClick={() => handleSwitchChange(label_status, record)} />
       )
     },
     {
@@ -75,8 +94,11 @@ const NewsFlashLabelList: FC = () => {
       align: 'center',
       render: (_, record: API.InformationLabelType) => (
         <Space>
-          <Button type="dashed" danger onClick={() => { handleDelete(record.id) }}>
+          <Button type="dashed" danger onClick={() => { handleDelete([record.id]) }}>
             删除
+          </Button>
+          <Button type="primary" onClick={() => { handleEdit(record) }}>
+            修改
           </Button>
         </Space>
       )
@@ -108,8 +130,8 @@ const NewsFlashLabelList: FC = () => {
     setTableQuery({ ...tableQuery, current: page, pageSize })
   }
 
-  function handleDelete(id: number) {
-    if (id) {
+  function handleDelete(ids: number[]) {
+    if (ids.length > 0) {
       Modal.confirm({
         title: '此操作将删除该标签, 是否继续?',
         icon: <ExclamationCircleOutlined rev={undefined} />,
@@ -117,7 +139,7 @@ const NewsFlashLabelList: FC = () => {
         okText: '删除',
         cancelText: '取消',
         onOk() {
-          console.log('OK')
+          return Delete(ids)
         },
         onCancel() {
           console.log('Cancel')
@@ -134,7 +156,7 @@ const NewsFlashLabelList: FC = () => {
           okText: '删除',
           cancelText: '取消',
           onOk() {
-            console.log('OK')
+            return Delete(selectedRowKeys)
           },
           onCancel() {
             console.log('Cancel')
@@ -144,14 +166,92 @@ const NewsFlashLabelList: FC = () => {
     }
   }
 
-  function handleSwitchChange(checked: boolean, record: API.InformationLabelType) {
-    setLoadingSwitchId(record.id)
-    console.log(checked)
+  async function Delete(ids: number[]) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => { resolve(true) }, 1000)
+    }).then(() => {
+      setTableData(tableData.filter(item => !ids.includes(item.id)))
+      message.success('操作成功')
+    }).catch(() => {
+      message.error('操作失败')
+    })
   }
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
-    setShowAddTable(false)
+  function handleEdit(record: API.InformationLabelType) {
+    setShowAddTable(true)
+    form.setFieldsValue(record)
+  }
+
+  function handleAdd() {
+    setShowAddTable(true)
+    form.resetFields()
+  }
+
+  function handleSwitchChange(checked: boolean, record: API.InformationLabelType) {
+    if (checked) {
+      Modal.confirm({
+        title: '此操作将禁用该标签, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'danger',
+        okText: '禁用',
+        cancelText: '取消',
+        onOk() {
+          return onSwitchChange(!checked, record)
+        },
+        onCancel() {
+          console.log('Cancel')
+        }
+      })
+    } else {
+      Modal.confirm({
+        title: '此操作将启用该标签, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'primary',
+        okText: '启用',
+        cancelText: '取消',
+        onOk() {
+          return onSwitchChange(!checked, record)
+        },
+        onCancel() {
+          console.log('Cancel')
+        }
+      })
+    }
+  }
+
+  async function onSwitchChange(checked: boolean, record: API.InformationLabelType) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 1000)
+    }).then(() => {
+      setTableData(tableData.map(item => item.id === record.id ? { ...item, label_status: checked } : item))
+    }).catch(() => {
+      message.error('操作失败')
+    })
+  }
+
+  const onFinishEdit = (values: any) => {
+    setLoadingEdit(true)
+    if (values.create_user) {
+      return Edit(values)
+    } else {
+      return Add(values)
+    }
+  }
+
+  const Edit = (values: any) => {
+    setTimeout(() => {
+      setLoadingEdit(false)
+      setShowAddTable(false)
+    }, 1000)
+  }
+
+  const Add = (values: any) => {
+    setTimeout(() => {
+      setLoadingEdit(false)
+      setShowAddTable(false)
+    }, 1000)
   }
 
   return (
@@ -159,8 +259,8 @@ const NewsFlashLabelList: FC = () => {
       <Card bordered={false}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Space>
-            <Button type='primary' onClick={() => { setShowAddTable(true) }}><PlusOutlined />新增标签</Button>
-            <Button type='primary' danger onClick={() => { handleDelete(0) }}><DeleteOutlined />批量删除</Button>
+            <Button type='primary' onClick={() => { handleAdd() }}><PlusOutlined />新增标签</Button>
+            <Button type='primary' danger onClick={() => { handleDelete([]) }}><DeleteOutlined />批量删除</Button>
           </Space>
           <Space>
             <h3>搜索：</h3>
@@ -189,32 +289,35 @@ const NewsFlashLabelList: FC = () => {
           }}
         />
         <Modal
-          open={loadingSwitchId !== -1}
-          title='禁用标签'
-          width='400px'
-          okText='禁用'
-          cancelText='取消'
-          onCancel={() => setLoadingSwitchId(-1)}
-          onOk={() => setLoadingSwitchId(-1)}
-        >
-          标签被禁用后线上将不再显示，推荐位也不会显示该标签
-        </Modal>
-        <Modal
           open={showAddTable}
-          title='新增标签'
+          title={form?.getFieldValue('create_user') ? '修改标签' : '新增标签'}
           closable={false}
           footer={null}
+          forceRender
         >
-          <Form form={form} onFinish={onFinish}>
+          <Form form={form} onFinish={onFinishEdit}>
             <Form.Item label='标签名称' name='label_name' rules={[{ required: true, message: '请输入标签名称' }, { max: 6, message: '标签名称长度不能超过6个字符' }]}>
               <Input />
             </Form.Item>
+            {
+              form?.getFieldValue('create_user') ? <>
+                <Form.Item label='标签状态' name='label_status' rules={[{ required: true, message: '请选择标签状态' }]}>
+                  <Select options={[{ label: '上线中', value: true }, { label: '已禁用', value: false }]} />
+                </Form.Item>
+                <Form.Item label='创建人' name='create_user' hidden>
+                  <Input disabled />
+                </Form.Item>
+                <Form.Item label='id' name='id' hidden>
+                  <Input disabled />
+                </Form.Item>
+              </> : null
+            }
             <Form.Item wrapperCol={{ span: 12, offset: 14 }}>
-              <Button type='primary' htmlType='submit'>
-                确认新增
+              <Button type='primary' htmlType='submit' loading={loadingEdit}>
+                确认{form?.getFieldValue('create_user') ? '修改' : '新增'}
               </Button>
               <Button style={{ marginLeft: '12px' }} onClick={() => { setShowAddTable(false) }}>
-                取消新增
+                取消{form?.getFieldValue('create_user') ? '修改' : '新增'}
               </Button>
             </Form.Item>
           </Form>
