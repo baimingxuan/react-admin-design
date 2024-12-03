@@ -7,7 +7,7 @@ import { useAppSelector, useAppDispatch } from '@/stores'
 import { setToken, setUserInfo, setSessionTimeout } from '@/stores/modules/user'
 import { getAuthCache } from '@/utils/auth'
 import { TOKEN_KEY } from '@/enums/cacheEnum'
-import { loginApi, getUserInfo } from '@/api'
+import { loginApi } from '@/api'
 import logoIcon from '@/assets/images/logo_name.png'
 import classNames from 'classnames'
 import styles from './index.module.less'
@@ -30,7 +30,7 @@ const LoginPage: FC = () => {
     try {
       setLoading(true)
       const userInfo = await loginAction({
-        username: values.username,
+        name: values.username,
         password: values.password
       })
       if (userInfo) {
@@ -51,9 +51,8 @@ const LoginPage: FC = () => {
     try {
       const { goHome = true, ...loginParams } = params
       const data = await loginApi(loginParams)
-
       // 保存 Token
-      dispatch(setToken(data?.token))
+      dispatch(setToken(data.data.jwtToken))
       return afterLoginAction(goHome)
     } catch (error) {
       return Promise.reject(error)
@@ -81,12 +80,15 @@ const LoginPage: FC = () => {
 
   const getUserInfoAction = async (): Promise<UserInfo | null> => {
     if (!getToken()) return null
+    dispatch(setUserInfo({
+      userId: "",
+      username: form.getFieldValue("username"),
+      realName: "",
+      avatar: "",
+      token: ""
+    }))
 
-    const userInfo = await getUserInfo()
-
-    dispatch(setUserInfo(userInfo))
-
-    return userInfo
+    return null
   }
 
   return (
@@ -99,8 +101,8 @@ const LoginPage: FC = () => {
         <Form
           form={form}
           initialValues={{
-            username: 'admin',
-            password: '123456',
+            username: '',
+            password: '',
             remember: true
           }}
           className={styles['login-box-form']}

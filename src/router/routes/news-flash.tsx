@@ -2,7 +2,6 @@ import { lazy } from '@loadable/component'
 import type { RouteObject } from '../types'
 import { LayoutGuard } from '../guard'
 import { LazyLoad } from '@/components/LazyLoad'
-import { ExceptionEnum } from '@/enums/exceptionEnum'
 
 // information module page
 const TextEditorRoute: RouteObject = {
@@ -22,15 +21,6 @@ const TextEditorRoute: RouteObject = {
             meta: {
                 title: '快讯列表',
                 key: 'news-flash-list'
-            }
-        },
-        {
-            path: 'news-flash-label',
-            name: 'NewsFlashLabel',
-            element: LazyLoad(lazy(() => import('@/views/news-flash/news-flash-label'))),
-            meta: {
-                title: '快讯标签',
-                key: 'news-flash-label'
             }
         },
         {

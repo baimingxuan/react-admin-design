@@ -15,7 +15,7 @@ const NewsFlashSourceList: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<API.NewsFlashSourceType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
-  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 15 })
+  const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 15 })
   const [searchValue, setSearchValue] = useState<string>('')
 
   const columns: ColumnsType<API.NewsFlashSourceType> = [
@@ -27,62 +27,62 @@ const NewsFlashSourceList: FC = () => {
     },
     {
       title: '上次采集时间',
-      dataIndex: 'last_collect_time',
+      dataIndex: 'lastCollectTime',
       align: 'center',
-      render: (last_collect_time) => {
-        return <span>{dayjs(last_collect_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (lastCollectTime) => {
+        return <span>{dayjs(lastCollectTime).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '上次采集数量',
-      dataIndex: 'last_collect_num',
+      dataIndex: 'lastCollectNum',
       align: 'center'
     },
     {
       title: '采集总数',
-      dataIndex: 'collect_total_num',
+      dataIndex: 'collectTotalNum',
       align: 'center'
     },
     {
       title: '来源地址',
-      dataIndex: 'source_site_url',
+      dataIndex: 'sourceSiteUrl',
       align: 'center',
-      render: (source_site_url) => {
+      render: (sourceSiteUrl) => {
         return (
-          <a href={source_site_url} style={{ color: 'blue' }} target='_blank'>{source_site_url}</a>
+          <a href={sourceSiteUrl} style={{ color: 'blue' }} target='_blank'>{sourceSiteUrl}</a>
         )
       }
     },
     {
       title: '接口状态',
-      dataIndex: 'source_status',
+      dataIndex: 'sourceStatus',
       align: 'center',
-      render: (source_status, record) => {
-        return source_status ? <Tag color="green">正常</Tag> : <Tag color="red">异常</Tag>
+      render: (sourceStatus, record) => {
+        return sourceStatus ? <Tag color="green">正常</Tag> : <Tag color="red">异常</Tag>
       }
     }
   ]
   // change page
-  function handlePageChange(page: number, pageSize: number) {
-    setTableQuery({ ...tableQuery, current: page, pageSize })
+  function handlePageChange(page: number, size: number) {
+    setTableQuery({ ...tableQuery, page, size })
   }
 
   // fetch data
   async function fetchData(value: string) {
     setTableLoading(true)
     const data = await getNewsFlashSourceList(tableQuery)
-    const { list, total } = data as unknown as API.APIResult
-    setTableData(list)
-    setTableTotal(total)
+    // const { list, total } = data as unknown as API.APIResult
+    // setTableData(list)
+    // setTableTotal(total)
     setTableLoading(false)
   }
 
   // fetch data when page change
   useEffect(() => {
-    if (tableQuery.current !== 0 && tableQuery.pageSize !== 0) {
+    if (tableQuery.page !== 0 && tableQuery.size !== 0) {
       fetchData(searchValue)
     }
-  }, [tableQuery.current, tableQuery.pageSize])
+  }, [tableQuery.page, tableQuery.size])
 
   return (
     <>
@@ -105,8 +105,8 @@ const NewsFlashSourceList: FC = () => {
           dataSource={tableData}
           loading={tableLoading}
           pagination={{
-            current: tableQuery.current,
-            pageSize: tableQuery.pageSize,
+            current: tableQuery.page,
+            pageSize: tableQuery.size,
             total: tableTotal,
             showTotal: () => `Total ${tableTotal} items`,
             showSizeChanger: true,

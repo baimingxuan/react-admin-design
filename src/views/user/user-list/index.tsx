@@ -12,14 +12,14 @@ import {
   message
 } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
-import { getUserList } from '@/api'
+import { getUserList, postUserIsActive } from '@/api'
 import dayjs from 'dayjs'
 
 const UserList: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<API.UserType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
-  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 15 })
+  const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 15 })
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
   const [searchValue, setSearchValue] = useState<string>('')
 
@@ -32,56 +32,79 @@ const UserList: FC = () => {
       sorter: (a, b) => a.id - b.id
     },
     {
+      title: '用户名',
+      dataIndex: 'nickname',
+      align: 'center',
+      render: (nickname) => {
+        return <Tag color='blue'>{nickname}</Tag>
+      }
+    },
+    {
+      title: 'UUID',
+      dataIndex: 'uuid',
+      align: 'center'
+    },
+    {
       title: '邮箱',
       dataIndex: 'email',
       align: 'center'
     },
     {
-      title: '钱包地址',
-      dataIndex: 'wallet_address',
+      title: '钱包地址(vsys)',
+      dataIndex: 'vsysAddress',
       align: 'center'
     },
     {
-      title: '用户名',
-      dataIndex: 'username',
-      align: 'center',
-      render: (username) => {
-        return <Tag color='blue'>{username}</Tag>
-      }
+      title: '钱包地址(solana)',
+      dataIndex: 'solanaAddress',
+      align: 'center'
     },
     {
-      title: '点赞（次）',
-      dataIndex: 'like_num',
-      align: 'center',
-      sorter: (a, b) => a.like_num - b.like_num
+      title: '钱包地址(ton)',
+      dataIndex: 'tonAddress',
+      align: 'center'
     },
     {
-      title: '收藏文章（篇）',
-      dataIndex: 'collect_num',
-      align: 'center',
-      sorter: (a, b) => a.collect_num - b.collect_num
-    },
-    {
-      title: 'AI互动（次）',
-      dataIndex: 'ai_interaction_num',
-      align: 'center',
-      sorter: (a, b) => a.ai_interaction_num - b.ai_interaction_num
+      title: '钱包地址(phantom)',
+      dataIndex: 'phantomAddress',
+      align: 'center'
     },
     {
       title: '注册时间',
-      dataIndex: 'create_time',
+      dataIndex: 'createdAt',
       align: 'center',
-      sorter: (a, b) => a.create_time.localeCompare(b.create_time),
-      render: (create_time) => {
-        return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
+      render: (createdAt) => {
+        return <span>{dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+      }
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updatedAt',
+      align: 'center',
+      render: (updatedAt) => {
+        return <span>{dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+      }
+    },
+    {
+      title: '活跃天数',
+      dataIndex: 'actionDays',
+      align: 'center'
+    },
+    {
+      title: '今日活跃',
+      dataIndex: 'actionToday',
+      align: 'center',
+      render: (actionToday) => {
+        return actionToday ? <Tag color='green'>是</Tag> : <Tag color='red'>否</Tag>
       }
     },
     {
       title: '操作',
-      dataIndex: 'user_status',
+      dataIndex: 'isActive',
       align: 'center',
-      render: (user_status, record) => {
-        return user_status ? <Button type='primary' danger onClick={() => handleBatchBlack(record.id)}>拉黑</Button> : <Button type='primary' ghost onClick={() => handleBatchRestore(record.id)}>恢复</Button>
+      render: (isActive, record) => {
+        return isActive ? <Button type='primary' danger onClick={() => handleBatchBlack(record.id)}>拉黑</Button> : <Button type='primary' ghost onClick={() => handleBatchRestore(record.id)}>恢复</Button>
       }
     }
   ]
@@ -94,26 +117,32 @@ const UserList: FC = () => {
   }
 
   // change page
-  function handlePageChange(page: number, pageSize: number) {
-    setTableQuery({ ...tableQuery, current: page, pageSize })
+  function handlePageChange(page: number, size: number) {
+    setTableQuery({ ...tableQuery, page, size })
   }
 
   // fetch data
-  async function fetchData(value: string) {
+  async function fetchData(value?: string) {
     setTableLoading(true)
-    const data = await getUserList(tableQuery)
-    const { list, total } = data as unknown as API.APIResult
-    setTableData(list)
-    setTableTotal(total)
-    setTableLoading(false)
+    getUserList({ ...tableQuery, nickname: value }).then((res: any) => {
+      if (res.code === 0) {
+        const { data, total } = res.data
+        setTableData(data)
+        setTableTotal(total)
+      } else {
+        message.error(res.message)
+      }
+    }).finally(() => {
+      setTableLoading(false)
+    })
   }
 
   // fetch data when page change
   useEffect(() => {
-    if (tableQuery.current !== 0 && tableQuery.pageSize !== 0) {
+    if (tableQuery.page !== 0 && tableQuery.size !== 0) {
       fetchData(searchValue)
     }
-  }, [tableQuery.current, tableQuery.pageSize])
+  }, [tableQuery.page, tableQuery.size])
 
   // batch black
   function handleBatchBlack(id: number) {
@@ -125,7 +154,7 @@ const UserList: FC = () => {
         okText: '拉黑',
         cancelText: '取消',
         onOk() {
-          console.log('OK')
+          handleUpdateUserIsActive([id], false)
         },
         onCancel() {
           console.log('Cancel')
@@ -142,7 +171,7 @@ const UserList: FC = () => {
           okText: '拉黑',
           cancelText: '取消',
           onOk() {
-            console.log('OK')
+            handleUpdateUserIsActive(selectedRowKeys, false)
           },
           onCancel() {
             console.log('Cancel')
@@ -160,10 +189,22 @@ const UserList: FC = () => {
       okText: '恢复',
       cancelText: '取消',
       onOk() {
-        console.log('OK')
+        handleUpdateUserIsActive([id], true)
       },
       onCancel() {
         console.log('Cancel')
+      }
+    })
+  }
+
+  // update user is active
+  function handleUpdateUserIsActive(ids: number[], isActive: boolean) {
+    return postUserIsActive({ ids, isActive }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('操作成功')
+        fetchData(searchValue)
+      } else {
+        message.error(res.message)
       }
     })
   }
@@ -190,8 +231,8 @@ const UserList: FC = () => {
           dataSource={tableData}
           loading={tableLoading}
           pagination={{
-            current: tableQuery.current,
-            pageSize: tableQuery.pageSize,
+            current: tableQuery.page,
+            pageSize: tableQuery.size,
             total: tableTotal,
             showTotal: () => `Total ${tableTotal} items`,
             showSizeChanger: true,

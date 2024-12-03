@@ -1,21 +1,27 @@
 import { type FC, useEffect, useState } from 'react'
+import { useLocation, useLoaderData } from 'react-router-dom'
+
 import type { Rule } from 'antd/es/form'
 import {
   Button,
   Card,
-  Tag,
   Spin,
   Input,
   Form,
   Upload,
   UploadProps,
   UploadFile,
+  message,
+  Select,
+  Divider,
 } from 'antd'
-import { useLocation, useLoaderData } from 'react-router-dom'
-import { getInformationDetailById } from '@/api'
 import { PlusOutlined } from '@ant-design/icons'
-import { UPLOAD_IMG_SRC } from '@/settings/websiteSetting'
+
+import router from '@/router'
+import { postInformationDetailById, postAddInformation, postInformationUpdate, getSearchInformationLabel, getSearchInformationSpecialTopic, uploadImage } from '@/api'
 import RichTextEditor from './components/RichText'
+
+import { useAppSelector } from '@/stores'
 const InformationEdit: FC = () => {
   let id = useLocation()?.state?.id
   if (id === undefined) {
@@ -23,49 +29,43 @@ const InformationEdit: FC = () => {
   }
   const [informationDetail, setInformationDetail] = useState<API.InformationInfoType | null>({
     id: 0,
-    create_time: '',
-    update_time: '',
-    create_user: '',
-    update_user: '',
-    information_background_img: '',
-    information_title_zh: '',
-    information_title_en: '',
-    information_content_zh: '',
-    information_content_en: '',
-    information_introduction_zh: '',
-    information_introduction_en: '',
-    information_label: [],
-    information_special_topic: {
-      id: 0,
-      special_topic_name_zh: '',
-      special_topic_name_en: '',
-      special_topic_introduction_zh: '',
-      special_topic_introduction_en: '',
-      special_topic_background_img: '',
-      special_topic_status: false,
-      create_time: '',
-      update_time: '',
-      create_user: '',
-      update_user: '',
-    },
-    information_status: false,
+    createdAt: '',
+    updatedAt: '',
+    author: '',
+    titleZh: '',
+    titleEn: '',
+    contentZh: '',
+    contentEn: '',
+    descriptionZh: '',
+    descriptionEn: '',
+    tagIds: [],
+    collectionIds: [],
+    isActive: false,
+    coverImageUrl: '',
   })
   const [loading, setLoading] = useState<boolean>(false)
   const [searchId, setSearchId] = useState<string>('')
   const [form] = Form.useForm()
-  const [listImgs, setListImgs] = useState<UploadFile[]>([
-    {
-      uid: '-1',
-      name: 'beautiful-girl.jpg',
-      status: 'done',
-      url: UPLOAD_IMG_SRC,
-      thumbUrl: UPLOAD_IMG_SRC
-    }
-  ])
-  const [informationLabel, setInformationLabel] = useState<string[]>([])
+  const [listImgs, setListImgs] = useState<UploadFile[]>([])
   const [htmlEn, setHtmlEn] = useState('')
   const [htmlZh, setHtmlZh] = useState('')
 
+  const [selectSpecialTopicEnList, setSelectSpecialTopicEnList] = useState<{ value: number, label: string }[]>([])
+  const [selectSpecialTopicZhList, setSelectSpecialTopicZhList] = useState<{ value: number, label: string }[]>([])
+  const [selectLabelList, setSelectLabelList] = useState<{ value: number, label: string }[]>([])
+  const { userInfo } = useAppSelector(state => state.user)
+
+  useEffect(() => {
+    // 获取所有专题
+    getSearchInformationSpecialTopic({}).then((res: API.InformationSpecialTopicListResult) => {
+      setSelectSpecialTopicEnList(res.data?.data?.map((item: any) => ({ value: item.id, label: item.nameEn, disabled: false })))
+      setSelectSpecialTopicZhList(res.data?.data?.map((item: any) => ({ value: item.id, label: item.nameZh, disabled: false })))
+    })
+    // 获取所有标签
+    getSearchInformationLabel({}).then((res: API.InformationLabelListResult) => {
+      setSelectLabelList(res.data?.data?.map((item: any) => ({ value: item.id, label: item.name, disabled: false })))
+    })
+  }, [])
 
   const formRules: Record<string, Rule[]> = {
     all: [
@@ -73,8 +73,33 @@ const InformationEdit: FC = () => {
     ],
   }
   const onFinish = (values: any) => {
-    console.log('Success:', values)
-    console.log(informationLabel)
+    if (values.id === 0) {
+      delete values.id
+      postAddInformation({ ...values, contentEn: htmlEn, contentZh: htmlZh, author: userInfo?.username }).then((res: any) => {
+        if (res.code === 0) {
+          message.success('资讯添加成功')
+          // 跳转到对应页面
+          router.navigate("/information/information-content/information-detail", { state: { id: res.data.id } })
+        } else {
+          message.error(res.msg || '资讯添加失败')
+        }
+      }).catch((err: any) => {
+        message.error(err.msg || '资讯添加失败')
+      })
+    } else {
+      // update
+      postInformationUpdate({ ...values, contentEn: htmlEn, contentZh: htmlZh }).then((res: any) => {
+        if (res.code === 0) {
+          message.success('资讯修改成功')
+          // 跳转到对应页面
+          router.navigate("/information/information-content/information-detail", { state: { id: res.data.id } })
+        } else {
+          message.error(res.msg || '资讯修改失败')
+        }
+      }).catch((err: any) => {
+        message.error(err.msg || '资讯修改失败')
+      })
+    }
   }
   const resetForm = () => {
     form.resetFields()
@@ -88,39 +113,60 @@ const InformationEdit: FC = () => {
   useEffect(() => {
     if (searchId) {
       setLoading(true)
-      getInformationDetailById({ id: Number(searchId) }).then((res: any) => {
-        setInformationDetail({ ...res, information_special_topic: res.information_special_topic.id })
-        setListImgs([{
-          uid: '-1',
-          name: res.information_background_img,
-          status: 'done',
-          url: res.information_background_img,
-          thumbUrl: res.information_background_img
-        }])
-        setInformationLabel(res.information_label)
-        setHtmlEn(res.information_content_en)
-        setHtmlZh(res.information_content_zh)
+      postInformationDetailById({ id: Number(searchId) }).then((res: API.InformationDetailResult) => {
+        setInformationDetail({
+          ...res.data.article,
+          tagIds: res.data?.tags?.map((item: any) => item.id) || [],
+          collectionIds: res.data?.collections?.map((item: any) => item.id) || []
+        })
+        if (res.data.article.coverImageUrl) {
+          setListImgs([{
+            uid: '-1',
+            name: res.data.article.coverImageUrl,
+            status: 'done',
+            url: res.data.article.coverImageUrl,
+            thumbUrl: res.data.article.coverImageUrl
+          }])
+        } else {
+          setListImgs([])
+        }
+        setHtmlEn(res.data.article.contentEn)
+        setHtmlZh(res.data.article.contentZh)
         setLoading(false)
       })
     }
   }, [searchId])
 
   useEffect(() => {
-    if (informationDetail?.information_content_en === htmlEn && informationDetail?.information_content_zh === htmlZh) {
+    if (informationDetail?.contentEn === htmlEn && informationDetail?.contentZh === htmlZh) {
       resetForm()
     }
   }, [informationDetail])
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setListImgs(newFileList)
+  const handleChangeListImgs: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setListImgs(newFileList)
+    form.setFieldValue("coverImageUrl", newFileList[0]?.response?.data?.url || "")
+  }
+
+  const customUploadListImgs: UploadProps['customRequest'] = (e) => {
+    uploadImage({ file: e.file }).then((res) => {
+      console.log('上传成功', res.data);
+      e.onSuccess?.(res.data);
+    }).catch((err) => {
+      console.log('上传失败', err)
+      e.onSuccess?.({
+        data: {
+          url: "https://www.baidu.com/img/bd_logo1.png",
+          name: "baidu.png",
+          status: "done",
+          thumbUrl: "https://www.baidu.com/img/bd_logo1.png"
+        }
+      });
+    });
+  }
 
   return (
     <>
-      <Card bordered={false}>
-        <Button type="primary">
-          保存资讯
-        </Button>
-      </Card>
-      <br />
       {loading && <Spin spinning={loading} tip="加载中..." />}
       {!searchId && id !== 'add' && <Input.Search style={{ width: '300px' }} placeholder="请输入资讯编号" onSearch={(value) => { setSearchId(value) }} />}
       {!loading && (searchId || id === 'add') && (
@@ -136,39 +182,74 @@ const InformationEdit: FC = () => {
               <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯编号</h3>} name='id' rules={formRules.all}>
                 <Input disabled placeholder='请输入内容' />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(中文)</h3>} name='information_title_zh' rules={formRules.all}>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>创建人</h3>} name="author">
+                <Input disabled placeholder='请输入内容' />
+              </Form.Item>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯状态</h3>} name='isActive' rules={formRules.all}>
+                <Select options={[{ label: '启用', value: true }, { label: '禁用', value: false }]} />
+              </Form.Item>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(中文)</h3>} name='titleZh' rules={formRules.all}>
                 <Input style={{ width: '100%' }} placeholder='请输入中文标题' />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(英文)</h3>} name='information_title_en' rules={formRules.all}>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(英文)</h3>} name='titleEn' rules={formRules.all}>
                 <Input style={{ width: '100%' }} placeholder='请输入英文标题' />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(中文)</h3>} name='information_introduction_zh' rules={formRules.all}>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(中文)</h3>} name='descriptionZh' rules={formRules.all}>
                 <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入中文简介' />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(英文)</h3>} name='information_introduction_en' rules={formRules.all}>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(英文)</h3>} name='descriptionEn' rules={formRules.all}>
                 <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入英文简介' />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标签</h3>} name='information_label' rules={formRules.all}>
-                {informationDetail?.information_label.map((label: API.InformationLabelType, index: number) => <Tag key={index} color="orange" closable onClose={() => { informationLabel.splice(index, 1) }}>{label.label_name}</Tag>)}
-                <Tag color="orange" onClick={() => { setInformationLabel([...informationLabel, 'new']) }}>添加标签</Tag>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标签</h3>} name='tagIds' rules={formRules.all}>
+                <Select mode='multiple' placeholder='请选择新增资讯标签' options={selectLabelList} optionFilterProp='label' value={informationDetail?.tagIds}
+                  dropdownRender={(menu) => (
+                    <>
+                      {menu}
+                      <Divider style={{ margin: '8px 0' }} />
+                      <Button type='link' onClick={() => {
+                        router.navigate('/information/information-label')
+                      }}>新增资讯标签</Button>
+                    </>
+                  )}
+                />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(中文)</h3>} name='information_special_topic' rules={formRules.all}>
-                <Input style={{ width: '100%' }} placeholder='请输入中文专题' />
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(中文)</h3>} name='collectionIds' rules={formRules.all}>
+                <Select mode='multiple' placeholder='请选择新增资讯专题' options={selectSpecialTopicZhList} optionFilterProp='label' value={informationDetail?.collectionIds}
+                  dropdownRender={(menu) => (
+                    <>
+                      {menu}
+                      <Divider style={{ margin: '8px 0' }} />
+                      <Button type='link' onClick={() => {
+                        router.navigate('/information/information-special-topic')
+                      }}>新增资讯专题</Button>
+                    </>
+                  )}
+                />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(英文)</h3>} name='information_special_topic' rules={formRules.all}>
-                <Input style={{ width: '100%' }} placeholder='请输入英文专题' />
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(英文)</h3>} name='collectionIds' rules={formRules.all}>
+                <Select mode='multiple' placeholder='请选择新增资讯专题' options={selectSpecialTopicEnList} optionFilterProp='label' value={informationDetail?.collectionIds}
+                  dropdownRender={(menu) => (
+                    <>
+                      {menu}
+                      <Divider style={{ margin: '8px 0' }} />
+                      <Button type='link' onClick={() => {
+                        router.navigate('/information/information-special-topic')
+                      }}>新增资讯专题</Button>
+                    </>
+                  )}
+                />
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯封面</h3>} name='information_background_img' rules={formRules.all}>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯封面</h3>} name='coverImageUrl' rules={formRules.all}>
                 <Card title='' bordered={false} styles={{ body: { height: '150px' } }} >
                   <Upload
                     fileList={listImgs}
-                    action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
                     accept='.jpg, .jpeg, .gif, .png, .bmp'
                     listType='picture-card'
                     className='list-upload'
                     style={{ height: '100px', width: 'auto' }}
-                    onChange={handleChange}
+                    onChange={handleChangeListImgs}
                     maxCount={1}
+                    customRequest={customUploadListImgs}
                   >
                     {listImgs.length === 0 && (
                       <div>
@@ -179,10 +260,10 @@ const InformationEdit: FC = () => {
                   </Upload>
                 </Card>
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(中文)</h3>} name='information_content_zh' rules={formRules.all}>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(中文)</h3>} name='contentZh'>
                 <RichTextEditor style={{ zIndex: "2" }} value={htmlZh} updateValue={(value) => setHtmlZh(value)}></RichTextEditor>
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(英文)</h3>} name='information_content_en' rules={formRules.all} >
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(英文)</h3>} name='contentEn' >
                 <RichTextEditor style={{ zIndex: "1" }} value={htmlEn} updateValue={(value) => setHtmlEn(value)}></RichTextEditor>
               </Form.Item>
               <Form.Item wrapperCol={{ span: 12, offset: 12 }}>

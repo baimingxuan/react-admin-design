@@ -23,23 +23,19 @@ const handleError = (error: AxiosError): Promise<AxiosError> => {
 service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = getToken()
   if (token) {
-    ;(config as Recordable).headers['Authorization'] = `${token}`
+    ; (config as Recordable).headers['Authorization'] = `Bearer ${token}`
   }
-  ;(config as Recordable).headers['Content-Type'] = 'application/json'
+  ; (config as Recordable).headers['Content-Type'] = 'application/json'
   return config
 }, handleError)
 
 // Respose interceptors configuration
 service.interceptors.response.use((response: AxiosResponse) => {
-  const data = response.data
-
-  if (data.code === 0) {
-    return data.data
-  } else {
-    message.error(data.message)
-
-    return Promise.reject('error')
+  if (response.data?.code === 2004) {
+    clearAuthCache()
+    location.href = '/login'
   }
+  return response.data
 }, handleError)
 
 export { service }

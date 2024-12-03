@@ -16,19 +16,19 @@ import {
   message
 } from 'antd'
 import { DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { getInformationList } from '@/api'
+import { getInformationList, postChangeInformationStatus, postDeleteInformation } from '@/api'
 import dayjs from 'dayjs'
 import { DefaultOptionType } from 'antd/es/select'
 import { Link } from 'react-router-dom'
+const { RangePicker } = DatePicker;
 
 const InformationList: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<API.InformationInfoType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
-  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 15 })
+  const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 15 })
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
   const [selectValue, setSelectValue] = useState<string>('1')
-  const [loadingSwitchId, setLoadingSwitchId] = useState<number>(0)
   const [selectLanguage, setSelectLanguage] = useState<string>('zh')
   const columns: ColumnsType<API.InformationInfoType> = [
     {
@@ -39,70 +39,53 @@ const InformationList: FC = () => {
     },
     {
       title: '资讯标题',
-      dataIndex: 'information_title_zh',
+      dataIndex: 'titleZh',
       align: 'center',
       render: (_, record: any) => {
         const content = (
           <div style={{ width: '300px' }}>
-            <p>资讯简介：<br />{selectLanguage === 'zh' ? record.information_introduction_zh : record.information_introduction_en}</p>
+            <p>资讯简介：<br />{selectLanguage === 'zh' ? record.descriptionZh : record.descriptionEn}</p>
           </div>
         )
         return (
           <Popover content={content}>
-            <Tag color="green">{selectLanguage === 'zh' ? record.information_title_zh : record.information_title_en}</Tag>
+            <Tag color="green">{selectLanguage === 'zh' ? record.titleZh : record.titleEn}</Tag>
           </Popover>
         )
-      }
-    },
-    {
-      title: '资讯专题',
-      dataIndex: 'information_special_topic',
-      align: 'center',
-      render: (information_special_topic) => {
-        const content = (
-          <div style={{ width: '300px' }}>
-            <p>专题简介：<br />{selectLanguage === 'zh' ? information_special_topic.special_topic_introduction_zh : information_special_topic.special_topic_introduction_en}</p>
-          </div>
-        )
-        return (
-          <Popover content={content}>
-            <Tag color="purple">{selectLanguage === 'zh' ? information_special_topic.special_topic_name_zh : information_special_topic.special_topic_name_en}</Tag>
-          </Popover>
-        )
-      }
-    },
-    {
-      title: '资讯标签',
-      dataIndex: 'information_label',
-      align: 'center',
-      render: (information_label) => {
-        return information_label.map((label: API.InformationLabelType, index: number) => <Tag key={index} color="orange">{label.label_name}</Tag>)
       }
     },
     {
       title: '创建人',
-      dataIndex: 'create_user',
+      dataIndex: 'author',
       align: 'center',
-      render: (create_user) => {
+      render: (author) => {
         return (
-          <Tag color='blue'>{create_user}</Tag>
+          <Tag color='blue'>{author}</Tag>
         )
       }
     },
     {
       title: '创建时间',
-      dataIndex: 'create_time',
+      dataIndex: 'createdAt',
       align: 'center',
-      render: (create_time) => {
-        return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (createdAt) => {
+        return <span>{dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+      }
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updatedAt',
+      align: 'center',
+      render: (updatedAt) => {
+        return <span>{dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '新闻禁用状态',
-      dataIndex: 'information_status',
+      dataIndex: 'isActive',
       align: 'center',
-      render: (information_status, record) => (
-        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" loading={loadingSwitchId == record.id} checked={information_status} onClick={() => handleSwitchChange(information_status, record)} />
+      render: (isActive, record) => (
+        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" checked={isActive} onClick={() => handleSwitchChange(isActive, record)} />
       )
     },
     {
@@ -132,22 +115,29 @@ const InformationList: FC = () => {
   }
 
   useEffect(() => {
-    if (tableQuery.current !== 0 && tableQuery.pageSize !== 0) {
+    if (tableQuery.page !== 0 && tableQuery.size !== 0) {
       fetchData()
     }
-  }, [tableQuery.current, tableQuery.pageSize])
+  }, [tableQuery.page, tableQuery.size])
 
   async function fetchData() {
     setTableLoading(true)
-    const data = await getInformationList(tableQuery)
-    const { list, total } = data as unknown as API.APIResult
-    setTableData(list)
-    setTableTotal(total)
-    setTableLoading(false)
+    getInformationList({ pagination: tableQuery }).then((res: any) => {
+      if (res.code !== 0) {
+        return message.error(res.error)
+      }
+      const { articles, pagination: { total } } = res.data
+      setTableData(articles)
+      setTableTotal(total || 0)
+    }).catch(() => {
+      message.error('获取数据失败')
+    }).finally(() => {
+      setTableLoading(false)
+    })
   }
 
-  function handlePageChange(page: number, pageSize: number) {
-    setTableQuery({ ...tableQuery, current: page, pageSize })
+  function handlePageChange(page: number, size: number) {
+    setTableQuery({ ...tableQuery, page, size })
   }
 
   function handleDelete(id: number) {
@@ -159,10 +149,16 @@ const InformationList: FC = () => {
         okText: '删除',
         cancelText: '取消',
         onOk() {
-          console.log('OK')
-        },
-        onCancel() {
-          console.log('Cancel')
+          postDeleteInformation({ ids: [id] }).then((res: any) => {
+            if (res.code === 0) {
+              message.success('删除成功')
+              fetchData()
+            } else {
+              message.error(res.msg || '删除失败')
+            }
+          }).catch((err: any) => {
+            message.error(err.msg || '删除失败')
+          })
         }
       })
     } else {
@@ -176,10 +172,16 @@ const InformationList: FC = () => {
           okText: '删除',
           cancelText: '取消',
           onOk() {
-            console.log('OK')
-          },
-          onCancel() {
-            console.log('Cancel')
+            postDeleteInformation({ ids: selectedRowKeys }).then((res: any) => {
+              if (res.code === 0) {
+                message.success('删除成功')
+                fetchData()
+              } else {
+                message.error(res.msg || '删除失败')
+              }
+            }).catch((err: any) => {
+              message.error(err.msg || '删除失败')
+            })
           }
         })
       }
@@ -187,8 +189,46 @@ const InformationList: FC = () => {
   }
 
   function handleSwitchChange(checked: boolean, record: API.InformationInfoType) {
-    setLoadingSwitchId(record.id)
-    console.log(checked)
+    if (checked) {
+      Modal.confirm({
+        title: '此操作将禁用标签, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'danger',
+        okText: '禁用',
+        cancelText: '取消',
+        onOk() {
+          return SwitchStatus(false, record)
+        },
+        onCancel() {
+        }
+      })
+    } else {
+      Modal.confirm({
+        title: '此操作将启用标签, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'danger',
+        okText: '启用',
+        cancelText: '取消',
+        onOk() {
+          return SwitchStatus(true, record)
+        },
+        onCancel() {
+        }
+      })
+    }
+  }
+
+  const SwitchStatus = async (status: boolean, record: API.InformationInfoType) => {
+    return postChangeInformationStatus({ id: record.id, option: status ? "activate" : "deactivate" }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('修改成功')
+        setTableData(tableData.map((item: API.InformationInfoType) => item.id === record.id ? { ...item, isActive: status } : item))
+      } else {
+        message.error(res.msg || '修改失败')
+      }
+    }).catch((err: any) => {
+      message.error(err.msg || '修改失败')
+    })
   }
 
   // select change
@@ -225,7 +265,7 @@ const InformationList: FC = () => {
             </Space>
             <Space>
               <h3>筛选日期：</h3>
-              <DatePicker /> - <DatePicker />
+              <RangePicker onChange={(value) => { console.log(value) }} />
               <Button type='primary'>筛选</Button>
             </Space>
             <Space>
@@ -246,8 +286,8 @@ const InformationList: FC = () => {
           dataSource={tableData}
           loading={tableLoading}
           pagination={{
-            current: tableQuery.current,
-            pageSize: tableQuery.pageSize,
+            current: tableQuery.page,
+            pageSize: tableQuery.size,
             total: tableTotal,
             showTotal: () => `Total ${tableTotal} items`,
             showSizeChanger: true,
@@ -255,17 +295,6 @@ const InformationList: FC = () => {
             onChange: handlePageChange
           }}
         />
-        <Modal
-          open={loadingSwitchId !== 0}
-          title='禁用资讯'
-          width='400px'
-          okText='禁用'
-          cancelText='取消'
-          onCancel={() => setLoadingSwitchId(0)}
-          onOk={() => setLoadingSwitchId(0)}
-        >
-          资讯被禁用后线上将不再显示，推荐位也不会显示该资讯
-        </Modal>
       </Card>
     </>
   )

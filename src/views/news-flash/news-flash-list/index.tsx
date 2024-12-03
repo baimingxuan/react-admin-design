@@ -26,10 +26,9 @@ const NewsFlashList: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<API.NewsFlashInfoType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
-  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 15 })
+  const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 15 })
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
   const [selectLanguage, setSelectLanguage] = useState<string>('zh')
-  const [selectLable, setSelectLable] = useState<string>('1')
   const [selectDate, setSelectDate] = useState<any>(null)
   const [searchValue, setSearchValue] = useState<string>('')
 
@@ -45,61 +44,51 @@ const NewsFlashList: FC = () => {
     },
     {
       title: '快讯标题',
-      dataIndex: 'news_flash_title_zh',
+      dataIndex: 'newsFlashTitleZh',
       align: 'center',
       render: (_, record: any) => {
         const content = (
           <div style={{ width: '300px' }}>
-            <p>快讯内容：<br />{selectLanguage === 'zh' ? record.news_flash_content_zh : record.news_flash_content_en}</p>
+            <p>快讯内容：<br />{selectLanguage === 'zh' ? record.newsFlashContentZh : record.newsFlashContentEn}</p>
           </div>
         )
         return (
           <Popover content={content}>
-            <Tag color="green">{selectLanguage === 'zh' ? record.news_flash_title_zh : record.news_flash_title_en}</Tag>
+            <Tag color="green">{selectLanguage === 'zh' ? record.newsFlashTitleZh : record.newsFlashTitleEn}</Tag>
           </Popover>
         )
       }
     },
     {
-      title: '快讯标签',
-      dataIndex: 'news_flash_label',
-      align: 'center',
-      render: (news_flash_label, record) => {
-        return news_flash_label?.map((label: API.NewsFlashLabelType) => {
-          return <Tag color="orange" key={record.id + label.label_name}>{label.label_name}</Tag>
-        })
-      }
-    },
-    {
       title: '创建时间',
-      dataIndex: 'create_time',
+      dataIndex: 'createdAt',
       align: 'center',
-      render: (create_time) => {
-        return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (createdAt) => {
+        return <span>{dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '快讯来源',
-      dataIndex: 'news_flash_source_site',
+      dataIndex: 'newsFlashSourceSite',
       align: 'center',
-      render: (news_flash_source_site) => {
-        return <a href={news_flash_source_site.source_site_url} style={{ color: 'blue' }} target='_blank'>{news_flash_source_site.source_site_url}</a>
+      render: (newsFlashSourceSite) => {
+        return <a href={newsFlashSourceSite.sourceSiteUrl} style={{ color: 'blue' }} target='_blank'>{newsFlashSourceSite.sourceSiteUrl}</a>
       }
     },
     {
       title: '原文地址',
-      dataIndex: 'news_flash_source_url',
+      dataIndex: 'newsFlashSourceUrl',
       align: 'center',
-      render: (news_flash_source_url) => {
-        return <a href={news_flash_source_url} style={{ color: 'blue' }} target='_blank'>{news_flash_source_url}</a>
+      render: (newsFlashSourceUrl) => {
+        return <a href={newsFlashSourceUrl} style={{ color: 'blue' }} target='_blank'>{newsFlashSourceUrl}</a>
       }
     },
     {
       title: '快讯状态',
-      dataIndex: 'news_flash_status',
+      dataIndex: 'newsFlashStatus',
       align: 'center',
-      render: (news_flash_status) => (
-        <Switch defaultChecked={news_flash_status} onChange={checked => (news_flash_status = checked)} />
+      render: (newsFlashStatus) => (
+        <Switch defaultChecked={newsFlashStatus} onChange={checked => (newsFlashStatus = checked)} />
       )
     },
     {
@@ -135,18 +124,17 @@ const NewsFlashList: FC = () => {
   async function fetchData(searchValue?: string, selectDate?: any) {
     setTableLoading(true)
     const data = await getNewsFlashList(tableQuery)
-    const { list, total } = data as unknown as API.APIResult
-    setTableData(list)
-    setTableTotal(total)
+    // const { list, total } = data as unknown as API.APIResult
+    // setTableData(list)
+    // setTableTotal(total)
     setTableLoading(false)
   }
 
-  function handlePageChange(page: number, pageSize: number) {
-    setTableQuery({ ...tableQuery, current: page, pageSize })
+  function handlePageChange(page: number, size: number) {
+    setTableQuery({ ...tableQuery, page, size })
   }
 
   function handleEdit(record: API.NewsFlashInfoType) {
-    form.setFieldsValue({ ...record, news_flash_label: [...record.news_flash_label.map((item: API.NewsFlashLabelType) => item.id)] })
     setModalVisibel(true)
   }
 
@@ -210,15 +198,6 @@ const NewsFlashList: FC = () => {
           </Space>
           <Space size={50}>
             <Space>
-              <h3>选择标签：</h3>
-              <Select value={selectLable} onChange={(value) => { setSelectLable(value) }}>
-                <Select.Option value="1">标签1</Select.Option>
-                <Select.Option value="2">标签2</Select.Option>
-                <Select.Option value="3">标签3</Select.Option>
-                <Select.Option value="4">标签4</Select.Option>
-              </Select>
-            </Space>
-            <Space>
               <h3>筛选日期：</h3>
               <RangePicker onChange={(value) => { setSelectDate(value) }} value={selectDate} />
               <Button type='primary' onClick={() => fetchData(searchValue, selectDate)}>筛选</Button>
@@ -241,8 +220,8 @@ const NewsFlashList: FC = () => {
           dataSource={tableData}
           loading={tableLoading}
           pagination={{
-            current: tableQuery.current,
-            pageSize: tableQuery.pageSize,
+            current: tableQuery.page,
+            pageSize: tableQuery.size,
             total: tableTotal,
             showTotal: () => `Total ${tableTotal} items`,
             showSizeChanger: true,
@@ -265,31 +244,17 @@ const NewsFlashList: FC = () => {
             style={{ width: '80%', margin: '0 auto' }}
             onFinish={handleConfirm}
           >
-            <Form.Item label='快讯标题(中文)' name='news_flash_title_zh' rules={[{ required: true, message: '请输入快讯标题(中文)' }]}>
+            <Form.Item label='快讯标题(中文)' name='newsFlashTitleZh' rules={[{ required: true, message: '请输入快讯标题(中文)' }]}>
               <Input />
             </Form.Item>
-            <Form.Item label='快讯内容(中文)' name='news_flash_content_zh' rules={[{ required: true, message: '请输入快讯内容(中文)' }]}>
+            <Form.Item label='快讯内容(中文)' name='newsFlashContentZh' rules={[{ required: true, message: '请输入快讯内容(中文)' }]}>
               <TextArea style={{ height: '200px' }} />
             </Form.Item>
-            <Form.Item label='快讯标题(英文)' name='news_flash_title_en' rules={[{ required: true, message: '请输入快讯标题(英文)' }]}>
+            <Form.Item label='快讯标题(英文)' name='newsFlashTitleEn' rules={[{ required: true, message: '请输入快讯标题(英文)' }]}>
               <Input />
             </Form.Item>
-            <Form.Item label='快讯内容(英文)' name='news_flash_content_en' rules={[{ required: true, message: '请输入快讯内容(英文)' }]}>
+            <Form.Item label='快讯内容(英文)' name='newsFlashContentEn' rules={[{ required: true, message: '请输入快讯内容(英文)' }]}>
               <TextArea style={{ height: '200px' }} />
-            </Form.Item>
-            <Form.Item label='快讯标签' name='news_flash_label' rules={[{ required: true, message: '请选择快讯标签' }]}>
-              <Select mode='multiple' placeholder='请选择新增快讯标签'>
-                <Select.Option value={0}>News Flash Label 1</Select.Option>
-                <Select.Option value={1}>News Flash Label 2</Select.Option>
-                <Select.Option value={2}>News Flash Label 3</Select.Option>
-                <Select.Option value={3}>News Flash Label 4</Select.Option>
-                <Select.Option value={4}>News Flash Label 5</Select.Option>
-                <Select.Option value={5}>News Flash Label 6</Select.Option>
-                <Select.Option value={6}>News Flash Label 7</Select.Option>
-                <Select.Option value={7}>News Flash Label 8</Select.Option>
-                <Select.Option value={8}>News Flash Label 9</Select.Option>
-                <Select.Option value={9}>News Flash Label 10</Select.Option>
-              </Select>
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 20, offset: 16 }}>

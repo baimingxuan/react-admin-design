@@ -18,32 +18,23 @@ import {
   UploadFile,
   UploadProps
 } from 'antd'
-import { DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { getInformationSpecialTopicList } from '@/api'
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { getInformationSpecialTopicList, getSearchInformationSpecialTopic, postAddInformationSpecialTopic, postUpdateInformationSpecialTopic, uploadImage } from '@/api'
 import dayjs from 'dayjs'
 import TextArea from 'antd/es/input/TextArea'
-import { UPLOAD_IMG_SRC } from '@/settings/websiteSetting'
 
 const InformationSpecialTopicList: FC = () => {
   const [form] = Form.useForm()
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<API.InformationSpecialTopicType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
-  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 10 })
-  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
+  const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 10 })
   const [selectLanguage, setSelectLanguage] = useState<string>('zh')
   const [showAddTable, setShowAddTable] = useState<boolean>(false)
   const [loadingEdit, setLoadingEdit] = useState<boolean>(false)
+  const [searchValues, setSearchValues] = useState<string>("")
 
-  const [listImgs, setListImgs] = useState<UploadFile[]>([
-    {
-      uid: '-1',
-      name: 'beautiful-girl.jpg',
-      status: 'done',
-      url: UPLOAD_IMG_SRC,
-      thumbUrl: UPLOAD_IMG_SRC
-    }
-  ])
+  const [listImgs, setListImgs] = useState<UploadFile[]>([])
 
   const columns: ColumnsType<API.InformationSpecialTopicType> = [
     {
@@ -54,71 +45,51 @@ const InformationSpecialTopicList: FC = () => {
     },
     {
       title: '专题名称',
-      dataIndex: 'special_topic_name_zh',
+      dataIndex: 'nameZh',
       align: 'center',
-      render: (special_topic_name_zh, record) => {
+      render: (nameZh, record) => {
         const content = (
           <div style={{ width: '300px' }}>
-            <p>专题简介：<br />{selectLanguage === 'zh' ? record.special_topic_introduction_zh : record.special_topic_introduction_en}</p>
+            <p>专题简介：<br />{selectLanguage === 'zh' ? record.descriptionZh : record.descriptionEn}</p>
           </div>
         )
         return (
           <Popover content={content}>
-            <Tag color="purple">{selectLanguage === 'zh' ? special_topic_name_zh : record.special_topic_name_en}</Tag>
+            <Tag color="purple">{selectLanguage === 'zh' ? nameZh : record.nameEn}</Tag>
           </Popover>
         )
       }
     },
     {
-      title: '创建人',
-      dataIndex: 'create_user',
-      align: 'center',
-      render: (create_user) => {
-        return (
-          <Tag color='blue'>{create_user}</Tag>
-        )
-      }
-    },
-    {
-      title: '更新人',
-      dataIndex: 'update_user',
-      align: 'center',
-      render: (update_user) => {
-        return (
-          <Tag color='blue'>{update_user}</Tag>
-        )
-      }
-    },
-    {
       title: '创建时间',
-      dataIndex: 'create_time',
+      dataIndex: 'createdAt',
       align: 'center',
-      render: (create_time) => {
-        return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (createdAt) => {
+        return <span>{dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '更新时间',
-      dataIndex: 'update_time',
+      dataIndex: 'updatedAt',
       align: 'center',
-      render: (update_time) => {
-        return <span>{dayjs(update_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (updateAt) => {
+        return <span>{dayjs(updateAt).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '专题封面',
-      dataIndex: 'special_topic_background_img',
+      dataIndex: 'backgroundImageUrl',
       align: 'center',
-      render: (special_topic_background_img) => {
-        return <img src={special_topic_background_img} alt='专题封面' style={{ width: '100px', height: 'auto' }} />
+      render: (backgroundImageUrl) => {
+        return <img src={backgroundImageUrl} alt='专题封面' style={{ width: '100px', height: 'auto' }} />
       }
     },
     {
       title: '专题禁用状态',
-      dataIndex: 'special_topic_status',
+      dataIndex: 'isActive',
       align: 'center',
-      render: (special_topic_status, record) => (
-        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" checked={special_topic_status} onClick={() => handleSwitchStatus(special_topic_status, record)} />
+      render: (isActive, record) => (
+        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" checked={isActive} onClick={() => handleSwitchStatus(isActive, record)} />
       )
     },
     {
@@ -130,93 +101,68 @@ const InformationSpecialTopicList: FC = () => {
           <Button type="primary" onClick={() => { handleEdit(record.id) }}>
             修改
           </Button>
-          <Button type="dashed" danger onClick={() => { handleDelete([record.id]) }}>
-            删除
-          </Button>
         </Space>
       )
     }
   ]
 
-  const tableSelection: TableProps<any>['rowSelection'] = {
-    onChange: (selectedRowKeys: any[]) => {
-      setSelectedRowKeys(selectedRowKeys)
-    }
-  }
-
   useEffect(() => {
-    if (tableQuery.current !== 0 && tableQuery.pageSize !== 0) {
+    if (tableQuery.page !== 0 && tableQuery.size !== 0) {
       fetchData()
     }
-  }, [tableQuery.current, tableQuery.pageSize])
+  }, [tableQuery.page, tableQuery.size])
 
-  async function fetchData() {
+  async function fetchData(values?: string) {
     setTableLoading(true)
-    const data = await getInformationSpecialTopicList(tableQuery)
-    const { list, total } = data as unknown as API.APIResult
-    setTableData(list)
-    setTableTotal(total)
-    setTableLoading(false)
-  }
-
-  function handlePageChange(page: number, pageSize: number) {
-    setTableQuery({ ...tableQuery, current: page, pageSize })
-  }
-
-  function handleDelete(ids: number[]) {
-    if (ids.length > 0) {
-      Modal.confirm({
-        title: '此操作将删除该专题, 是否继续?',
-        icon: <ExclamationCircleOutlined rev={undefined} />,
-        okType: 'danger',
-        okText: '删除',
-        cancelText: '取消',
-        onOk() {
-          return deleteSpecialTopic(ids)
-        },
-        onCancel() {
-          console.log('Cancel')
+    if (values) {
+      getSearchInformationSpecialTopic({ query: values }).then((res: any) => {
+        if (res.code !== 0) {
+          return message.error("获取数据失败,错误码:" + res.code)
         }
+        setTableData(res.data.data)
+        setTableTotal(res.data.data.length)
+      }).catch(() => {
+        message.error('获取专题列表失败')
+      }).finally(() => {
+        setTableLoading(false)
       })
     } else {
-      if (selectedRowKeys.length === 0) {
-        message.error('请选择要删除的专题')
-      } else {
-        Modal.confirm({
-          title: '此操作将删除选中专题, 是否继续?',
-          icon: <ExclamationCircleOutlined rev={undefined} />,
-          okType: 'danger',
-          okText: '删除',
-          cancelText: '取消',
-          onOk() {
-            return deleteSpecialTopic(selectedRowKeys)
-          },
-          onCancel() {
-            console.log('Cancel')
-          }
-        })
-      }
+      getInformationSpecialTopicList(tableQuery).then((res: any) => {
+        if (res.code !== 0) {
+          return message.error("获取数据失败,错误码:" + res.code)
+        }
+        const { data, total } = res.data
+        setTableData(data)
+        setTableTotal(total)
+      }).catch(() => {
+        message.error('获取专题列表失败')
+      }).finally(() => {
+        setTableLoading(false)
+      })
     }
   }
 
-  async function deleteSpecialTopic(ids: number[]) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(true)
-      }, 1000);
-    })
+  function handlePageChange(page: number, size: number) {
+    setTableQuery({ ...tableQuery, page, size })
   }
+
+
+
 
   function handleEdit(id: number) {
     let item = tableData.find((item) => item.id === id)
     form.setFieldsValue({ ...item })
-    setListImgs([{
-      uid: '-1',
-      name: 'beautiful-girl.jpg',
-      status: 'done',
-      url: item?.special_topic_background_img,
-      thumbUrl: item?.special_topic_background_img
-    }])
+    if (item?.backgroundImageUrl) {
+      setListImgs([{
+        uid: '-1',
+        name: 'beautiful-girl.jpg',
+        status: 'done',
+        url: item?.backgroundImageUrl,
+        thumbUrl: item?.backgroundImageUrl
+      }])
+    } else {
+      setListImgs([])
+    }
     setShowAddTable(true)
   }
 
@@ -224,13 +170,6 @@ const InformationSpecialTopicList: FC = () => {
     setShowAddTable(true)
     form.resetFields()
     form.setFieldsValue({})
-    setListImgs([{
-      uid: '-1',
-      name: 'beautiful-girl.jpg',
-      status: 'done',
-      url: UPLOAD_IMG_SRC,
-      thumbUrl: UPLOAD_IMG_SRC
-    }])
   }
 
   function handleSwitchStatus(checked: boolean, record: API.InformationSpecialTopicType) {
@@ -264,24 +203,26 @@ const InformationSpecialTopicList: FC = () => {
   }
 
   async function switchStatus(checked: boolean, record: API.InformationSpecialTopicType) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => { resolve(true) }, 1000)
-    }).then(() => {
-      message.success('操作成功')
+    postUpdateInformationSpecialTopic({ ...record, isActive: checked }).then((res: any) => {
+      if (res.code !== 0) {
+        return message.error("修改专题状态失败,错误码:" + res.code)
+      }
+      message.success('修改专题状态成功')
       setTableData(tableData.map((item) => {
         if (item.id === record.id) {
-          return { ...item, special_topic_status: checked }
+          return { ...item, isActive: checked }
         }
         return item
       }))
     }).catch(() => {
-      message.error('操作失败')
+      message.error('修改专题状态失败')
     })
   }
 
   const onFinish = (values: any) => {
     setLoadingEdit(true)
-    if (values.create_user) {
+    if (values.createdAt) {
+      delete values.createdAt
       editOnFinish(values)
     } else {
       addOnFinish(values)
@@ -289,28 +230,64 @@ const InformationSpecialTopicList: FC = () => {
   }
 
   const editOnFinish = async (values: any) => {
-    setTimeout(() => {
-      setLoadingEdit(false)
+    setLoadingEdit(true)
+    postUpdateInformationSpecialTopic({ ...values, backgroundImageUrl: listImgs[0]?.response?.data?.url || "" }).then((res: any) => {
+      if (res.code !== 0) {
+        return message.error("修改专题失败,错误码:" + res.code)
+      }
+      message.success('修改专题成功')
+      fetchData()
       setShowAddTable(false)
-    }, 1000);
+    }).catch(() => {
+      message.error('修改专题失败')
+    }).finally(() => {
+      setLoadingEdit(false)
+    })
   }
 
   const addOnFinish = async (values: any) => {
-    setTimeout(() => {
-      setLoadingEdit(false)
+    setLoadingEdit(true)
+    postAddInformationSpecialTopic({ ...values, backgroundImageUrl: listImgs[0]?.response?.data?.url || "" }).then((res: any) => {
+      if (res.code !== 0) {
+        return message.error("新增专题失败,错误码:" + res.code)
+      }
+      message.success('新增专题成功')
+      fetchData()
       setShowAddTable(false)
-    }, 1000);
+    }).catch(() => {
+      message.error('新增专题失败')
+    }).finally(() => {
+      setLoadingEdit(false)
+    })
   }
 
-  const updateListImgs: UploadProps['onChange'] = ({ fileList: newFileList }) => setListImgs(newFileList)
+  const handleChangeListImgs: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setListImgs(newFileList)
+    form.setFieldValue("backgroundImageUrl", newFileList[0]?.response?.data?.url || "")
+  }
 
+  const customUploadListImgs: UploadProps['customRequest'] = (e) => {
+    uploadImage({ file: e.file }).then((res) => {
+      console.log('上传成功', res.data);
+      e.onSuccess?.(res.data);
+    }).catch((err) => {
+      console.log('上传失败', err)
+      e.onSuccess?.({
+        data: {
+          url: "https://www.baidu.com/img/bd_logo1.png",
+          name: "baidu.png",
+          status: "done",
+          thumbUrl: "https://www.baidu.com/img/bd_logo1.png"
+        }
+      });
+    });
+  }
   return (
     <>
       <Card bordered={false}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Space>
             <Button type='primary' onClick={() => { addInformationSpecialTopic() }}><PlusOutlined />新增专题</Button>
-            <Button type='primary' danger onClick={() => { handleDelete([]) }}><DeleteOutlined />批量删除</Button>
             <Space>
               <h3>选择语言:</h3>
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
@@ -321,9 +298,9 @@ const InformationSpecialTopicList: FC = () => {
           </Space>
           <Space>
             <h3>搜索：</h3>
-            <Input placeholder='请输入搜索内容' />
-            <Button type='primary'>搜索</Button>
-            <Button type='primary' danger>重置</Button>
+            <Input placeholder='请输入搜索内容' onChange={(e) => { setSearchValues(e.target.value) }} />
+            <Button type='primary' onClick={() => { fetchData(searchValues) }}>搜索</Button>
+            <Button type='primary' danger onClick={() => { setSearchValues('') }}>重置</Button>
           </Space>
         </div>
       </Card>
@@ -331,13 +308,12 @@ const InformationSpecialTopicList: FC = () => {
       <Card bordered={false}>
         <Table
           rowKey='id'
-          rowSelection={tableSelection}
           columns={columns}
           dataSource={tableData}
           loading={tableLoading}
           pagination={{
-            current: tableQuery.current,
-            pageSize: tableQuery.pageSize,
+            current: tableQuery.page,
+            pageSize: tableQuery.size,
             total: tableTotal,
             showTotal: () => `Total ${tableTotal} items`,
             showSizeChanger: true,
@@ -347,36 +323,51 @@ const InformationSpecialTopicList: FC = () => {
         />
         <Modal
           open={showAddTable}
-          title={form.getFieldValue('create_user') ? '修改专题' : '新增专题'}
+          title={form.getFieldValue('createdAt') ? '修改专题' : '新增专题'}
           closable={false}
           footer={null}
           width='1000px'
           forceRender
         >
           <Form form={form} onFinish={onFinish}>
-            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(中文)</h4>} name='special_topic_name_zh' rules={[{ required: true, message: '请输入专题名称' }]}>
+            {
+              form.getFieldValue('createdAt') ? <>
+                <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>创建时间</h4>} name='createdAt' hidden>
+                  <Input />
+                </Form.Item>
+                <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>ID</h4>} name='id'>
+                  <Input disabled />
+                </Form.Item>
+                <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题禁用状态</h4>} name='isActive' rules={[{ required: true, message: '请选择专题禁用状态' }]}>
+                  <Select>
+                    <Select.Option value={true}>上线中</Select.Option>
+                    <Select.Option value={false}>已禁用</Select.Option>
+                  </Select>
+                </Form.Item>
+              </> : null
+            }
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(中文)</h4>} name='nameZh' rules={[{ required: true, message: '请输入专题名称' }]}>
               <Input />
             </Form.Item>
-            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(英文)</h4>} name='special_topic_name_en' rules={[{ required: true, message: '请输入专题名称' }]}>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(英文)</h4>} name='nameEn' rules={[{ required: true, message: '请输入专题名称' }]}>
               <Input />
             </Form.Item>
-            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(中文)</h4>} name='special_topic_introduction_zh' rules={[{ required: true, message: '请输入专题简介' }]}>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(中文)</h4>} name='descriptionZh' rules={[{ required: true, message: '请输入专题简介' }]}>
               <TextArea rows={4} />
             </Form.Item>
-            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(英文)</h4>} name='special_topic_introduction_en' rules={[{ required: true, message: '请输入专题简介' }]}>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(英文)</h4>} name='descriptionEn' rules={[{ required: true, message: '请输入专题简介' }]}>
               <TextArea rows={4} />
             </Form.Item>
-            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题封面</h4>} name='special_topic_background_img' rules={[{ required: true, message: '请上传专题封面' }]}>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题封面</h4>} name='backgroundImageUrl' rules={[{ required: true, message: '请上传专题封面' }]}>
               <Card title='' bordered={false} styles={{ body: { height: '150px' } }}>
                 <Upload
                   fileList={listImgs}
-                  action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
                   accept='.jpg, .jpeg, .gif, .png, .bmp'
                   listType='picture-card'
-                  className='list-upload'
                   style={{ height: '100px', width: 'auto' }}
-                  onChange={updateListImgs}
+                  onChange={handleChangeListImgs}
                   maxCount={1}
+                  customRequest={customUploadListImgs}
                 >
                   {listImgs.length === 0 && (
                     <div>
@@ -387,20 +378,6 @@ const InformationSpecialTopicList: FC = () => {
                 </Upload>
               </Card>
             </Form.Item>
-            {
-              form.getFieldValue('create_user') ? <>
-                <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题禁用状态</h4>} name='special_topic_status' rules={[{ required: true, message: '请选择专题禁用状态' }]}>
-                  <Select>
-                    <Select.Option value={true}>上线中</Select.Option>
-                    <Select.Option value={false}>已禁用</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>创建人</h4>} name='create_user' hidden>
-                  <Input />
-                </Form.Item>
-              </> : null
-            }
-
             <Form.Item wrapperCol={{ span: 12, offset: 14 }}>
               <Button type='primary' htmlType='submit' loading={loadingEdit}>
                 确认

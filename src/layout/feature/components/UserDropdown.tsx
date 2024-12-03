@@ -6,7 +6,6 @@ import { getAuthCache, clearAuthCache } from '@/utils/auth'
 import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { useAppDispatch, useAppSelector } from '@/stores'
 import { useMessage } from '@/hooks/web/useMessage'
-import { logoutApi } from '@/api'
 import { resetState } from '@/stores/modules/user'
 import headerImg from '@/assets/images/avatar.jpeg'
 
@@ -54,14 +53,6 @@ export default function UserDropdown() {
   }
 
   const logoutAction = async (goLogin = false) => {
-    if (getToken()) {
-      try {
-        await logoutApi()
-      } catch (error) {
-        const { createMessage } = useMessage()
-        createMessage.error('注销失败!')
-      }
-    }
     dispatch(resetState())
     clearAuthCache()
     goLogin && navigate('/login')

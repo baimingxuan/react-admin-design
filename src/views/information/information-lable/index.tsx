@@ -1,7 +1,6 @@
 import type { ColumnsType } from 'antd/es/table'
 import { type FC, useState, useEffect } from 'react'
 import {
-  type TableProps,
   Card,
   Button,
   Table,
@@ -14,8 +13,8 @@ import {
   Form,
   Select
 } from 'antd'
-import { DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { getInformationLabelList, } from '@/api'
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { getInformationLabelList, getSearchInformationLabel, postAddInformationLabel, postUpdateInformationLabel, } from '@/api'
 import dayjs from 'dayjs'
 
 const InformationLabelList: FC = () => {
@@ -23,9 +22,8 @@ const InformationLabelList: FC = () => {
   const [tableLoading, setTableLoading] = useState(false)
   const [tableData, setTableData] = useState<API.InformationLabelType[]>([])
   const [tableTotal, setTableTotal] = useState<number>(0)
-  const [tableQuery, setTableQuery] = useState<API.PageState>({ current: 1, pageSize: 10 })
+  const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 10 })
   const [searchValue, setSearchValue] = useState<string>('')
-  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
   const [showAddTable, setShowAddTable] = useState<boolean>(false)
   const [loadingEdit, setLoadingEdit] = useState<boolean>(false)
 
@@ -38,56 +36,36 @@ const InformationLabelList: FC = () => {
     },
     {
       title: '标签名称',
-      dataIndex: 'label_name',
+      dataIndex: 'name',
       align: 'center',
-      render: (label_name) => {
+      render: (name) => {
         return (
-          <Tag color="orange">{label_name}</Tag>
-        )
-      }
-    },
-    {
-      title: '创建人',
-      dataIndex: 'create_user',
-      align: 'center',
-      render: (create_user) => {
-        return (
-          <Tag color='blue'>{create_user}</Tag>
-        )
-      }
-    },
-    {
-      title: '更新人',
-      dataIndex: 'update_user',
-      align: 'center',
-      render: (update_user) => {
-        return (
-          <Tag color='blue'>{update_user}</Tag>
+          <Tag color="orange">{name}</Tag>
         )
       }
     },
     {
       title: '创建时间',
-      dataIndex: 'create_time',
+      dataIndex: 'createdAt',
       align: 'center',
-      render: (create_time) => {
-        return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (createTime) => {
+        return <span>{dayjs(createTime).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '更新时间',
-      dataIndex: "update_time",
+      dataIndex: "updatedAt",
       align: 'center',
-      render: (create_time) => {
-        return <span>{dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (updateTime) => {
+        return <span>{dayjs(updateTime).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '标签禁用状态',
-      dataIndex: 'label_status',
+      dataIndex: 'isActive',
       align: 'center',
-      render: (label_status, record) => (
-        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" checked={label_status} onClick={() => handleSwitchChange(label_status, record)} />
+      render: (isActive, record) => (
+        <Switch checkedChildren="上线中" unCheckedChildren="已禁用" checked={isActive} onClick={() => handleSwitchChange(isActive, record)} />
       )
     },
     {
@@ -97,35 +75,50 @@ const InformationLabelList: FC = () => {
       render: (_, record: API.InformationLabelType) => (
         <Space>
           <Button type='primary' onClick={() => { handleEdit(record.id) }}>修改</Button>
-          <Button type="dashed" danger onClick={() => { handleDelete([record.id]) }}>删除</Button>
         </Space>
       )
     }
   ]
 
-  const tableSelection: TableProps<any>['rowSelection'] = {
-    onChange: (selectedRowKeys: any[]) => {
-      setSelectedRowKeys(selectedRowKeys)
-    }
-  }
-
   useEffect(() => {
-    if (tableQuery.current !== 0 && tableQuery.pageSize !== 0) {
+    if (tableQuery.page !== 0 && tableQuery.size !== 0) {
       fetchData(searchValue)
     }
-  }, [tableQuery.current, tableQuery.pageSize])
+  }, [tableQuery.page, tableQuery.size])
 
   async function fetchData(searchValue: string) {
     setTableLoading(true)
-    const data = await getInformationLabelList(tableQuery)
-    const { list, total } = data as unknown as API.APIResult
-    setTableData(list)
-    setTableTotal(total)
-    setTableLoading(false)
+    if (searchValue) {
+      getSearchInformationLabel({ query: searchValue }).then((res: any) => {
+        if (res.code !== 0) {
+          return message.error("获取数据失败,错误码:" + res.code)
+        }
+        const { data } = res.data
+        setTableData(data)
+        setTableTotal(data.length)
+      }).catch(() => {
+        message.error('获取数据失败')
+      }).finally(() => {
+        setTableLoading(false)
+      })
+    } else {
+      getInformationLabelList(tableQuery).then((res: API.InformationLabelListResult) => {
+        if (res.code !== 0) {
+          return message.error("获取数据失败,错误码:" + res.code)
+        }
+        const { data, total } = res.data
+        setTableData(data)
+        setTableTotal(total)
+      }).catch(() => {
+        message.error('获取数据失败')
+      }).finally(() => {
+        setTableLoading(false)
+      })
+    }
   }
 
-  function handlePageChange(page: number, pageSize: number) {
-    setTableQuery({ ...tableQuery, current: page, pageSize })
+  function handlePageChange(page: number, size: number) {
+    setTableQuery({ ...tableQuery, page, size })
   }
 
   function handleSwitchChange(checked: boolean, record: API.InformationLabelType) {
@@ -163,85 +156,61 @@ const InformationLabelList: FC = () => {
     setShowAddTable(true)
   }
 
-  function handleDelete(ids: number[]) {
-    if (ids.length > 0) {
-      Modal.confirm({
-        title: '此操作将删除该标签, 是否继续?',
-        icon: <ExclamationCircleOutlined rev={undefined} />,
-        okType: 'danger',
-        okText: '删除',
-        cancelText: '取消',
-        onOk() {
-          return Delete(ids)
-        },
-        onCancel() {
-        }
-      })
-    } else {
-      if (selectedRowKeys.length === 0) {
-        message.error('请选择要删除的标签')
-      } else {
-        Modal.confirm({
-          title: '此操作将删除选中标签, 是否继续?',
-          icon: <ExclamationCircleOutlined rev={undefined} />,
-          okType: 'danger',
-          okText: '删除',
-          cancelText: '取消',
-          onOk() {
-            return Delete(selectedRowKeys)
-          },
-          onCancel() {
-          }
-        })
-      }
-    }
-  }
 
   const SwitchStatus = async (status: boolean, record: API.InformationLabelType) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(true)
-      }, 1000);
-    }).catch(() => console.log('Oops errors!')).then(() => {
-      setTableData(tableData.map(item => item.id === record.id ? { ...item, label_status: status } : item))
+    return postUpdateInformationLabel({ id: record.id, name: record.name, isActive: status }).then((res: any) => {
+      if (res.code === 0) {
+        setTableData(tableData.map(item => item.id === record.id ? { ...item, isActive: status } : item))
+        message.success('操作成功')
+      } else {
+        message.error("修改失败,错误码:" + res.code)
+      }
+    }).catch(() => {
+      message.error('操作失败')
     })
   }
 
   const onFinishEdit = async (values: any) => {
     setLoadingEdit(true)
-    if (values.create_user) {
+    if (values.createdAt) {
       return Edit(values)
     } else {
-      return Add(values)
+      return Add(values.name)
     }
   }
 
   const Edit = async (values: any) => {
-    setTimeout(() => {
-      setLoadingEdit(false)
-      setShowAddTable(false)
-    }, 1000);
-  }
-
-  const Add = async (values: any) => {
-    setTimeout(() => {
-      setLoadingEdit(false)
-      setShowAddTable(false)
-    }, 1000);
-  }
-
-  const Delete = async (ids: number[]) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(true)
-      }, 1000);
+    postUpdateInformationLabel({ id: values.id, name: values.name, isActive: values.isActive }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('操作成功')
+        setTableData(tableData.map(item => item.id === values.id ? { ...item, name: values.name, isActive: values.isActive } : item))
+      } else {
+        message.error("修改失败,错误码:" + res.code)
+      }
     }).catch(() => {
       message.error('操作失败')
-    }).then(() => {
-      setTableData(tableData.filter(item => !ids.includes(item.id)))
-      message.success('操作成功')
+    }).finally(() => {
+      setShowAddTable(false)
+      setLoadingEdit(false)
     })
   }
+
+  const Add = async (name: string) => {
+    postAddInformationLabel({ name }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('新增成功')
+        fetchData(searchValue)
+      } else {
+        message.error("新增失败,错误码:" + res.code)
+      }
+    }).catch(() => {
+      message.error('新增失败')
+    }).finally(() => {
+      setLoadingEdit(false)
+      setShowAddTable(false)
+    })
+  }
+
 
   return (
     <>
@@ -249,7 +218,6 @@ const InformationLabelList: FC = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Space>
             <Button type='primary' onClick={() => { setShowAddTable(true); form.resetFields() }}><PlusOutlined />新增标签</Button>
-            <Button type='primary' danger onClick={() => { handleDelete([]) }}><DeleteOutlined />批量删除</Button>
           </Space>
           <Space>
             <h3>搜索：</h3>
@@ -263,13 +231,12 @@ const InformationLabelList: FC = () => {
       <Card bordered={false}>
         <Table
           rowKey='id'
-          rowSelection={tableSelection}
           columns={columns}
           dataSource={tableData}
           loading={tableLoading}
           pagination={{
-            current: tableQuery.current,
-            pageSize: tableQuery.pageSize,
+            current: tableQuery.page,
+            pageSize: tableQuery.size,
             total: tableTotal,
             showTotal: () => `Total ${tableTotal} items`,
             showSizeChanger: true,
@@ -279,34 +246,34 @@ const InformationLabelList: FC = () => {
         />
         <Modal
           open={showAddTable}
-          title={form.getFieldValue('create_user') ? '修改标签' : '新增标签'}
+          title={form.getFieldValue('createdAt') ? '修改标签' : '新增标签'}
           closable={false}
           footer={null}
           forceRender
         >
           <Form form={form} onFinish={onFinishEdit}>
-            <Form.Item label='标签名称' name='label_name' rules={[{ required: true, message: '请输入标签名称' }, { max: 6, message: '标签名称长度不能超过6个字符' }]}>
+            <Form.Item label='标签名称' name='name' rules={[{ required: true, message: '请输入标签名称' }, { max: 12, message: '标签名称长度不能超过12个字符' }]}>
               <Input />
             </Form.Item>
-            {form.getFieldValue('create_user') ? (
+            {form.getFieldValue('createdAt') ? (
               <>
-                <Form.Item label='标签状态' name='label_status' rules={[{ required: true, message: '请选择标签状态' }]}>
+                <Form.Item label='标签状态' name='isActive' rules={[{ required: true, message: '请选择标签状态' }]}>
                   <Select options={[{ label: '上线中', value: true }, { label: '已禁用', value: false }]} />
                 </Form.Item>
                 <Form.Item label='标签ID' name='id' hidden>
                   <Input />
                 </Form.Item>
-                <Form.Item label='创建人' hidden name='create_user'>
+                <Form.Item label='创建时间' hidden name='createdAt'>
                   <Input disabled />
                 </Form.Item>
               </>
             ) : null}
             <Form.Item wrapperCol={{ span: 12, offset: 12 }}>
               <Button loading={loadingEdit} type='primary' htmlType='submit'>
-                确认{form.getFieldValue('create_user') ? '修改' : '新增'}
+                确认{form.getFieldValue('createdAt') ? '修改' : '新增'}
               </Button>
               <Button style={{ marginLeft: '12px' }} onClick={() => { setShowAddTable(false) }}>
-                取消{form.getFieldValue('create_user') ? '修改' : '新增'}
+                取消{form.getFieldValue('createdAt') ? '修改' : '新增'}
               </Button>
             </Form.Item>
           </Form>
