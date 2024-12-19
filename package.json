@@ -8,7 +8,7 @@
     "url": "https://github.com/baimingxuan"
   },
   "scripts": {
-    "serve": "vite",
+    "serve": "vite --no-open",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
     "clean:cache": "rimraf .eslintcache && rimraf node_modules && pnpm install",
