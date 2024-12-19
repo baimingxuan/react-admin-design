@@ -257,7 +257,7 @@ const InformationEdit: FC = () => {
                 />
               </Form.Item>
               <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯封面</h3>} name='coverImageUrl' rules={formRules.all}>
-                <Card title='' bordered={false} styles={{ body: { height: '150px' } }} >
+                <Card title='' bordered={false} bodyStyle={{ height: '150px' }} >
                   <Upload
                     fileList={listImgs}
                     accept='.jpg, .jpeg, .gif, .png, .bmp'

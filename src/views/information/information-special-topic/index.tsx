@@ -375,7 +375,7 @@ const InformationSpecialTopicList: FC = () => {
               <TextArea rows={4} />
             </Form.Item>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题封面</h4>} name='backgroundImageUrl' rules={[{ required: true, message: '请上传专题封面' }]}>
-              <Card title='' bordered={false} styles={{ body: { height: '150px' } }}>
+              <Card title='' bordered={false} bodyStyle={{ height: '150px' }}>
                 <Upload
                   fileList={listImgs}
                   accept='.jpg, .jpeg, .gif, .png, .bmp'
