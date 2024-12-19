@@ -2,7 +2,9 @@ import { service } from '@/utils/axios'
 
 // IMAGE
 // upload image
-export function uploadImage(data: any) { return service({ url: '/upload/uploadImage', method: 'post', data }) }
+export function uploadImage(data: any): Promise<API.APIResult<any>> {
+  return service({ url: '/staff/cdn/image/upload', method: 'post', data })
+}
 
 // USER
 // user login api
@@ -87,16 +89,28 @@ export function getSearchInformationSpecialTopic(params: any): Promise<API.Infor
 
 // NEWS FLASH
 // News Flash list
-export function getNewsFlashList(params: any): Promise<API.NewsFlashListResult> {
-  return service({ url: '/newsFlash/getNewsFlashList', method: 'get', params })
+export function postNewsFlashList(data: any): Promise<API.NewsFlashListResult> {
+  return service({ url: '/staff/breaking-news/list', method: 'post', data })
+}
+// News Flash delete
+export function postDeleteNewsFlash(data: any): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/breaking-news/delete', method: 'post', data })
+}
+// News Flash change status
+export function postChangeNewsFlashStatus(data: any): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/breaking-news/change/isactive', method: 'post', data })
+}
+// News Flash update
+export function postUpdateNewsFlash(data: any): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/breaking-news/update', method: 'post', data })
 }
 // News Flash source list
-export function getNewsFlashSourceList(params: any): Promise<API.NewsFlashSourceListResult> {
-  return service({ url: '/newsFlash/getNewsFlashSourceList', method: 'get', params })
+export function getNewsFlashSourceList(data: any): Promise<API.NewsFlashSourceListResult> {
+  return service({ url: '/staff/breaking-news/source/list', method: 'post', data })
 }
 
 // HOME
 // home page data
-export function getHomeAllList(params: any): Promise<API.HomeAllListResult> {
-  return service({ url: '/home/getAllList', method: 'get', params })
+export function getHomeAllList(data: any): Promise<API.HomeAllListResult> {
+  return service({ url: '/staff/home/getAllList', method: 'post', data })
 }

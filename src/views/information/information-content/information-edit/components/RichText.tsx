@@ -5,6 +5,7 @@ import Toolbar from './Toolbar'
 import '@wangeditor/editor/dist/css/style.css'
 import { message } from 'antd'
 import { uploadImage } from '@/api'
+import { uploadImgToBase64 } from '@/utils/image'
 
 const RichTextEditor: FC<{ value: string, updateValue: (value: string) => void, style?: React.CSSProperties }> = ({ value, updateValue, style }) => {
     const [editor, setEditor] = useState<IDomEditor | null>(null)
@@ -17,20 +18,18 @@ const RichTextEditor: FC<{ value: string, updateValue: (value: string) => void, 
                 maxFileSize: 4 * 1024 * 1024,
                 maxNumberOfFiles: 1,
                 timeout: 5 * 1000,
-                customUpload(file: any, insertFn: any) {
-                    let data = new FormData();
-                    data.append("file", file); // file 即选中的文件 主要就是这个传的参数---看接口要携带什么参数{ key :value}
-                    console.log(data.get('file'))
-                    const hide = message.loading('上传中...', 0);
-                    //这里写自己的接口
-                    uploadImage(data).then((res: any) => {
-                        const url = res.data.data.url;
-                        insertFn(url); //插入图片，看返回的数据是什么
-                        hide();
-                    }).catch((err: any) => {
-                        insertFn('https://www.baidu.com/img/bd_logo1.png')
-                        hide();
-                    })
+                async customUpload(file: any, insertFn: any) {
+                    // 将图片转换为base64
+                    const base64 = await uploadImgToBase64(file as File) as { result: string }
+                    uploadImage({ image: base64.result.replace(/.*;base64,/, '') }).then((res) => {
+                        console.log(res)
+                        if (res.code !== 0) {
+                            return message.error("上传图片失败,错误码:" + res.code)
+                        }
+                        insertFn(res.data.imageUrl + "/article")
+                    }).catch((err) => {
+                        message.error('上传失败:' + err)
+                    });
                 }
             },
             uploadVideo: {
@@ -38,8 +37,7 @@ const RichTextEditor: FC<{ value: string, updateValue: (value: string) => void, 
                 maxNumberOfFiles: 1,
                 timeout: 5 * 1000, // 5 秒
                 customUpload(file: any, insertFn: any) {
-                    console.log(file)
-                    insertFn('https://vjs.zencdn.net/v/oceans.mp4')
+                    message.error('暂不支持上传视频')
                 }
             }
         }

@@ -6,7 +6,7 @@ import { getToken, clearAuthCache } from '@/utils/auth'
 // Create axios instance
 const service = axios.create({
   baseURL: '/api',
-  timeout: 10 * 1000
+  timeout: 10 * 10000
 })
 
 // Handle Error

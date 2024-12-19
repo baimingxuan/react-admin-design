@@ -22,6 +22,7 @@ import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { getInformationSpecialTopicList, getSearchInformationSpecialTopic, postAddInformationSpecialTopic, postUpdateInformationSpecialTopic, uploadImage } from '@/api'
 import dayjs from 'dayjs'
 import TextArea from 'antd/es/input/TextArea'
+import { uploadImgToBase64 } from '@/utils/image'
 
 const InformationSpecialTopicList: FC = () => {
   const [form] = Form.useForm()
@@ -266,20 +267,35 @@ const InformationSpecialTopicList: FC = () => {
     form.setFieldValue("backgroundImageUrl", newFileList[0]?.response?.data?.url || "")
   }
 
-  const customUploadListImgs: UploadProps['customRequest'] = (e) => {
-    uploadImage({ file: e.file }).then((res) => {
-      console.log('上传成功', res.data);
-      e.onSuccess?.(res.data);
-    }).catch((err) => {
-      console.log('上传失败', err)
+  const customUploadListImgs: UploadProps['customRequest'] = async (e) => {
+    // 将图片转换为base64
+    const base64 = await uploadImgToBase64(e.file as File) as { result: string }
+    uploadImage({ image: base64.result.replace(/.*;base64,/, '') }).then((res) => {
+      console.log(res)
+      if (res.code !== 0) {
+        e.onError?.({
+          status: res.code,
+          message: '上传失败',
+          name: ""
+        })
+        return message.error("上传图片失败,错误码:" + res.code)
+      }
+      console.log(res.data.imageUrl)
       e.onSuccess?.({
         data: {
-          url: "https://www.baidu.com/img/bd_logo1.png",
-          name: "baidu.png",
+          url: res.data.imageUrl + "/large",
+          name: '',
           status: "done",
-          thumbUrl: "https://www.baidu.com/img/bd_logo1.png"
+          thumbUrl: res.data.imageUrl + "/thumbnail"
         }
       });
+    }).catch((err) => {
+      message.error('上传失败')
+      e.onError?.({
+        status: 500,
+        message: '上传失败',
+        name: 'baidu.png'
+      })
     });
   }
   return (
@@ -394,5 +410,4 @@ const InformationSpecialTopicList: FC = () => {
 }
 
 export default InformationSpecialTopicList
-
 

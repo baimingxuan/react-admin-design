@@ -152,3 +152,19 @@ export function calcImageSize(
     ratio
   }
 }
+
+/**
+ * 将图片转换为base64
+ * @param file 
+ * @returns 
+ */
+export function uploadImgToBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()//html5提供的一种异步文件读取机制 
+    reader.readAsDataURL(file)//将文件读取为Base64编码的数据URL
+    reader.onload = function () {  // 图片转base64完成后返回reader对象
+      resolve(reader)
+    }
+    reader.onerror = reject
+  })
+}

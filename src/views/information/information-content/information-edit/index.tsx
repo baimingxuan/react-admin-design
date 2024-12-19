@@ -22,6 +22,7 @@ import { postInformationDetailById, postAddInformation, postInformationUpdate, g
 import RichTextEditor from './components/RichText'
 
 import { useAppSelector } from '@/stores'
+import { uploadImgToBase64 } from '@/utils/image'
 const InformationEdit: FC = () => {
   let id = useLocation()?.state?.id
   if (id === undefined) {
@@ -41,7 +42,7 @@ const InformationEdit: FC = () => {
     tagIds: [],
     collectionIds: [],
     isActive: false,
-    coverImageUrl: '',
+    coverImageUrl: 'https://d6-invdn-com.investing.com/content/pic0d7eb4e60be50fd74d21d3c1f2149d54.jpg',
   })
   const [loading, setLoading] = useState<boolean>(false)
   const [searchId, setSearchId] = useState<string>('')
@@ -117,7 +118,8 @@ const InformationEdit: FC = () => {
         setInformationDetail({
           ...res.data.article,
           tagIds: res.data?.tags?.map((item: any) => item.id) || [],
-          collectionIds: res.data?.collections?.map((item: any) => item.id) || []
+          collectionIds: res.data?.collections?.map((item: any) => item.id) || [],
+          coverImageUrl: "https://d6-invdn-com.investing.com/content/pic0d7eb4e60be50fd74d21d3c1f2149d54.jpg"
         })
         if (res.data.article.coverImageUrl) {
           setListImgs([{
@@ -148,20 +150,35 @@ const InformationEdit: FC = () => {
     form.setFieldValue("coverImageUrl", newFileList[0]?.response?.data?.url || "")
   }
 
-  const customUploadListImgs: UploadProps['customRequest'] = (e) => {
-    uploadImage({ file: e.file }).then((res) => {
-      console.log('上传成功', res.data);
-      e.onSuccess?.(res.data);
-    }).catch((err) => {
-      console.log('上传失败', err)
+  const customUploadListImgs: UploadProps['customRequest'] = async (e) => {
+    // 将图片转换为base64
+    const base64 = await uploadImgToBase64(e.file as File) as { result: string }
+    uploadImage({ image: base64.result.replace(/.*;base64,/, '') }).then((res) => {
+      console.log(res)
+      if (res.code !== 0) {
+        e.onError?.({
+          status: res.code,
+          message: '上传失败',
+          name: ""
+        })
+        return message.error("上传图片失败,错误码:" + res.code)
+      }
+      console.log(res.data.imageUrl)
       e.onSuccess?.({
         data: {
-          url: "https://www.baidu.com/img/bd_logo1.png",
-          name: "baidu.png",
+          url: res.data.imageUrl + "/large",
+          name: '',
           status: "done",
-          thumbUrl: "https://www.baidu.com/img/bd_logo1.png"
+          thumbUrl: res.data.imageUrl + "/thumbnail"
         }
       });
+    }).catch((err) => {
+      message.error('上传失败')
+      e.onError?.({
+        status: 500,
+        message: '上传失败',
+        name: 'baidu.png'
+      })
     });
   }
 

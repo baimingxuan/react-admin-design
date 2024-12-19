@@ -68,16 +68,16 @@ declare namespace API {
 
     interface NewsFlashInfoType {
         id: number
-        newsFlashTitleZh: string
-        newsFlashContentZh: string
-        newsFlashTitleEn: string
-        newsFlashContentEn: string
-        newsFlashStatus: boolean
+        titleZh: string
+        contentZh: string
+        titleEn: string
+        contentEn: string
+        isActive: boolean
         createdAt: string
         author: string
         updatedAt: string
-        newsFlashSourceUrl: string
-        newsFlashSourceSite: NewsFlashSourceType
+        link: string
+        source: string
     }
 
     interface NewsFlashSourceType {
