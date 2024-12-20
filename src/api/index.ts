@@ -106,7 +106,7 @@ export function postUpdateNewsFlash(data: any): Promise<API.APIResult<null>> {
 }
 // News Flash source list
 export function getNewsFlashSourceList(data: any): Promise<API.NewsFlashSourceListResult> {
-  return service({ url: '/staff/breaking-news/source/list', method: 'post', data })
+  return service({ url: '/staff/spider-logs/list', method: 'post', data })
 }
 
 // HOME

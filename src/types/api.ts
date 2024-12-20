@@ -82,13 +82,12 @@ declare namespace API {
 
     interface NewsFlashSourceType {
         id: number
-        sourceSiteUrl: string
-        lastCollectTime: string
-        collectTotalNum: number
-        sourceStatus: boolean
         createdAt: string
-        updatedAt: string
-        author: string
+        endTime: string
+        itemsCount: number
+        status: string
+        taskId: string
+        totalCount: number
     }
 
     interface HomeAllDataType {
@@ -158,7 +157,7 @@ declare namespace API {
 
     type NewsFlashSourceListResult = APIResult<{
         data: NewsFlashSourceType[]
-        total: number
+        pagination: PageState
     }>
 
     type HomeAllListResult = APIResult<{

@@ -6,7 +6,8 @@ import {
   Table,
   Tag,
   Space,
-  Input
+  Input,
+  message
 } from 'antd'
 import { getNewsFlashSourceList } from '@/api'
 import dayjs from 'dayjs'
@@ -27,38 +28,38 @@ const NewsFlashSourceList: FC = () => {
     },
     {
       title: '上次采集时间',
-      dataIndex: 'lastCollectTime',
+      dataIndex: 'endTime',
       align: 'center',
-      render: (lastCollectTime) => {
-        return <span>{dayjs(lastCollectTime).format('YYYY-MM-DD HH:mm:ss')}</span>
+      render: (endTime) => {
+        return <span>{dayjs(endTime).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
     },
     {
       title: '上次采集数量',
-      dataIndex: 'lastCollectNum',
+      dataIndex: 'itemsCount',
       align: 'center'
     },
     {
       title: '采集总数',
-      dataIndex: 'collectTotalNum',
+      dataIndex: 'totalCount',
       align: 'center'
     },
     {
       title: '来源地址',
-      dataIndex: 'sourceSiteUrl',
+      dataIndex: 'taskId',
       align: 'center',
-      render: (sourceSiteUrl) => {
+      render: (taskId) => {
         return (
-          <a href={sourceSiteUrl} style={{ color: 'blue' }} target='_blank'>{sourceSiteUrl}</a>
+          <a style={{ color: 'blue' }}>{taskId}</a>
         )
       }
     },
     {
       title: '接口状态',
-      dataIndex: 'sourceStatus',
+      dataIndex: 'status',
       align: 'center',
-      render: (sourceStatus, record) => {
-        return sourceStatus ? <Tag color="green">正常</Tag> : <Tag color="red">异常</Tag>
+      render: (status) => {
+        return status === 'success' ? <Tag color="green">正常</Tag> : status === 'failed' ? <Tag color="red">异常</Tag> : <Tag color="orange">采集中</Tag>
       }
     }
   ]
@@ -70,10 +71,14 @@ const NewsFlashSourceList: FC = () => {
   // fetch data
   async function fetchData(value: string) {
     setTableLoading(true)
-    const data = await getNewsFlashSourceList(tableQuery)
-    // const { list, total } = data as unknown as API.APIResult
-    // setTableData(list)
-    // setTableTotal(total)
+    const res = await getNewsFlashSourceList({ pagination: tableQuery })
+    console.log(res)
+    if (res.code !== 0) {
+      return message.error("获取数据失败,错误码:" + res.code)
+    }
+    const { data, pagination: { total } } = res.data
+    setTableData(data)
+    setTableTotal(total || 0)
     setTableLoading(false)
   }
 
