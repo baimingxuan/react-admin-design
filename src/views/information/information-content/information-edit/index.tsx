@@ -166,10 +166,10 @@ const InformationEdit: FC = () => {
       console.log(res.data.imageUrl)
       e.onSuccess?.({
         data: {
-          url: res.data.imageUrl + "/large",
+          url: res.data.imageUrl + "/wideThumbnail",
           name: '',
           status: "done",
-          thumbUrl: res.data.imageUrl + "/thumbnail"
+          thumbUrl: res.data.imageUrl + "/wideThumbnail"
         }
       });
     }).catch((err) => {
