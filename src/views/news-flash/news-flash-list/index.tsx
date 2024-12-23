@@ -92,13 +92,13 @@ const NewsFlashList: FC = () => {
       align: 'center',
       render: (_, record: any) => {
         const content = (
-          <div style={{ width: '300px' }}>
+          <div style={{ width: '300px', overflow: 'scroll', height: '300px' }}>
             <p>快讯内容：<br />{selectLanguage === 'zh' ? record.contentZh : record.contentEn}</p>
           </div>
         )
         return (
-          <Popover content={content}>
-            <Tag color="green">{selectLanguage === 'zh' ? record.titleZh : record.titleEn}</Tag>
+          <Popover content={content} >
+            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zh' ? record.titleZh : record.titleEn}</Tag>
           </Popover>
         )
       }
@@ -108,7 +108,15 @@ const NewsFlashList: FC = () => {
       dataIndex: 'createdAt',
       align: 'center',
       render: (createdAt) => {
-        return <span>{dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+        return <span>{dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss:SSS')}</span>
+      }
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updatedAt',
+      align: 'center',
+      render: (updatedAt) => {
+        return <span>{dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss:SSS')}</span>
       }
     },
     {

@@ -271,7 +271,7 @@ const InformationEdit: FC = () => {
                     {listImgs.length === 0 && (
                       <div>
                         <PlusOutlined rev={undefined} />
-                        <div style={{ marginTop: '8px' }}>点击上传</div>
+                        <div style={{ marginTop: '8px' }}>点击上传（建议尺寸: W:278px H:157px）</div>
                       </div>
                     )}
                   </Upload>
