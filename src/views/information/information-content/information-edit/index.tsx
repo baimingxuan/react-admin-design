@@ -1,5 +1,5 @@
 import { type FC, useEffect, useState } from 'react'
-import { useLocation, useLoaderData } from 'react-router-dom'
+import { useLocation, useLoaderData, useNavigate } from 'react-router-dom'
 
 import type { Rule } from 'antd/es/form'
 import {
@@ -17,13 +17,13 @@ import {
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
-import router from '@/router'
 import { postInformationDetailById, postAddInformation, postInformationUpdate, getSearchInformationLabel, getSearchInformationSpecialTopic, uploadImage } from '@/api'
 import RichTextEditor from './components/RichText'
 
 import { useAppSelector } from '@/stores'
 import { uploadImgToBase64 } from '@/utils/image'
 const InformationEdit: FC = () => {
+  const router = useNavigate()
   let id = useLocation()?.state?.id
   if (id === undefined) {
     id = (useLoaderData() as { id: any }).id
@@ -42,7 +42,7 @@ const InformationEdit: FC = () => {
     tagIds: [],
     collectionIds: [],
     isActive: false,
-    coverImageUrl: 'https://d6-invdn-com.investing.com/content/pic0d7eb4e60be50fd74d21d3c1f2149d54.jpg',
+    coverImageUrl: '',
   })
   const [loading, setLoading] = useState<boolean>(false)
   const [searchId, setSearchId] = useState<string>('')
@@ -76,11 +76,12 @@ const InformationEdit: FC = () => {
   const onFinish = (values: any) => {
     if (values.id === 0) {
       delete values.id
-      postAddInformation({ ...values, contentEn: htmlEn, contentZh: htmlZh, author: userInfo?.username }).then((res: any) => {
+      postAddInformation({ ...values, author: userInfo?.username }).then((res: any) => {
         if (res.code === 0) {
           message.success('资讯添加成功')
           // 跳转到对应页面
-          router.navigate("/information/information-content/information-detail", { state: { id: res.data.id } })
+
+          router("/information/information-content/information-detail", { state: { id: res.data.id } })
         } else {
           message.error(res.msg || '资讯添加失败')
         }
@@ -89,11 +90,11 @@ const InformationEdit: FC = () => {
       })
     } else {
       // update
-      postInformationUpdate({ ...values, contentEn: htmlEn, contentZh: htmlZh }).then((res: any) => {
+      postInformationUpdate({ ...values, }).then((res: any) => {
         if (res.code === 0) {
           message.success('资讯修改成功')
           // 跳转到对应页面
-          router.navigate("/information/information-content/information-detail", { state: { id: res.data.id } })
+          router("/information/information-content/information-detail", { state: { id: res.data.id } })
         } else {
           message.error(res.msg || '资讯修改失败')
         }
@@ -119,7 +120,6 @@ const InformationEdit: FC = () => {
           ...res.data.article,
           tagIds: res.data?.tags?.map((item: any) => item.id) || [],
           collectionIds: res.data?.collections?.map((item: any) => item.id) || [],
-          coverImageUrl: "https://d6-invdn-com.investing.com/content/pic0d7eb4e60be50fd74d21d3c1f2149d54.jpg"
         })
         if (res.data.article.coverImageUrl) {
           setListImgs([{
@@ -163,7 +163,6 @@ const InformationEdit: FC = () => {
         })
         return message.error("上传图片失败,错误码:" + res.code)
       }
-      console.log(res.data.imageUrl)
       e.onSuccess?.({
         data: {
           url: res.data.imageUrl + "/wideThumbnail",
@@ -172,6 +171,7 @@ const InformationEdit: FC = () => {
           thumbUrl: res.data.imageUrl + "/wideThumbnail"
         }
       });
+      form.setFieldValue("coverImageUrl", res.data.imageUrl + "/wideThumbnail")
     }).catch((err) => {
       message.error('上传失败')
       e.onError?.({
@@ -224,7 +224,7 @@ const InformationEdit: FC = () => {
                       {menu}
                       <Divider style={{ margin: '8px 0' }} />
                       <Button type='link' onClick={() => {
-                        router.navigate('/information/information-label')
+                        router('/information/information-label')
                       }}>新增资讯标签</Button>
                     </>
                   )}
@@ -237,7 +237,7 @@ const InformationEdit: FC = () => {
                       {menu}
                       <Divider style={{ margin: '8px 0' }} />
                       <Button type='link' onClick={() => {
-                        router.navigate('/information/information-special-topic')
+                        router('/information/information-special-topic')
                       }}>新增资讯专题</Button>
                     </>
                   )}
@@ -250,7 +250,7 @@ const InformationEdit: FC = () => {
                       {menu}
                       <Divider style={{ margin: '8px 0' }} />
                       <Button type='link' onClick={() => {
-                        router.navigate('/information/information-special-topic')
+                        router('/information/information-special-topic')
                       }}>新增资讯专题</Button>
                     </>
                   )}
@@ -260,7 +260,7 @@ const InformationEdit: FC = () => {
                 <Card title='' bordered={false} bodyStyle={{ height: '150px' }} >
                   <Upload
                     fileList={listImgs}
-                    accept='.jpg, .jpeg, .gif, .png, .bmp'
+                    accept='.jpg, .jpeg, .gif, .png, .bmp, .svg'
                     listType='picture-card'
                     className='list-upload'
                     style={{ height: '100px', width: 'auto' }}
@@ -277,11 +277,11 @@ const InformationEdit: FC = () => {
                   </Upload>
                 </Card>
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(中文)</h3>} name='contentZh'>
-                <RichTextEditor style={{ zIndex: "2" }} value={htmlZh} updateValue={(value) => setHtmlZh(value)}></RichTextEditor>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(中文)</h3>} name='contentZh' rules={formRules.all}>
+                <RichTextEditor style={{ zIndex: "2" }} value={htmlZh} updateValue={(value) => { setHtmlZh(value), form.setFieldValue("contentZh", value) }}></RichTextEditor>
               </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(英文)</h3>} name='contentEn' >
-                <RichTextEditor style={{ zIndex: "1" }} value={htmlEn} updateValue={(value) => setHtmlEn(value)}></RichTextEditor>
+              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(英文)</h3>} name='contentEn' rules={formRules.all}>
+                <RichTextEditor style={{ zIndex: "1" }} value={htmlEn} updateValue={(value) => { setHtmlEn(value), form.setFieldValue("contentEn", value) }}></RichTextEditor>
               </Form.Item>
               <Form.Item wrapperCol={{ span: 12, offset: 12 }}>
                 <Button type='primary' htmlType='submit'>

@@ -232,7 +232,7 @@ const InformationSpecialTopicList: FC = () => {
 
   const editOnFinish = async (values: any) => {
     setLoadingEdit(true)
-    postUpdateInformationSpecialTopic({ ...values, backgroundImageUrl: listImgs[0]?.response?.data?.url || "" }).then((res: any) => {
+    postUpdateInformationSpecialTopic({ ...values }).then((res: any) => {
       if (res.code !== 0) {
         return message.error("修改专题失败,错误码:" + res.code)
       }
@@ -248,7 +248,7 @@ const InformationSpecialTopicList: FC = () => {
 
   const addOnFinish = async (values: any) => {
     setLoadingEdit(true)
-    postAddInformationSpecialTopic({ ...values, backgroundImageUrl: listImgs[0]?.response?.data?.url || "" }).then((res: any) => {
+    postAddInformationSpecialTopic({ ...values }).then((res: any) => {
       if (res.code !== 0) {
         return message.error("新增专题失败,错误码:" + res.code)
       }
@@ -289,6 +289,7 @@ const InformationSpecialTopicList: FC = () => {
           thumbUrl: res.data.imageUrl + "/wideThumbnail"
         }
       });
+      form.setFieldValue("backgroundImageUrl", res.data.imageUrl + "/wideThumbnail")
     }).catch((err) => {
       message.error('上传失败')
       e.onError?.({
@@ -378,7 +379,7 @@ const InformationSpecialTopicList: FC = () => {
               <Card title='' bordered={false} bodyStyle={{ height: '150px' }}>
                 <Upload
                   fileList={listImgs}
-                  accept='.jpg, .jpeg, .gif, .png, .bmp'
+                  accept='.jpg, .jpeg, .gif, .png, .bmp, .svg'
                   listType='picture-card'
                   style={{ height: '100px', width: 'auto' }}
                   onChange={handleChangeListImgs}
