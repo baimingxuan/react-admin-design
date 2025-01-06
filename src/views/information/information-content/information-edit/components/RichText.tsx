@@ -73,7 +73,7 @@ const RichTextEditor: FC<{ value: string, updateValue: (value: string) => void, 
                 onCreated={setEditor}
                 onChange={editor => setHtml(editor.getHtml())}
                 mode='default'
-                style={{ height: '500px', overflowY: 'hidden' }}
+                style={{ overflowY: 'hidden' }}
             />
         </div>
     )

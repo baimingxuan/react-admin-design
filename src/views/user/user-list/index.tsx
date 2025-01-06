@@ -50,24 +50,28 @@ const UserList: FC = () => {
       align: 'center'
     },
     {
-      title: '钱包地址(vsys)',
+      title: 'vsys钱包地址',
       dataIndex: 'vsysAddress',
-      align: 'center'
+      align: 'center',
+      ellipsis: true
     },
     {
-      title: '钱包地址(solana)',
+      title: 'solana钱包地址',
       dataIndex: 'solanaAddress',
-      align: 'center'
+      align: 'center',
+      ellipsis: true
     },
     {
-      title: '钱包地址(ton)',
+      title: 'ton钱包地址',
       dataIndex: 'tonAddress',
-      align: 'center'
+      align: 'center',
+      ellipsis: true
     },
     {
-      title: '钱包地址(phantom)',
+      title: 'phantom钱包地址',
       dataIndex: 'phantomAddress',
-      align: 'center'
+      align: 'center',
+      ellipsis: true
     },
     {
       title: '注册时间',

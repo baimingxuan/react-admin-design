@@ -44,12 +44,12 @@ const InformationList: FC = () => {
       render: (_, record: any) => {
         const content = (
           <div style={{ width: '300px' }}>
-            <p>资讯简介：<br />{selectLanguage === 'zh' ? record.descriptionZh : record.descriptionEn}</p>
+            <p>资讯简介：<br />{selectLanguage === 'zh' ? record.descriptionZh : selectLanguage === 'en' ? record.descriptionEn : selectLanguage === 'ko' ? record.descriptionKr : selectLanguage === 'es' ? record.descriptionEs : ''}</p>
           </div>
         )
         return (
           <Popover content={content}>
-            <Tag color="green">{selectLanguage === 'zh' ? record.titleZh : record.titleEn}</Tag>
+            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zh' ? record.titleZh : selectLanguage === 'en' ? record.titleEn : selectLanguage === 'ko' ? record.titleKr : selectLanguage === 'es' ? record.titleEs : ''}</Tag>
           </Popover>
         )
       }
@@ -250,6 +250,8 @@ const InformationList: FC = () => {
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                 <Select.Option value="en">英文</Select.Option>
                 <Select.Option value="zh">中文</Select.Option>
+                <Select.Option value="ko">韩语</Select.Option>
+                <Select.Option value="es">西班牙语</Select.Option>
               </Select>
             </Space>
           </Space>
