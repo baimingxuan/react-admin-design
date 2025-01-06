@@ -51,12 +51,12 @@ const InformationSpecialTopicList: FC = () => {
       render: (nameZh, record) => {
         const content = (
           <div style={{ width: '300px' }}>
-            <p>专题简介：<br />{selectLanguage === 'zh' ? record.descriptionZh : record.descriptionEn}</p>
+            <p>专题简介：<br />{selectLanguage === 'zh' ? record.descriptionZh : selectLanguage === 'en' ? record.descriptionEn : selectLanguage === 'ko' ? record.descriptionKr : selectLanguage === 'es' ? record.descriptionEs : ''}</p>
           </div>
         )
         return (
           <Popover content={content}>
-            <Tag color="purple">{selectLanguage === 'zh' ? nameZh : record.nameEn}</Tag>
+            <Tag color="purple">{selectLanguage === 'zh' ? nameZh : selectLanguage === 'en' ? record.nameEn : selectLanguage === 'ko' ? record.nameKr : selectLanguage === 'es' ? record.nameEs : ''}</Tag>
           </Popover>
         )
       }
@@ -310,6 +310,8 @@ const InformationSpecialTopicList: FC = () => {
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                 <Select.Option value="en">英文</Select.Option>
                 <Select.Option value="zh">中文</Select.Option>
+                <Select.Option value="ko">韩语</Select.Option>
+                <Select.Option value="es">西班牙语</Select.Option>
               </Select>
             </Space>
           </Space>
@@ -346,7 +348,12 @@ const InformationSpecialTopicList: FC = () => {
           width='1000px'
           forceRender
         >
-          <Form form={form} onFinish={onFinish}>
+          <Form form={form}
+            colon={false}
+            labelCol={{ span: 4 }}
+            labelAlign='left'
+            style={{ width: '100%', margin: '0 auto' }}
+            onFinish={onFinish}>
             {
               form.getFieldValue('createdAt') ? <>
                 <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>创建时间</h4>} name='createdAt' hidden>
@@ -369,10 +376,22 @@ const InformationSpecialTopicList: FC = () => {
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(英文)</h4>} name='nameEn' rules={[{ required: true, message: '请输入专题名称' }]}>
               <Input />
             </Form.Item>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(韩语)</h4>} name='nameKr' rules={[{ required: true, message: '请输入专题名称' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(西班牙语)</h4>} name='nameEs' rules={[{ required: true, message: '请输入专题名称' }]}>
+              <Input />
+            </Form.Item>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(中文)</h4>} name='descriptionZh' rules={[{ required: true, message: '请输入专题简介' }]}>
               <TextArea rows={4} />
             </Form.Item>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(英文)</h4>} name='descriptionEn' rules={[{ required: true, message: '请输入专题简介' }]}>
+              <TextArea rows={4} />
+            </Form.Item>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(韩语)</h4>} name='descriptionKr' rules={[{ required: true, message: '请输入专题简介' }]}>
+              <TextArea rows={4} />
+            </Form.Item>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(西班牙语)</h4>} name='descriptionEs' rules={[{ required: true, message: '请输入专题简介' }]}>
               <TextArea rows={4} />
             </Form.Item>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题封面</h4>} name='backgroundImageUrl' rules={[{ required: true, message: '请上传专题封面' }]}>

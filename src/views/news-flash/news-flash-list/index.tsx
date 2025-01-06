@@ -93,12 +93,12 @@ const NewsFlashList: FC = () => {
       render: (_, record: any) => {
         const content = (
           <div style={{ width: '300px', overflow: 'scroll', height: '300px' }}>
-            <p>快讯内容：<br />{selectLanguage === 'zh' ? record.contentZh : record.contentEn}</p>
+            <p>快讯内容：<br />{selectLanguage === 'zh' ? record.contentZh : selectLanguage === 'ko' ? record.contentKr : record.contentEs}</p>
           </div>
         )
         return (
           <Popover content={content} >
-            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zh' ? record.titleZh : record.titleEn}</Tag>
+            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zh' ? record.titleZh : selectLanguage === 'ko' ? record.titleKr : record.titleEs}</Tag>
           </Popover>
         )
       }
@@ -278,6 +278,8 @@ const NewsFlashList: FC = () => {
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                 <Select.Option value="en">英文</Select.Option>
                 <Select.Option value="zh">中文</Select.Option>
+                <Select.Option value="ko">韩语</Select.Option>
+                <Select.Option value="es">西班牙语</Select.Option>
               </Select>
             </Space>
           </Space>
@@ -317,18 +319,12 @@ const NewsFlashList: FC = () => {
         <Modal
           open={modalVisibel}
           title='修改快讯'
-          width='600px'
+          width='1000px'
           footer={null}
+          closable={false}
           forceRender
         >
-          <Form
-            form={form}
-            colon={false}
-            labelCol={{ span: 6 }}
-            labelAlign='left'
-            style={{ width: '80%', margin: '0 auto' }}
-            onFinish={handleConfirm}
-          >
+          <Form form={form} onFinish={handleConfirm}>
             <Form.Item label='快讯ID' name='id' hidden>
               <Input />
             </Form.Item>
@@ -342,6 +338,18 @@ const NewsFlashList: FC = () => {
               <Input />
             </Form.Item>
             <Form.Item label='快讯内容(英文)' name='contentEn' rules={[{ required: true, message: '请输入快讯内容(英文)' }]}>
+              <TextArea style={{ height: '200px' }} />
+            </Form.Item>
+            <Form.Item label='快讯标题(韩语)' name='titleKr' rules={[{ required: true, message: '请输入快讯标题(韩语)' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label='快讯内容(韩语)' name='contentKr' rules={[{ required: true, message: '请输入快讯内容(韩语)' }]}>
+              <TextArea style={{ height: '200px' }} />
+            </Form.Item>
+            <Form.Item label='快讯标题(西班牙语)' name='titleEs' rules={[{ required: true, message: '请输入快讯标题(西班牙语)' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label='快讯内容(西班牙语)' name='contentEs' rules={[{ required: true, message: '请输入快讯内容(西班牙语)' }]}>
               <TextArea style={{ height: '200px' }} />
             </Form.Item>
             <Form.Item label='快讯状态' name='isActive'>
