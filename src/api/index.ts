@@ -45,7 +45,10 @@ export function postInformationDetailById(data: { id: number }): Promise<API.Inf
 export function postInformationUpdate(data: any): Promise<API.APIResult<null>> {
   return service({ url: '/staff/article/update', method: 'post', data })
 }
-
+// Information translate
+export function postInformationTranslate(data: { id: number }): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/article/translate/chinese', method: 'post', data })
+}
 
 // INFORMATION LABEL  
 // Information label list
