@@ -131,6 +131,7 @@ const NewsFlashList: FC = () => {
       title: '原文地址',
       dataIndex: 'link',
       align: 'center',
+      ellipsis: true,
       render: (link) => {
         return <a href={link} style={{ color: 'blue' }} target='_blank'>{link}</a>
       }
@@ -148,7 +149,7 @@ const NewsFlashList: FC = () => {
       key: 'action',
       align: 'center',
       render: (_, record: any) => (
-        <Space>
+        <Space wrap>
           <Button type="dashed" onClick={() => handleEdit(record)}>
             详情
           </Button>
@@ -277,7 +278,7 @@ const NewsFlashList: FC = () => {
               <h3>选择语言:</h3>
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                 <Select.Option value="en">英文</Select.Option>
-                <Select.Option value="zh">中文</Select.Option>
+                <Select.Option value="zh">繁体中文</Select.Option>
                 <Select.Option value="ko">韩语</Select.Option>
                 <Select.Option value="es">西班牙语</Select.Option>
               </Select>
@@ -328,10 +329,10 @@ const NewsFlashList: FC = () => {
             <Form.Item label='快讯ID' name='id' hidden>
               <Input />
             </Form.Item>
-            <Form.Item label='快讯标题(中文)' name='titleZh' rules={[{ required: true, message: '请输入快讯标题(中文)' }]}>
+            <Form.Item label='快讯标题(繁体中文)' name='titleZh' rules={[{ required: true, message: '请输入快讯标题(繁体中文)' }]}>
               <Input />
             </Form.Item>
-            <Form.Item label='快讯内容(中文)' name='contentZh' rules={[{ required: true, message: '请输入快讯内容(中文)' }]}>
+            <Form.Item label='快讯内容(繁体中文)' name='contentZh' rules={[{ required: true, message: '请输入快讯内容(繁体中文)' }]}>
               <TextArea style={{ height: '200px' }} />
             </Form.Item>
             <Form.Item label='快讯标题(英文)' name='titleEn' rules={[{ required: true, message: '请输入快讯标题(英文)' }]}>

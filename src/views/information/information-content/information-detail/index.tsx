@@ -58,7 +58,7 @@ const InformationDetail: FC = () => {
                   <h3>选择语言:</h3>
                   <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                     <Select.Option value="en">英文</Select.Option>
-                    <Select.Option value="zh">中文</Select.Option>
+                    <Select.Option value="zh">繁体中文</Select.Option>
                     <Select.Option value="ko">韩语</Select.Option>
                     <Select.Option value="es">西班牙语</Select.Option>
                   </Select>

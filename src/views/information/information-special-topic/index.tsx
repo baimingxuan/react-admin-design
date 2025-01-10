@@ -309,7 +309,7 @@ const InformationSpecialTopicList: FC = () => {
               <h3>选择语言:</h3>
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                 <Select.Option value="en">英文</Select.Option>
-                <Select.Option value="zh">中文</Select.Option>
+                <Select.Option value="zh">繁体中文</Select.Option>
                 <Select.Option value="ko">韩语</Select.Option>
                 <Select.Option value="es">西班牙语</Select.Option>
               </Select>
@@ -370,7 +370,7 @@ const InformationSpecialTopicList: FC = () => {
                 </Form.Item>
               </> : null
             }
-            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(中文)</h4>} name='nameZh' rules={[{ required: true, message: '请输入专题名称' }]}>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(繁体中文)</h4>} name='nameZh' rules={[{ required: true, message: '请输入专题名称' }]}>
               <Input />
             </Form.Item>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(英文)</h4>} name='nameEn' rules={[{ required: true, message: '请输入专题名称' }]}>
@@ -382,7 +382,7 @@ const InformationSpecialTopicList: FC = () => {
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题名称(西班牙语)</h4>} name='nameEs' rules={[{ required: true, message: '请输入专题名称' }]}>
               <Input />
             </Form.Item>
-            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(中文)</h4>} name='descriptionZh' rules={[{ required: true, message: '请输入专题简介' }]}>
+            <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(繁体中文)</h4>} name='descriptionZh' rules={[{ required: true, message: '请输入专题简介' }]}>
               <TextArea rows={4} />
             </Form.Item>
             <Form.Item label={<h4 style={{ whiteSpace: 'nowrap' }}>专题简介(英文)</h4>} name='descriptionEn' rules={[{ required: true, message: '请输入专题简介' }]}>

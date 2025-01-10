@@ -17,7 +17,7 @@ import {
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
-import { postInformationDetailById, postAddInformation, postInformationUpdate, getSearchInformationLabel, getSearchInformationSpecialTopic, uploadImage } from '@/api'
+import { postInformationDetailById, postAddInformation, postInformationUpdate, getSearchInformationLabel, getSearchInformationSpecialTopic, uploadImage, postInformationTranslate } from '@/api'
 import RichTextEditor from './components/RichText'
 
 import { useAppSelector } from '@/stores'
@@ -58,21 +58,15 @@ const InformationEdit: FC = () => {
   const [htmlZh, setHtmlZh] = useState('')
   const [htmlKr, setHtmlKr] = useState('')
   const [htmlEs, setHtmlEs] = useState('')
-
-  const [selectSpecialTopicEnList, setSelectSpecialTopicEnList] = useState<{ value: number, label: string }[]>([])
+  const [isTranslate, setIsTranslate] = useState(false)
   const [selectSpecialTopicZhList, setSelectSpecialTopicZhList] = useState<{ value: number, label: string }[]>([])
-  const [selectSpecialTopicKrList, setSelectSpecialTopicKrList] = useState<{ value: number, label: string }[]>([])
-  const [selectSpecialTopicEsList, setSelectSpecialTopicEsList] = useState<{ value: number, label: string }[]>([])
   const [selectLabelList, setSelectLabelList] = useState<{ value: number, label: string }[]>([])
   const { userInfo } = useAppSelector(state => state.user)
 
   useEffect(() => {
     // 获取所有专题
     getSearchInformationSpecialTopic({}).then((res: API.InformationSpecialTopicListResult) => {
-      setSelectSpecialTopicEnList(res.data?.data?.map((item: any) => ({ value: item.id, label: item.nameEn, disabled: false })))
       setSelectSpecialTopicZhList(res.data?.data?.map((item: any) => ({ value: item.id, label: item.nameZh, disabled: false })))
-      setSelectSpecialTopicKrList(res.data?.data?.map((item: any) => ({ value: item.id, label: item.nameKr, disabled: false })))
-      setSelectSpecialTopicEsList(res.data?.data?.map((item: any) => ({ value: item.id, label: item.nameEs, disabled: false })))
     })
     // 获取所有标签
     getSearchInformationLabel({}).then((res: API.InformationLabelListResult) => {
@@ -86,35 +80,81 @@ const InformationEdit: FC = () => {
     ],
   }
   const onFinish = (values: any) => {
+    let isTranslate = values.titleEn ? false : true
+    if (loading) return
+    setLoading(true)
     if (values.id === 0) {
       delete values.id
       postAddInformation({ ...values, author: userInfo?.username }).then((res: any) => {
         if (res.code === 0) {
           message.success('资讯添加成功')
-          // 跳转到对应页面
-
-          router("/information/information-content/information-detail", { state: { id: res.data.id } })
+          if (isTranslate) {
+            translate(res.data.id)
+          } else {
+            router("/information/information-content/information-detail", { state: { id: res.data.id } })
+          }
         } else {
           message.error(res.msg || '资讯添加失败')
         }
       }).catch((err: any) => {
         message.error(err.msg || '资讯添加失败')
+      }).finally(() => {
+        setLoading(false)
       })
     } else {
       // update
       postInformationUpdate({ ...values, }).then((res: any) => {
         if (res.code === 0) {
           message.success('资讯修改成功')
-          // 跳转到对应页面
-          router("/information/information-content/information-detail", { state: { id: res.data.id } })
+          if (isTranslate) {
+            translate(res.data.id)
+          } else {
+            router("/information/information-content/information-detail", { state: { id: res.data.id } })
+          }
         } else {
           message.error(res.msg || '资讯修改失败')
         }
       }).catch((err: any) => {
         message.error(err.msg || '资讯修改失败')
+      }).finally(() => {
+        setLoading(false)
       })
     }
   }
+
+  const translate = (id: number) => {
+    if (isTranslate) return
+    setIsTranslate(true)
+    postInformationTranslate({ id }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('资讯翻译成功')
+        loadData(id)
+      } else {
+        message.error(res.msg || '资讯翻译失败')
+      }
+    }).catch((err: any) => {
+      message.error(err.msg || '资讯翻译失败')
+    }).finally(() => {
+      setIsTranslate(false)
+    })
+  }
+
+  const onTranslate = () => {
+    let values = form.getFieldsValue()
+    setLoading(true)
+    postInformationUpdate({ ...values, isActive: false }).then((res: any) => {
+      if (res.code === 0) {
+        translate(Number(searchId))
+      } else {
+        message.error("更新失败")
+      }
+    }).catch((err: any) => {
+      message.error(err.msg || '更新失败')
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
+
   const resetForm = () => {
     form.resetFields()
   }
@@ -126,38 +166,49 @@ const InformationEdit: FC = () => {
 
   useEffect(() => {
     if (searchId) {
-      setLoading(true)
-      postInformationDetailById({ id: Number(searchId) }).then((res: API.InformationDetailResult) => {
-        setInformationDetail({
-          ...res.data.article,
-          tagIds: res.data?.tags?.map((item: any) => item.id) || [],
-          collectionIds: res.data?.collections?.map((item: any) => item.id) || [],
-        })
-        if (res.data.article.coverImageUrl) {
-          setListImgs([{
-            uid: '-1',
-            name: res.data.article.coverImageUrl,
-            status: 'done',
-            url: res.data.article.coverImageUrl,
-            thumbUrl: res.data.article.coverImageUrl
-          }])
-        } else {
-          setListImgs([])
-        }
-        setHtmlEn(res.data.article.contentEn)
-        setHtmlZh(res.data.article.contentZh)
-        setHtmlKr(res.data.article.contentKr)
-        setHtmlEs(res.data.article.contentEs)
-        setLoading(false)
-      })
+      loadData(Number(searchId))
     }
   }, [searchId])
 
+  const loadData = (id: number) => {
+    setLoading(true)
+    postInformationDetailById({ id }).then((res: API.InformationDetailResult) => {
+      setInformationDetail({
+        ...res.data.article,
+        tagIds: res.data?.tags?.map((item: any) => item.id) || [],
+        collectionIds: res.data?.collections?.map((item: any) => item.id) || [],
+      })
+      if (res.data.article.coverImageUrl) {
+        setListImgs([{
+          uid: '-1',
+          name: res.data.article.coverImageUrl,
+          status: 'done',
+          url: res.data.article.coverImageUrl,
+          thumbUrl: res.data.article.coverImageUrl
+        }])
+      } else {
+        setListImgs([])
+      }
+      setHtmlEn(res.data.article.contentEn)
+      setHtmlZh(res.data.article.contentZh)
+      setHtmlKr(res.data.article.contentKr)
+      setHtmlEs(res.data.article.contentEs)
+    }).catch((err: any) => {
+      message.error(err.msg || '资讯加载失败')
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
+
   useEffect(() => {
-    if (informationDetail?.contentEn === htmlEn && informationDetail?.contentZh === htmlZh && informationDetail?.contentKr === htmlKr && informationDetail?.contentEs === htmlEs) {
-      resetForm()
+    if (htmlEn || htmlZh || htmlKr || htmlEs) {
+      if (informationDetail?.contentEn === htmlEn && informationDetail?.contentZh === htmlZh && informationDetail?.contentKr === htmlKr && informationDetail?.contentEs === htmlEs) {
+        setTimeout(() => {
+          resetForm()
+        }, 10);
+      }
     }
-  }, [informationDetail])
+  }, [informationDetail, htmlEn, htmlZh, htmlKr, htmlEs])
 
   const handleChangeListImgs: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setListImgs(newFileList)
@@ -168,7 +219,6 @@ const InformationEdit: FC = () => {
     // 将图片转换为base64
     const base64 = await uploadImgToBase64(e.file as File) as { result: string }
     uploadImage({ image: base64.result.replace(/.*;base64,/, '') }).then((res) => {
-      console.log(res)
       if (res.code !== 0) {
         e.onError?.({
           status: res.code,
@@ -198,161 +248,129 @@ const InformationEdit: FC = () => {
 
   return (
     <>
-      {loading && <Spin spinning={loading} tip="加载中..." />}
-      {!searchId && id !== 'add' && <Input.Search style={{ width: '300px' }} placeholder="请输入资讯编号" onSearch={(value) => { setSearchId(value) }} />}
-      {!loading && (searchId || id === 'add') && (
-        <Card bordered={false}>
-          <div style={{ overflowX: 'scroll' }}>
-            <Form
-              form={form}
-              labelCol={{ span: 4 }}
-              initialValues={{ ...informationDetail }}
-              onFinish={onFinish}
-              style={{ width: '1200px', margin: '0 auto' }}
-            >
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯编号</h3>} name='id' rules={formRules.all}>
-                <Input disabled placeholder='请输入内容' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>创建人</h3>} name="author">
-                <Input disabled placeholder='请输入内容' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯状态</h3>} name='isActive' rules={formRules.all}>
-                <Select options={[{ label: '启用', value: true }, { label: '禁用', value: false }]} />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(中文)</h3>} name='titleZh' rules={formRules.all}>
-                <Input style={{ width: '100%' }} placeholder='请输入中文标题' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(英文)</h3>} name='titleEn' rules={formRules.all}>
-                <Input style={{ width: '100%' }} placeholder='请输入英文标题' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(韩语)</h3>} name='titleKr' rules={formRules.all}>
-                <Input style={{ width: '100%' }} placeholder='请输入韩语标题' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(西班牙语)</h3>} name='titleEs' rules={formRules.all}>
-                <Input style={{ width: '100%' }} placeholder='请输入西班牙语标题' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯封面</h3>} name='coverImageUrl' rules={formRules.all}>
-                <Card title='' bordered={false} bodyStyle={{ height: '150px' }} >
-                  <Upload
-                    fileList={listImgs}
-                    accept='.jpg, .jpeg, .gif, .png, .bmp, .svg'
-                    listType='picture-card'
-                    className='list-upload'
-                    style={{ height: '100px', width: 'auto' }}
-                    onChange={handleChangeListImgs}
-                    maxCount={1}
-                    customRequest={customUploadListImgs}
-                  >
-                    {listImgs.length === 0 && (
-                      <div>
-                        <PlusOutlined rev={undefined} />
-                        <div style={{ marginTop: '8px' }}>点击上传（建议尺寸: W:278px H:157px）</div>
-                      </div>
-                    )}
-                  </Upload>
-                </Card>
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(中文)</h3>} name='descriptionZh' rules={formRules.all}>
-                <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入中文简介' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(英文)</h3>} name='descriptionEn' rules={formRules.all}>
-                <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入英文简介' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(韩语)</h3>} name='descriptionKr' rules={formRules.all}>
-                <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入韩语简介' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(西班牙语)</h3>} name='descriptionEs' rules={formRules.all}>
-                <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入西班牙语简介' />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标签</h3>} name='tagIds' rules={formRules.all}>
-                <Select mode='multiple' placeholder='请选择新增资讯标签' options={selectLabelList} optionFilterProp='label' value={informationDetail?.tagIds}
-                  dropdownRender={(menu) => (
-                    <>
-                      {menu}
-                      <Divider style={{ margin: '8px 0' }} />
-                      <Button type='link' onClick={() => {
-                        router('/information/information-label')
-                      }}>新增资讯标签</Button>
-                    </>
-                  )}
-                />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(中文)</h3>} name='collectionIds' rules={formRules.all}>
-                <Select mode='multiple' placeholder='请选择新增资讯专题' options={selectSpecialTopicZhList} optionFilterProp='label' value={informationDetail?.collectionIds}
-                  dropdownRender={(menu) => (
-                    <>
-                      {menu}
-                      <Divider style={{ margin: '8px 0' }} />
-                      <Button type='link' onClick={() => {
-                        router('/information/information-special-topic')
-                      }}>新增资讯专题</Button>
-                    </>
-                  )}
-                />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(英文)</h3>} name='collectionIds' rules={formRules.all}>
-                <Select mode='multiple' placeholder='请选择新增资讯专题' options={selectSpecialTopicEnList} optionFilterProp='label' value={informationDetail?.collectionIds}
-                  dropdownRender={(menu) => (
-                    <>
-                      {menu}
-                      <Divider style={{ margin: '8px 0' }} />
-                      <Button type='link' onClick={() => {
-                        router('/information/information-special-topic')
-                      }}>新增资讯专题</Button>
-                    </>
-                  )}
-                />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(韩语)</h3>} name='collectionIds' rules={formRules.all}>
-                <Select mode='multiple' placeholder='请选择新增资讯专题' options={selectSpecialTopicKrList} optionFilterProp='label' value={informationDetail?.collectionIds}
-                  dropdownRender={(menu) => (
-                    <>
-                      {menu}
-                      <Divider style={{ margin: '8px 0' }} />
-                      <Button type='link' onClick={() => {
-                        router('/information/information-special-topic')
-                      }}>新增资讯专题</Button>
-                    </>
-                  )}
-                />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(西班牙语)</h3>} name='collectionIds' rules={formRules.all}>
-                <Select mode='multiple' placeholder='请选择新增资讯专题' options={selectSpecialTopicEsList} optionFilterProp='label' value={informationDetail?.collectionIds}
-                  dropdownRender={(menu) => (
-                    <>
-                      {menu}
-                      <Divider style={{ margin: '8px 0' }} />
-                      <Button type='link' onClick={() => {
-                        router('/information/information-special-topic')
-                      }}>新增资讯专题</Button>
-                    </>
-                  )}
-                />
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(中文)</h3>} name='contentZh' rules={formRules.all}>
-                <RichTextEditor style={{ zIndex: "4" }} value={htmlZh} updateValue={(value) => { setHtmlZh(value), form.setFieldValue("contentZh", value) }}></RichTextEditor>
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(英文)</h3>} name='contentEn' rules={formRules.all}>
-                <RichTextEditor style={{ zIndex: "3" }} value={htmlEn} updateValue={(value) => { setHtmlEn(value), form.setFieldValue("contentEn", value) }}></RichTextEditor>
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(韩语)</h3>} name='contentKr' rules={formRules.all}>
-                <RichTextEditor style={{ zIndex: "2" }} value={htmlKr} updateValue={(value) => { setHtmlKr(value), form.setFieldValue("contentKr", value) }}></RichTextEditor>
-              </Form.Item>
-              <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(西班牙语)</h3>} name='contentEs' rules={formRules.all}>
-                <RichTextEditor style={{ zIndex: "1" }} value={htmlEs} updateValue={(value) => { setHtmlEs(value), form.setFieldValue("contentEs", value) }}></RichTextEditor>
-              </Form.Item>
-              <Form.Item wrapperCol={{ span: 12, offset: 12 }}>
-                <Button type='primary' htmlType='submit'>
-                  提交
-                </Button>
-                <Button style={{ marginLeft: '12px' }} onClick={resetForm}>
-                  重置
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Card>
-      )}
+      <Spin spinning={loading} tip="加载中..." >
+        <Spin spinning={isTranslate} tip="翻译中...">
+          {!searchId && id !== 'add' && <Input.Search style={{ width: '300px' }} placeholder="请输入资讯编号" onSearch={(value) => { setSearchId(value) }} />}
+          {(searchId || id === 'add') && (
+            <Card bordered={false} >
+              <div style={{ overflowX: 'scroll' }}>
+                <Form
+                  form={form}
+                  labelCol={{ span: 4 }}
+                  initialValues={{ ...informationDetail }}
+                  onFinish={onFinish}
+                  style={{ width: '1200px', margin: '0 auto' }}
+                >
+                  <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯编号</h3>} name='id' rules={formRules.all}>
+                    <Input disabled placeholder='请输入内容' />
+                  </Form.Item>
+                  <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>创建人</h3>} name="author">
+                    <Input disabled placeholder='请输入内容' />
+                  </Form.Item>
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯状态</h3>} name='isActive' rules={formRules.all}>
+                    <Select options={[{ label: '启用', value: true }, { label: '禁用', value: false }]} />
+                  </Form.Item>}
+                  <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(繁体中文)</h3>} name='titleZh' rules={formRules.all}>
+                    <Input style={{ width: '100%' }} placeholder='请输入中文标题' />
+                  </Form.Item>
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(英文)</h3>} name='titleEn' rules={formRules.all}>
+                    <Input style={{ width: '100%' }} placeholder='请输入英文标题' />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(韩语)</h3>} name='titleKr' rules={formRules.all}>
+                    <Input style={{ width: '100%' }} placeholder='请输入韩语标题' />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(西班牙语)</h3>} name='titleEs' rules={formRules.all}>
+                    <Input style={{ width: '100%' }} placeholder='请输入西班牙语标题' />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯封面</h3>} name='coverImageUrl' rules={formRules.all}>
+                    <Card title='' bordered={false} bodyStyle={{ height: '150px' }} >
+                      <Upload
+                        fileList={listImgs}
+                        accept='.jpg, .jpeg, .gif, .png, .bmp, .svg'
+                        listType='picture-card'
+                        className='list-upload'
+                        style={{ height: '100px', width: 'auto' }}
+                        onChange={handleChangeListImgs}
+                        maxCount={1}
+                        customRequest={customUploadListImgs}
+                      >
+                        {listImgs.length === 0 && (
+                          <div>
+                            <PlusOutlined rev={undefined} />
+                            <div style={{ marginTop: '8px' }}>点击上传（建议尺寸: W:278px H:157px）</div>
+                          </div>
+                        )}
+                      </Upload>
+                    </Card>
+                  </Form.Item>}
+                  <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(繁体中文)</h3>} name='descriptionZh' rules={formRules.all}>
+                    <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入中文简介' />
+                  </Form.Item>
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(英文)</h3>} name='descriptionEn' rules={formRules.all}>
+                    <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入英文简介' />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(韩语)</h3>} name='descriptionKr' rules={formRules.all}>
+                    <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入韩语简介' />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(西班牙语)</h3>} name='descriptionEs' rules={formRules.all}>
+                    <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入西班牙语简介' />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标签</h3>} name='tagIds'>
+                    <Select mode='multiple' placeholder='请选择资讯标签' options={selectLabelList} optionFilterProp='label' value={informationDetail?.tagIds}
+                      dropdownRender={(menu) => (
+                        <>
+                          {menu}
+                          <Divider style={{ margin: '8px 0' }} />
+                          <Button type='link' onClick={() => {
+                            router('/information/information-label')
+                          }}>新增资讯标签</Button>
+                        </>
+                      )}
+                    />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题(繁体中文)</h3>} name='collectionIds' >
+                    <Select mode='multiple' placeholder='请选择资讯专题' options={selectSpecialTopicZhList} optionFilterProp='label' value={informationDetail?.collectionIds}
+                      dropdownRender={(menu) => (
+                        <>
+                          {menu}
+                          <Divider style={{ margin: '8px 0' }} />
+                          <Button type='link' onClick={() => {
+                            router('/information/information-special-topic')
+                          }}>新增资讯专题</Button>
+                        </>
+                      )}
+                    />
+                  </Form.Item>}
+                  <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(繁体中文)</h3>} name='contentZh' rules={formRules.all}>
+                    <RichTextEditor style={{ zIndex: "4" }} value={htmlZh} updateValue={(value) => { setHtmlZh(value); form.setFieldValue("contentZh", value) }}></RichTextEditor>
+                  </Form.Item>
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(英文)</h3>} name='contentEn' rules={formRules.all}>
+                    <RichTextEditor style={{ zIndex: "3" }} value={htmlEn} updateValue={(value) => { setHtmlEn(value); form.setFieldValue("contentEn", value) }}></RichTextEditor>
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(韩语)</h3>} name='contentKr' rules={formRules.all}>
+                    <RichTextEditor style={{ zIndex: "2" }} value={htmlKr} updateValue={(value) => { setHtmlKr(value); form.setFieldValue("contentKr", value) }}></RichTextEditor>
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(西班牙语)</h3>} name='contentEs' rules={formRules.all}>
+                    <RichTextEditor style={{ zIndex: "1" }} value={htmlEs} updateValue={(value) => { setHtmlEs(value); form.setFieldValue("contentEs", value) }}></RichTextEditor>
+                  </Form.Item>}
+                  <Form.Item wrapperCol={{ span: 12, offset: 12 }}>
+                    {informationDetail?.titleEn &&
+                      <Button type='primary' disabled={isTranslate || loading} style={{ marginLeft: '12px' }} onClick={onTranslate}>
+                        翻译
+                      </Button>}
+                    <Button disabled={isTranslate || loading} style={{ marginLeft: '12px' }} type='primary' htmlType='submit'>
+                      {!informationDetail?.titleEn ? '翻译' : '修改'}
+                    </Button>
+                    <Button disabled={isTranslate || loading} style={{ marginLeft: '12px' }} onClick={resetForm}>
+                      重置
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+            </Card>
+          )}
+        </Spin>
+      </Spin >
     </>
   )
 }
