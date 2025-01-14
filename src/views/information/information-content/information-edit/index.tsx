@@ -173,26 +173,31 @@ const InformationEdit: FC = () => {
   const loadData = (id: number) => {
     setLoading(true)
     postInformationDetailById({ id }).then((res: API.InformationDetailResult) => {
+      let resData = res.data.article
+      resData.contentEn = checkHtml(resData.contentEn)
+      resData.contentZh = checkHtml(resData.contentZh)
+      resData.contentKr = checkHtml(resData.contentKr)
+      resData.contentEs = checkHtml(resData.contentEs)
       setInformationDetail({
-        ...res.data.article,
+        ...resData,
         tagIds: res.data?.tags?.map((item: any) => item.id) || [],
         collectionIds: res.data?.collections?.map((item: any) => item.id) || [],
       })
-      if (res.data.article.coverImageUrl) {
+      if (resData.coverImageUrl) {
         setListImgs([{
           uid: '-1',
-          name: res.data.article.coverImageUrl,
+          name: resData.coverImageUrl,
           status: 'done',
-          url: res.data.article.coverImageUrl,
-          thumbUrl: res.data.article.coverImageUrl
+          url: resData.coverImageUrl,
+          thumbUrl: resData.coverImageUrl
         }])
       } else {
         setListImgs([])
       }
-      setHtmlEn(res.data.article.contentEn)
-      setHtmlZh(res.data.article.contentZh)
-      setHtmlKr(res.data.article.contentKr)
-      setHtmlEs(res.data.article.contentEs)
+      setHtmlEn(resData.contentEn)
+      setHtmlZh(resData.contentZh)
+      setHtmlKr(resData.contentKr)
+      setHtmlEs(resData.contentEs)
     }).catch((err: any) => {
       message.error(err.msg || '资讯加载失败')
     }).finally(() => {
@@ -200,9 +205,37 @@ const InformationEdit: FC = () => {
     })
   }
 
+  const checkHtml = (value: string) => {
+    // 判断 value 是否是 html合规
+    // 格式（ul标签的子标签必须是li）
+    if (value === "" || value === "<p><br></p>") return value
+    const ulRegex = /<ul>(.*?)<\/ul>/g
+    const liRegex = /<li>(.*?)<\/li>/g
+    let html = value
+    if (ulRegex.test(html)) {
+      const ulMatches = html.match(ulRegex)
+      if (ulMatches) {
+        ulMatches.forEach(ul => {
+          const liMatches = ul.match(liRegex)
+          if (liMatches) {
+            // 去掉 ul 标签
+            ul = ul.replace(/<ul>/g, '').replace(/<\/ul>/g, '')
+            html = html.replace(ul, liMatches.join(''))
+          }
+        })
+      }
+    }
+    console.log(html)
+    return html
+  }
+
   useEffect(() => {
     if (htmlEn || htmlZh || htmlKr || htmlEs) {
-      if (informationDetail?.contentEn === htmlEn && informationDetail?.contentZh === htmlZh && informationDetail?.contentKr === htmlKr && informationDetail?.contentEs === htmlEs) {
+      if (informationDetail?.contentEn === htmlEn
+        && informationDetail?.contentZh === htmlZh
+        && informationDetail?.contentKr === htmlKr
+        && informationDetail?.contentEs === htmlEs) {
+        console.log("重置")
         setTimeout(() => {
           resetForm()
         }, 10);

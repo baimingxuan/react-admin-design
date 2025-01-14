@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { type SlateDescendant, type IEditorConfig, createEditor, type IDomEditor } from '@wangeditor/editor'
+import { message } from 'antd'
 
 interface IProps {
   defaultContent?: SlateDescendant[]
@@ -22,7 +23,7 @@ function EditorComponent(props: Partial<IProps>) {
     onChange,
     defaultConfig = {},
     mode = 'default',
-    style = {},
+    style = { minHeight: '400px' },
     className
   } = props
   const ref = useRef<HTMLDivElement>(null)
@@ -79,19 +80,23 @@ function EditorComponent(props: Partial<IProps>) {
     // Prevents duplicate rendering when the editor is already created。(防止重复渲染 当编辑器已经创建就不在创建了)
     if (ref.current?.getAttribute('data-w-e-textarea')) return
 
-    const newEditor = createEditor({
-      selector: ref.current,
-      config: {
-        ...defaultConfig,
-        onCreated: handleCreated,
-        onChange: handleChanged,
-        onDestroyed: handleDestroyed
-      },
-      content: defaultContent,
-      html: defaultHtml || value,
-      mode
-    })
-    setEditor(newEditor)
+    try {
+      const newEditor = createEditor({
+        selector: ref.current,
+        config: {
+          ...defaultConfig,
+          onCreated: handleCreated,
+          onChange: handleChanged,
+          onDestroyed: handleDestroyed,
+        },
+        content: defaultContent,
+        html: defaultHtml || value,
+        mode
+      })
+      setEditor(newEditor)
+    } catch (error) {
+      message.error('文本格式错误')
+    }
   }, [editor])
 
   return <div style={style} ref={ref} className={className}></div>
