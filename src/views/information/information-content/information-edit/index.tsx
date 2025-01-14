@@ -225,7 +225,6 @@ const InformationEdit: FC = () => {
         })
       }
     }
-    console.log(html)
     return html
   }
 
@@ -235,7 +234,6 @@ const InformationEdit: FC = () => {
         && informationDetail?.contentZh === htmlZh
         && informationDetail?.contentKr === htmlKr
         && informationDetail?.contentEs === htmlEs) {
-        console.log("重置")
         setTimeout(() => {
           resetForm()
         }, 10);
