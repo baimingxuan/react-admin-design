@@ -42,6 +42,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]'
       }),
+      // 开发模式下启用mock
       // viteMockServe({
       //   mockPath: 'mock',
       //   ignore: /^_/,
