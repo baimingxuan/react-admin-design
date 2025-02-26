@@ -33,14 +33,17 @@ declare namespace API {
         id: number
         titleEn: string
         titleZh: string
+        titleZhHans: string
         titleKr: string
         titleEs: string
         descriptionEn: string
         descriptionZh: string
+        descriptionZhHans: string
         descriptionKr: string
         descriptionEs: string
         contentEn: string
         contentZh: string
+        contentZhHans: string
         contentKr: string
         contentEs: string
         author: string
@@ -64,10 +67,12 @@ declare namespace API {
         id: number
         nameEn: string
         nameZh: string
+        nameZhHans: string
         nameKr: string
         nameEs: string
         descriptionEn: string
         descriptionZh: string
+        descriptionZhHans: string
         descriptionKr: string
         descriptionEs: string
         backgroundImageUrl: string
@@ -79,10 +84,12 @@ declare namespace API {
     interface NewsFlashInfoType {
         id: number
         titleZh: string
+        titleZhHans: string
         titleKr: string
         titleEs: string
         titleEn: string
         contentZh: string
+        contentZhHans: string
         contentKr: string
         contentEs: string
         contentEn: string

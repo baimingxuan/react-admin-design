@@ -34,14 +34,17 @@ const InformationEdit: FC = () => {
     updatedAt: '',
     author: '',
     titleZh: '',
+    titleZhHans: '',
     titleEn: '',
     titleKr: '',
     titleEs: '',
     contentZh: '',
+    contentZhHans: '',
     contentEn: '',
     contentKr: '',
     contentEs: '',
     descriptionZh: '',
+    descriptionZhHans: '',
     descriptionEn: '',
     descriptionKr: '',
     descriptionEs: '',
@@ -88,6 +91,7 @@ const InformationEdit: FC = () => {
       postAddInformation({ ...values, author: userInfo?.username }).then((res: any) => {
         if (res.code === 0) {
           message.success('资讯添加成功')
+          setInformationDetail({ ...values, id: res.data.id })
           if (isTranslate) {
             translate(res.data.id)
           } else {
@@ -302,7 +306,7 @@ const InformationEdit: FC = () => {
                     <Select options={[{ label: '启用', value: true }, { label: '禁用', value: false }]} />
                   </Form.Item>}
                   <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(繁体中文)</h3>} name='titleZh' rules={formRules.all}>
-                    <Input style={{ width: '100%' }} placeholder='请输入中文标题' />
+                    <Input style={{ width: '100%' }} placeholder='请输入繁体中文标题' />
                   </Form.Item>
                   {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(英文)</h3>} name='titleEn' rules={formRules.all}>
                     <Input style={{ width: '100%' }} placeholder='请输入英文标题' />
@@ -335,7 +339,7 @@ const InformationEdit: FC = () => {
                     </Card>
                   </Form.Item>}
                   <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(繁体中文)</h3>} name='descriptionZh' rules={formRules.all}>
-                    <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入中文简介' />
+                    <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入繁体中文简介' />
                   </Form.Item>
                   {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(英文)</h3>} name='descriptionEn' rules={formRules.all}>
                     <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入英文简介' />

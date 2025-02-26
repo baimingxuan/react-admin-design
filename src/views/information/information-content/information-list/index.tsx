@@ -256,7 +256,7 @@ const InformationList: FC = () => {
             </Space>
           </Space>
           <Space size={50}>
-            <Space>
+            {/* <Space>
               <h3>选择标签：</h3>
               <Select value={selectValue} onChange={handleSelectChange}>
                 <Select.Option value="1">标签1</Select.Option>
@@ -264,7 +264,7 @@ const InformationList: FC = () => {
                 <Select.Option value="3">标签3</Select.Option>
                 <Select.Option value="4">标签4</Select.Option>
               </Select>
-            </Space>
+            </Space> */}
             <Space>
               <h3>筛选日期：</h3>
               <RangePicker onChange={(value) => { console.log(value) }} />
