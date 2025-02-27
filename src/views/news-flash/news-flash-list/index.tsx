@@ -145,6 +145,20 @@ const NewsFlashList: FC = () => {
       )
     },
     {
+      title: '分数',
+      dataIndex: 'score',
+      align: 'center',
+      sorter: {
+        compare: (a: API.NewsFlashInfoType, b: API.NewsFlashInfoType) => {
+          return a.score - b.score
+        },
+        multiple: 1,
+      },
+      render: (score: number) => {
+        return <span>{score}</span>
+      }
+    },
+    {
       title: '操作',
       key: 'action',
       align: 'center',
