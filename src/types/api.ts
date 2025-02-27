@@ -99,6 +99,7 @@ declare namespace API {
         updatedAt: string
         link: string
         source: string
+        score: number
     }
 
     interface NewsFlashSourceType {
