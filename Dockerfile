@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 COPY package*.json ./
 
 # 安装项目依赖
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # 复制整个项目到工作目录
 COPY . .
