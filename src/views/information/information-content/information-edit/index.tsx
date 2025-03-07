@@ -61,6 +61,7 @@ const InformationEdit: FC = () => {
   const [htmlZh, setHtmlZh] = useState('')
   const [htmlKr, setHtmlKr] = useState('')
   const [htmlEs, setHtmlEs] = useState('')
+  const [htmlZhHans, setHtmlZhHans] = useState('')
   const [isTranslate, setIsTranslate] = useState(false)
   const [selectSpecialTopicZhList, setSelectSpecialTopicZhList] = useState<{ value: number, label: string }[]>([])
   const [selectLabelList, setSelectLabelList] = useState<{ value: number, label: string }[]>([])
@@ -182,6 +183,7 @@ const InformationEdit: FC = () => {
       resData.contentZh = checkHtml(resData.contentZh)
       resData.contentKr = checkHtml(resData.contentKr)
       resData.contentEs = checkHtml(resData.contentEs)
+      resData.contentZhHans = checkHtml(resData.contentZhHans)
       setInformationDetail({
         ...resData,
         tagIds: res.data?.tags?.map((item: any) => item.id) || [],
@@ -202,6 +204,7 @@ const InformationEdit: FC = () => {
       setHtmlZh(resData.contentZh)
       setHtmlKr(resData.contentKr)
       setHtmlEs(resData.contentEs)
+      setHtmlZhHans(resData.contentZhHans)
     }).catch((err: any) => {
       message.error(err.msg || '资讯加载失败')
     }).finally(() => {
@@ -233,17 +236,18 @@ const InformationEdit: FC = () => {
   }
 
   useEffect(() => {
-    if (htmlEn || htmlZh || htmlKr || htmlEs) {
+    if (htmlEn || htmlZh || htmlKr || htmlEs || htmlZhHans) {
       if (informationDetail?.contentEn === htmlEn
         && informationDetail?.contentZh === htmlZh
         && informationDetail?.contentKr === htmlKr
-        && informationDetail?.contentEs === htmlEs) {
+        && informationDetail?.contentEs === htmlEs
+        && informationDetail?.contentZhHans === htmlZhHans) {
         setTimeout(() => {
           resetForm()
         }, 10);
       }
     }
-  }, [informationDetail, htmlEn, htmlZh, htmlKr, htmlEs])
+  }, [informationDetail, htmlEn, htmlZh, htmlKr, htmlEs, htmlZhHans])
 
   const handleChangeListImgs: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setListImgs(newFileList)
@@ -305,6 +309,9 @@ const InformationEdit: FC = () => {
                   {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯状态</h3>} name='isActive' rules={formRules.all}>
                     <Select options={[{ label: '启用', value: true }, { label: '禁用', value: false }]} />
                   </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(简体中文)</h3>} name='titleZhHans' rules={formRules.all}>
+                    <Input style={{ width: '100%' }} placeholder='请输入简体中文标题' />
+                  </Form.Item>}
                   <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题(繁体中文)</h3>} name='titleZh' rules={formRules.all}>
                     <Input style={{ width: '100%' }} placeholder='请输入繁体中文标题' />
                   </Form.Item>
@@ -337,6 +344,9 @@ const InformationEdit: FC = () => {
                         )}
                       </Upload>
                     </Card>
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(简体中文)</h3>} name='descriptionZhHans' rules={formRules.all}>
+                    <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入简体中文简介' />
                   </Form.Item>}
                   <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介(繁体中文)</h3>} name='descriptionZh' rules={formRules.all}>
                     <Input.TextArea rows={5} style={{ width: '100%' }} placeholder='请输入繁体中文简介' />
@@ -375,6 +385,9 @@ const InformationEdit: FC = () => {
                         </>
                       )}
                     />
+                  </Form.Item>}
+                  {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(简体中文)</h3>} name='contentZhHans' rules={formRules.all}>
+                    <RichTextEditor style={{ zIndex: "5" }} value={htmlZhHans} updateValue={(value) => { setHtmlZhHans(value); form.setFieldValue("contentZhHans", value) }}></RichTextEditor>
                   </Form.Item>}
                   <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容(繁体中文)</h3>} name='contentZh' rules={formRules.all}>
                     <RichTextEditor style={{ zIndex: "4" }} value={htmlZh} updateValue={(value) => { setHtmlZh(value); form.setFieldValue("contentZh", value) }}></RichTextEditor>

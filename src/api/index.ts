@@ -117,3 +117,17 @@ export function getNewsFlashSourceList(data: any): Promise<API.NewsFlashSourceLi
 export function getHomeAllList(data: any): Promise<API.HomeAllListResult> {
   return service({ url: '/staff/home/getAllList', method: 'post', data })
 }
+
+// AD
+// ad list
+export function getAdList(params: any): Promise<API.AdListResult> {
+  return service({ url: '/staff/advertise/list', method: 'get', params })
+}
+// ad create
+export function postCreateAd(data: any): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/advertise/add', method: 'post', data })
+}
+// ad update
+export function postUpdateAd(data: any): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/advertise/update', method: 'post', data })
+}

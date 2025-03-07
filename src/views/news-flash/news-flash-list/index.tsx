@@ -29,8 +29,9 @@ const NewsFlashList: FC = () => {
   const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 15 })
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
   const [selectLanguage, setSelectLanguage] = useState<string>('zh')
-  const [selectDate, setSelectDate] = useState<any>(null)
   const [searchValue, setSearchValue] = useState<string>('')
+  const [startDate, setStartDate] = useState<string>(dayjs().subtract(1, 'day').format('YYYY-MM-DD'))
+  const [endDate, setEndDate] = useState<string>(dayjs().format('YYYY-MM-DD'))
 
   const [form] = Form.useForm()
   const [modalVisibel, setModalVisibel] = useState<boolean>(false)
@@ -93,12 +94,12 @@ const NewsFlashList: FC = () => {
       render: (_, record: any) => {
         const content = (
           <div style={{ width: '300px', overflow: 'scroll', height: '300px' }}>
-            <p>快讯内容：<br />{selectLanguage === 'zh' ? record.contentZh : selectLanguage === 'ko' ? record.contentKr : record.contentEs}</p>
+            <p>快讯内容：<br />{selectLanguage === 'zhHans' ? record.contentZhHans : selectLanguage === 'zh' ? record.contentZh : selectLanguage === 'ko' ? record.contentKr : record.contentEs}</p>
           </div>
         )
         return (
           <Popover content={content} >
-            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zh' ? record.titleZh : selectLanguage === 'ko' ? record.titleKr : record.titleEs}</Tag>
+            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zhHans' ? record.titleZhHans : selectLanguage === 'zh' ? record.titleZh : selectLanguage === 'ko' ? record.titleKr : record.titleEs}</Tag>
           </Popover>
         )
       }
@@ -188,9 +189,10 @@ const NewsFlashList: FC = () => {
     fetchData()
   }, [tableQuery])
 
-  async function fetchData(searchValue?: string, selectDate?: any) {
+  async function fetchData(page?: number) {
+    if (tableLoading) return
     setTableLoading(true)
-    postNewsFlashList({ pagination: tableQuery }).then((res: any) => {
+    postNewsFlashList({ pagination: { ...tableQuery, page: page || tableQuery.page }, startDate, endDate, title: searchValue }).then((res: any) => {
       if (res.code !== 0) {
         return message.error(res.error)
       }
@@ -282,6 +284,19 @@ const NewsFlashList: FC = () => {
     }
   }
 
+  function handleSearch() {
+    setTableQuery({ ...tableQuery, page: 1 })
+    fetchData(1)
+  }
+
+  function handleReset() {
+    setTableQuery({ ...tableQuery, page: 1 })
+    setStartDate(dayjs().subtract(1, 'day').format('YYYY-MM-DD'))
+    setEndDate(dayjs().format('YYYY-MM-DD'))
+    setSearchValue('')
+    fetchData(1)
+  }
+
   return (
     <>
       <Card bordered={false}>
@@ -292,23 +307,36 @@ const NewsFlashList: FC = () => {
               <h3>选择语言:</h3>
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                 <Select.Option value="en">英文</Select.Option>
+                <Select.Option value="zhHans">简体中文</Select.Option>
                 <Select.Option value="zh">繁体中文</Select.Option>
                 <Select.Option value="ko">韩语</Select.Option>
                 <Select.Option value="es">西班牙语</Select.Option>
               </Select>
             </Space>
           </Space>
-          <Space size={50}>
+          <Space size={10}>
             <Space>
               <h3>筛选日期：</h3>
-              <RangePicker onChange={(value) => { setSelectDate(value) }} value={selectDate} />
-              <Button type='primary' onClick={() => fetchData(searchValue, selectDate)}>筛选</Button>
+              <RangePicker
+                defaultValue={[dayjs(startDate), dayjs(endDate)]}
+                value={[dayjs(startDate), dayjs(endDate)]}
+                format='YYYY-MM-DD'
+                onChange={(value) => {
+                  if (value) {
+                    setStartDate(value[0]?.format('YYYY-MM-DD') || '')
+                    setEndDate(value[1]?.format('YYYY-MM-DD') || '')
+                  }
+                }}
+                disabledDate={(current) => {
+                  return current && current > dayjs().endOf('day')
+                }}
+              />
             </Space>
             <Space>
               <h3>搜索：</h3>
               <Input placeholder='请输入搜索内容' onChange={(e) => { setSearchValue(e.target.value) }} value={searchValue} />
-              <Button type='primary' onClick={() => fetchData(searchValue, selectDate)}>搜索</Button>
-              <Button type='primary' danger onClick={() => fetchData()}>重置</Button>
+              <Button type='primary' onClick={() => handleSearch()}>搜索&筛选</Button>
+              <Button type='primary' danger onClick={() => handleReset()}>清除 搜索&筛选</Button>
             </Space>
           </Space>
         </div>
@@ -342,6 +370,12 @@ const NewsFlashList: FC = () => {
           <Form form={form} onFinish={handleConfirm}>
             <Form.Item label='快讯ID' name='id' hidden>
               <Input />
+            </Form.Item>
+            <Form.Item label='快讯标题(简体中文)' name='titleZhHans' rules={[{ required: true, message: '请输入快讯标题(简体中文)' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label='快讯内容(简体中文)' name='contentZhHans' rules={[{ required: true, message: '请输入快讯内容(简体中文)' }]}>
+              <TextArea style={{ height: '200px' }} />
             </Form.Item>
             <Form.Item label='快讯标题(繁体中文)' name='titleZh' rules={[{ required: true, message: '请输入快讯标题(繁体中文)' }]}>
               <Input />

@@ -58,6 +58,7 @@ const InformationDetail: FC = () => {
                   <h3>选择语言:</h3>
                   <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                     <Select.Option value="en">英文</Select.Option>
+                    <Select.Option value="zhHans">简体中文</Select.Option>
                     <Select.Option value="zh">繁体中文</Select.Option>
                     <Select.Option value="ko">韩语</Select.Option>
                     <Select.Option value="es">西班牙语</Select.Option>
@@ -65,17 +66,17 @@ const InformationDetail: FC = () => {
                 </Space>
               </div>} column={1}>
               <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯编号</h3>}>{informationDetail?.id}</Descriptions.Item>
-              <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题</h3>}>{selectLanguage === 'zh' ? informationDetail?.titleZh : selectLanguage === 'en' ? informationDetail?.titleEn : selectLanguage === 'ko' ? informationDetail?.titleKr : selectLanguage === 'es' ? informationDetail?.titleEs : ''}</Descriptions.Item>
+              <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标题</h3>}>{selectLanguage === 'zhHans' ? informationDetail?.titleZhHans : selectLanguage === 'zh' ? informationDetail?.titleZh : selectLanguage === 'en' ? informationDetail?.titleEn : selectLanguage === 'ko' ? informationDetail?.titleKr : selectLanguage === 'es' ? informationDetail?.titleEs : ''}</Descriptions.Item>
               <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯封面</h3>}>
                 <img src={informationDetail?.coverImageUrl} alt="资讯封面" style={{ width: '200px', height: '100px' }} />
               </Descriptions.Item>
               <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯标签</h3>}>
                 {tags?.map((tag, index: number) => <Tag key={index} color="orange">{tag.name}</Tag>)}</Descriptions.Item>
               <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯专题</h3>}>
-                {collections?.map((collection, index: number) => <Tag key={index} color="purple">{selectLanguage === 'zh' ? collection.nameZh : selectLanguage === 'en' ? collection.nameEn : selectLanguage === 'ko' ? collection.nameKr : selectLanguage === 'es' ? collection.nameEs : ''}</Tag>)}
+                {collections?.map((collection, index: number) => <Tag key={index} color="purple">{selectLanguage === 'zhHans' ? collection.nameZhHans : selectLanguage === 'zh' ? collection.nameZh : selectLanguage === 'en' ? collection.nameEn : selectLanguage === 'ko' ? collection.nameKr : selectLanguage === 'es' ? collection.nameEs : ''}</Tag>)}
               </Descriptions.Item>
-              <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介</h3>}>{selectLanguage === 'zh' ? informationDetail?.descriptionZh : selectLanguage === 'en' ? informationDetail?.descriptionEn : selectLanguage === 'ko' ? informationDetail?.descriptionKr : selectLanguage === 'es' ? informationDetail?.descriptionEs : ''}</Descriptions.Item>
-              <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容</h3>}> <div dangerouslySetInnerHTML={{ __html: (selectLanguage === 'zh' ? informationDetail?.contentZh : selectLanguage === 'en' ? informationDetail?.contentEn : selectLanguage === 'ko' ? informationDetail?.contentKr : selectLanguage === 'es' ? informationDetail?.contentEs : '') || '' }}></div> </Descriptions.Item>
+              <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯简介</h3>}>{selectLanguage === 'zhHans' ? informationDetail?.descriptionZhHans : selectLanguage === 'zh' ? informationDetail?.descriptionZh : selectLanguage === 'en' ? informationDetail?.descriptionEn : selectLanguage === 'ko' ? informationDetail?.descriptionKr : selectLanguage === 'es' ? informationDetail?.descriptionEs : ''}</Descriptions.Item>
+              <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯内容</h3>}> <div dangerouslySetInnerHTML={{ __html: (selectLanguage === 'zhHans' ? informationDetail?.contentZhHans : selectLanguage === 'zh' ? informationDetail?.contentZh : selectLanguage === 'en' ? informationDetail?.contentEn : selectLanguage === 'ko' ? informationDetail?.contentKr : selectLanguage === 'es' ? informationDetail?.contentEs : '') || '' }}></div> </Descriptions.Item>
               <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>添加时间</h3>}>{dayjs(informationDetail?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</Descriptions.Item>
               <Descriptions.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>更新时间</h3>}>{dayjs(informationDetail?.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</Descriptions.Item>
             </Descriptions>

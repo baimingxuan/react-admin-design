@@ -18,7 +18,6 @@ import {
 import { DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { getInformationList, postChangeInformationStatus, postDeleteInformation } from '@/api'
 import dayjs from 'dayjs'
-import { DefaultOptionType } from 'antd/es/select'
 import { Link } from 'react-router-dom'
 const { RangePicker } = DatePicker;
 
@@ -28,8 +27,10 @@ const InformationList: FC = () => {
   const [tableTotal, setTableTotal] = useState<number>(0)
   const [tableQuery, setTableQuery] = useState<API.PageState>({ page: 1, size: 15 })
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([])
-  const [selectValue, setSelectValue] = useState<string>('1')
+  const [searchTitle, setSearchTitle] = useState<string>('')
   const [selectLanguage, setSelectLanguage] = useState<string>('zh')
+  const [selectDateEnd, setSelectDateEnd] = useState<string>(dayjs().format('YYYY-MM-DD'))
+  const [selectDateStart, setSelectDateStart] = useState<string>(dayjs().subtract(1, 'day').format('YYYY-MM-DD'))
   const columns: ColumnsType<API.InformationInfoType> = [
     {
       title: '新闻ID',
@@ -44,12 +45,12 @@ const InformationList: FC = () => {
       render: (_, record: any) => {
         const content = (
           <div style={{ width: '300px' }}>
-            <p>资讯简介：<br />{selectLanguage === 'zh' ? record.descriptionZh : selectLanguage === 'en' ? record.descriptionEn : selectLanguage === 'ko' ? record.descriptionKr : selectLanguage === 'es' ? record.descriptionEs : ''}</p>
+            <p>资讯简介：<br />{selectLanguage === 'zhHans' ? record.descriptionZhHans : selectLanguage === 'zh' ? record.descriptionZh : selectLanguage === 'en' ? record.descriptionEn : selectLanguage === 'ko' ? record.descriptionKr : selectLanguage === 'es' ? record.descriptionEs : ''}</p>
           </div>
         )
         return (
           <Popover content={content}>
-            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zh' ? record.titleZh : selectLanguage === 'en' ? record.titleEn : selectLanguage === 'ko' ? record.titleKr : selectLanguage === 'es' ? record.titleEs : ''}</Tag>
+            <Tag color="green" style={{ maxWidth: '300px', whiteSpace: 'normal' }}>{selectLanguage === 'zhHans' ? record.titleZhHans : selectLanguage === 'zh' ? record.titleZh : selectLanguage === 'en' ? record.titleEn : selectLanguage === 'ko' ? record.titleKr : selectLanguage === 'es' ? record.titleEs : ''}</Tag>
           </Popover>
         )
       }
@@ -120,9 +121,15 @@ const InformationList: FC = () => {
     }
   }, [tableQuery.page, tableQuery.size])
 
-  async function fetchData() {
+  async function fetchData(page?: number) {
+    if (tableLoading) return
     setTableLoading(true)
-    getInformationList({ pagination: tableQuery }).then((res: any) => {
+    getInformationList({
+      pagination: { ...tableQuery, page: page || tableQuery.page },
+      startDate: selectDateStart,
+      endDate: selectDateEnd,
+      title: searchTitle
+    }).then((res: any) => {
       if (res.code !== 0) {
         return message.error(res.error)
       }
@@ -231,9 +238,17 @@ const InformationList: FC = () => {
     })
   }
 
-  // select change
-  function handleSelectChange(value: any, option: DefaultOptionType | DefaultOptionType[]): void {
-    setSelectValue(value)
+  function handleSearch() {
+    setTableQuery({ ...tableQuery, page: 1 })
+    fetchData(1)
+  }
+
+  function handleReset() {
+    setTableQuery({ ...tableQuery, page: 1 })
+    setSelectDateStart(dayjs().subtract(1, 'day').format('YYYY-MM-DD'))
+    setSelectDateEnd(dayjs().format('YYYY-MM-DD'))
+    setSearchTitle('')
+    fetchData(1)
   }
 
   return (
@@ -249,32 +264,39 @@ const InformationList: FC = () => {
               <h3>选择语言:</h3>
               <Select value={selectLanguage} onChange={(value) => { setSelectLanguage(value) }}>
                 <Select.Option value="en">英文</Select.Option>
+                <Select.Option value="zhHans">简体中文</Select.Option>
                 <Select.Option value="zh">繁体中文</Select.Option>
                 <Select.Option value="ko">韩语</Select.Option>
                 <Select.Option value="es">西班牙语</Select.Option>
               </Select>
             </Space>
           </Space>
-          <Space size={50}>
-            {/* <Space>
-              <h3>选择标签：</h3>
-              <Select value={selectValue} onChange={handleSelectChange}>
-                <Select.Option value="1">标签1</Select.Option>
-                <Select.Option value="2">标签2</Select.Option>
-                <Select.Option value="3">标签3</Select.Option>
-                <Select.Option value="4">标签4</Select.Option>
-              </Select>
-            </Space> */}
+          <Space size={10}>
             <Space>
               <h3>筛选日期：</h3>
-              <RangePicker onChange={(value) => { console.log(value) }} />
-              <Button type='primary'>筛选</Button>
+              <RangePicker
+                defaultValue={[dayjs(selectDateStart), dayjs(selectDateEnd)]}
+                value={[dayjs(selectDateStart), dayjs(selectDateEnd)]}
+                format='YYYY-MM-DD'
+                onChange={(value) => {
+                  if (value) {
+                    setSelectDateStart(value[0]?.format('YYYY-MM-DD') || '')
+                    setSelectDateEnd(value[1]?.format('YYYY-MM-DD') || '')
+                  }
+                }}
+                disabledDate={(current) => {
+                  return current && current > dayjs().endOf('day')
+                }}
+                onOk={(value) => {
+                  console.log(value)
+                }}
+              />
             </Space>
             <Space>
               <h3>搜索：</h3>
-              <Input placeholder='请输入搜索内容' />
-              <Button type='primary'>搜索</Button>
-              <Button type='primary' danger>重置</Button>
+              <Input value={searchTitle} onChange={(e) => { setSearchTitle(e.target.value) }} placeholder='请输入搜索内容' />
+              <Button type='primary' onClick={() => { handleSearch() }}>筛选&搜索</Button>
+              <Button type='primary' danger onClick={() => { handleReset() }}>清除 筛选&搜索</Button>
             </Space>
           </Space>
         </div>

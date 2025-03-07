@@ -121,6 +121,17 @@ declare namespace API {
         aiNumber: number
     }
 
+    interface AdType {
+        id: number
+        createdAt: string
+        updatedAt: string
+        title: string
+        imageUrl: string
+        language: "en" | "zh" | "kr" | "es" | "zh_hans"
+        url: string
+        isActive: boolean
+    }
+
     interface LoginParams {
         name: string
         password: string
@@ -149,6 +160,9 @@ declare namespace API {
 
     interface InformationListParams {
         pagination: PageState
+        startDate?: string
+        endDate?: string
+        title?: string
     }
 
     type InformationListResult = APIResult<{
@@ -185,5 +199,10 @@ declare namespace API {
     type HomeAllListResult = APIResult<{
         total: number
         data: HomeAllDataType[]
+    }>
+
+    type AdListResult = APIResult<{
+        Advertises: AdType[]
+        total: number
     }>
 }
