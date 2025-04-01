@@ -2,7 +2,8 @@ import { type FC, useState } from 'react'
 import { Row, Col, Space } from 'antd'
 import CountUpCard from './components/CountUpCard'
 import ChartsCard from './components/ChartsCard'
-import { countUpData, pieOptions, ringOptions, radarOptions, barOptions, lineOptions } from './data'
+import { countUpData, ringOptions, lineOptions } from './data'
+import TableBasic from './components/table-basic'
 
 const HomePage: FC = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -29,22 +30,16 @@ const HomePage: FC = () => {
         })}
       </Row>
       <Row gutter={12}>
-        <Col span={8}>
-          <ChartsCard loading={isLoading} options={pieOptions} height={300} />
+        <Col span={16}>
+          <ChartsCard loading={isLoading} options={lineOptions} height={300} />
         </Col>
         <Col span={8}>
           <ChartsCard loading={isLoading} options={ringOptions} height={300} />
         </Col>
-        <Col span={8}>
-          <ChartsCard loading={isLoading} options={radarOptions} height={300} />
-        </Col>
       </Row>
       <Row gutter={12}>
-        <Col span={12}>
-          <ChartsCard loading={isLoading} options={barOptions} height={350} />
-        </Col>
-        <Col span={12}>
-          <ChartsCard loading={isLoading} options={lineOptions} height={350} />
+        <Col span={24}>
+          <TableBasic />
         </Col>
       </Row>
     </Space>

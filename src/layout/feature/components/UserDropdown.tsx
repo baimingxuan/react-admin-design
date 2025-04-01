@@ -1,26 +1,16 @@
 import type { MenuProps } from 'antd'
 import { Space, Dropdown } from 'antd'
-import { LockOutlined, PoweroffOutlined } from '@ant-design/icons'
+import { PoweroffOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { getAuthCache, clearAuthCache } from '@/utils/auth'
 import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { useAppDispatch, useAppSelector } from '@/stores'
 import { useMessage } from '@/hooks/web/useMessage'
-import { logoutApi } from '@/api'
 import { resetState } from '@/stores/modules/user'
 import headerImg from '@/assets/images/avatar.jpeg'
 
 export default function UserDropdown() {
   const items: MenuProps['items'] = [
-    {
-      key: 'lock',
-      label: (
-        <Space size={4}>
-          <LockOutlined rev={undefined} />
-          <span>锁定屏幕</span>
-        </Space>
-      )
-    },
     {
       key: 'logout',
       label: (
@@ -34,9 +24,6 @@ export default function UserDropdown() {
 
   const onClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
-      case 'lock':
-        handleLock()
-        break
       case 'logout':
         handleLogout()
         break
@@ -51,7 +38,6 @@ export default function UserDropdown() {
     return token || getAuthCache<string>(TOKEN_KEY)
   }
 
-  const handleLock = () => {}
 
   const handleLogout = () => {
     const { createConfirm } = useMessage()
@@ -67,14 +53,6 @@ export default function UserDropdown() {
   }
 
   const logoutAction = async (goLogin = false) => {
-    if (getToken()) {
-      try {
-        await logoutApi()
-      } catch (error) {
-        const { createMessage } = useMessage()
-        createMessage.error('注销失败!')
-      }
-    }
     dispatch(resetState())
     clearAuthCache()
     goLogin && navigate('/login')

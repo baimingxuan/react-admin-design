@@ -2,8 +2,6 @@ import type { FC, ReactNode } from 'react'
 import { Result, Card, Button } from 'antd'
 import { useNavigate, useLoaderData } from 'react-router-dom'
 import { ExceptionEnum } from '@/enums/exceptionEnum'
-import { PageWrapper } from '@/components/Page'
-import { RESULT_COMPO } from '@/settings/websiteSetting'
 
 const subTitleMap = new Map([
   [ExceptionEnum.PAGE_NOT_ACCESS, '对不起，您没有权限访问此页面。'],
@@ -23,9 +21,7 @@ const PageException: FC = () => {
   const WithCard = ({ children }: { children: ReactNode }) => {
     if (withCard) {
       return (
-        <PageWrapper plugin={RESULT_COMPO}>
-          <Card bordered={false}>{children}</Card>
-        </PageWrapper>
+        <Card bordered={false}>{children}</Card>
       )
     } else {
       return (

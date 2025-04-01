@@ -24,7 +24,18 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       // Listening on all local ips
       host: true,
       open: true,
-      port: VITE_PORT
+      port: VITE_PORT,
+      // port: 8990,
+      proxy: {
+        '/api': { // 匹配请求路径，localhost:3000/snow
+          target: 'http://192.168.31.80:6780/api', // 代理的目标地址
+          // target: 'https://crypto-pulse.io/api', // 代理的目标地址
+          // target: 'http://192.168.31.80:6780/api', // 代理的目标地址
+          changeOrigin: true, // 开发模式，默认的origin是真实的 origin:localhost:3000 代理服务会把origin修改为目标地址
+          secure: false, // 是否https接口
+          rewrite: (path) => path.replace(/^\/api/, ""),
+        }
+      },
     },
     plugins: [
       react(),
@@ -32,17 +43,18 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
         symbolId: 'icon-[dir]-[name]'
       }),
-      viteMockServe({
-        mockPath: 'mock',
-        ignore: /^_/,
-        localEnabled: !isBuild,
-        prodEnabled: isBuild,
-        injectCode: `
-          import { setupProdMockServer } from 'mock/_createProductionServer';
+      // 开发模式下启用mock
+      // viteMockServe({
+      //   mockPath: 'mock',
+      //   ignore: /^_/,
+      //   localEnabled: !isBuild,
+      //   prodEnabled: isBuild,
+      //   injectCode: `
+      //     import { setupProdMockServer } from 'mock/_createProductionServer';
 
-          setupProdMockServer()
-          `
-      })
+      //     setupProdMockServer()
+      //     `
+      // })
     ],
 
     build: {
