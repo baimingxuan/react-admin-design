@@ -16,7 +16,7 @@ import {
   message
 } from 'antd'
 import { DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { getInformationList, postChangeInformationStatus, postDeleteInformation } from '@/api'
+import { getInformationList, postChangeInformationStar, postChangeInformationStatus, postDeleteInformation, postInformationUpdate } from '@/api'
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 const { RangePicker } = DatePicker;
@@ -80,6 +80,14 @@ const InformationList: FC = () => {
       render: (updatedAt) => {
         return <span>{dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')}</span>
       }
+    },
+    {
+      title: '是否选为精选资讯',
+      dataIndex: 'isStar',
+      align: 'center',
+      render: (isStar, record) => (
+        <Switch checkedChildren="是" unCheckedChildren="否" checked={isStar} onClick={() => handleStarChange(isStar, record)} />
+      )
     },
     {
       title: '新闻禁用状态',
@@ -223,6 +231,49 @@ const InformationList: FC = () => {
         }
       })
     }
+  }
+  function handleStarChange(checked: boolean, record: API.InformationInfoType) {
+    console.log(checked, record)
+    if (!checked) {
+      Modal.confirm({
+        title: '此操作将选为精选资讯, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'danger',
+        okText: '选为精选资讯',
+        cancelText: '取消',
+        onOk() {
+          return SwitchStar(true, record)
+        },
+        onCancel() {
+        }
+      })
+    } else {
+      Modal.confirm({
+        title: '此操作将取消精选资讯, 是否继续?',
+        icon: <ExclamationCircleOutlined rev={undefined} />,
+        okType: 'danger',
+        okText: '取消精选资讯',
+        cancelText: '取消',
+        onOk() {
+          return SwitchStar(false, record)
+        },
+        onCancel() {
+        }
+      })
+    }
+  }
+
+  const SwitchStar = async (status: boolean, record: API.InformationInfoType) => {
+    return postChangeInformationStar({ id: record.id, isStar: status }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('修改成功')
+        setTableData(tableData.map((item: API.InformationInfoType) => item.id === record.id ? { ...item, isStar: status } : item))
+      } else {
+        message.error(res.msg || '修改失败')
+      }
+    }).catch((err: any) => {
+      message.error(err.msg || '修改失败')
+    })
   }
 
   const SwitchStatus = async (status: boolean, record: API.InformationInfoType) => {

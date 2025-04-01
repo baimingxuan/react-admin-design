@@ -52,6 +52,7 @@ const InformationEdit: FC = () => {
     collectionIds: [],
     isActive: false,
     coverImageUrl: '',
+    isStar: false,
   })
   const [loading, setLoading] = useState<boolean>(false)
   const [searchId, setSearchId] = useState<string>('')
@@ -305,6 +306,10 @@ const InformationEdit: FC = () => {
                   </Form.Item>
                   <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>创建人</h3>} name="author">
                     <Input disabled placeholder='请输入内容' />
+                  </Form.Item>
+                  {/* 是否选为精选资讯 */}
+                  <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>是否选为精选资讯</h3>} name='isStar' rules={formRules.all}>
+                    <Select options={[{ label: '是', value: true }, { label: '否', value: false }]} />
                   </Form.Item>
                   {informationDetail?.titleEn && <Form.Item label={<h3 style={{ whiteSpace: 'nowrap' }}>资讯状态</h3>} name='isActive' rules={formRules.all}>
                     <Select options={[{ label: '启用', value: true }, { label: '禁用', value: false }]} />

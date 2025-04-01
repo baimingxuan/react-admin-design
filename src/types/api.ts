@@ -46,6 +46,7 @@ declare namespace API {
         contentZhHans: string
         contentKr: string
         contentEs: string
+        isStar: boolean
         author: string
         createdAt: string
         updatedAt: string

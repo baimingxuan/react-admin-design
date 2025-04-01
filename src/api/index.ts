@@ -37,6 +37,10 @@ export function postDeleteInformation(data: any): Promise<API.APIResult<null>> {
 export function postChangeInformationStatus(data: any): Promise<API.APIResult<null>> {
   return service({ url: '/staff/article/change/isactive', method: 'post', data })
 }
+// Information change star
+export function postChangeInformationStar(data: any): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/article/change/is_star', method: 'post', data })
+}
 // Information detail by id
 export function postInformationDetailById(data: { id: number }): Promise<API.InformationDetailResult> {
   return service({ url: '/staff/article/detail', method: 'post', data })
