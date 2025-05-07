@@ -135,3 +135,14 @@ export function postCreateAd(data: any): Promise<API.APIResult<null>> {
 export function postUpdateAd(data: any): Promise<API.APIResult<null>> {
   return service({ url: '/staff/advertise/update', method: 'post', data })
 }
+
+// project
+// project list
+export function getProjectList(params: any): Promise<API.ProjectListResult> {
+  return service({ url: '/staff/token/list', method: 'get', params })
+}
+
+// update project
+export function postUpdateProject(data: any): Promise<API.APIResult<null>> {
+  return service({ url: '/staff/token/update', method: 'post', data })
+}

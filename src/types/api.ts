@@ -206,4 +206,71 @@ declare namespace API {
         Advertises: AdType[]
         total: number
     }>
+
+    type ProjectListResult = APIResult<{
+        tokens: ProjectType[]
+        total: number
+    }>
+
+    interface ProjectType {
+        name: string;
+        symbol: string;
+        address: string;
+        logoUri: string;
+        createdAt: string;
+        updatedAt: string;
+        marketCap: number;
+        holder: number;
+        price: number;
+        priceChangePercent30m: number;
+        trade30m: number;
+        buy30m: number;
+        sell30m: number;
+        volume30m: number;
+        volumeBuy30m: number;
+        volumeSell30m: number;
+        priceChangePercent1h: number;
+        trade1h: number;
+        buy1h: number;
+        sell1h: number;
+        volume1h: number;
+        volumeBuy1h: number;
+        volumeSell1h: number;
+        priceChangePercent2h: number;
+        trade2h: number;
+        buy2h: number;
+        sell2h: number;
+        volume2h: number;
+        volumeBuy2h: number;
+        volumeSell2h: number;
+        priceChangePercent4h: number;
+        trade4h: number;
+        buy4h: number;
+        sell4h: number;
+        volume4h: number;
+        volumeBuy4h: number;
+        volumeSell4h: number;
+        priceChangePercent8h: number;
+        trade8h: number;
+        buy8h: number;
+        sell8h: number;
+        volume8h: number;
+        volumeBuy8h: number;
+        volumeSell8h: number;
+        priceChangePercent24h: number;
+        trade24h: number;
+        buy24h: number;
+        sell24h: number;
+        volume24h: number;
+        volumeBuy24h: number;
+        volumeSell24h: number;
+        websiteUrl: string;
+        xUrl: string;
+        descriptionEn: string;
+        DescriptionZhHans: string;
+        descriptionZh: string;
+        descriptionKr: string;
+        descriptionEs: string;
+        status: 0 | 1 | 2 | 3;
+    }
 }
